@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
 
 const TravelStyleInput = ({ nextStep, backStep }) => {
-  const [location, setLocation] = useState('');
+  const [travelStyle, setTravelStyle] = useState('');
+
+  const handleChange = (e) => {
+    setTravelStyle(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (location) {
-      nextStep(location);
+    if (travelStyle) {
+      nextStep(travelStyle);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>What's your travelling style?</label>
-      <input 
-        type="text" 
-        value={location} 
-        onChange={(e) => setLocation(e.target.value)} 
-        placeholder="Enter a city" 
-      />
+      <label htmlFor="travel-style">What's your travelling style?</label>
+      <select 
+        name="travel-style" 
+        id="travel-style" 
+        value={travelStyle} 
+        onChange={handleChange}
+      >
+        <option value="laid-back">Laid Back</option>
+        <option value="everything">See as much as possible</option>
+        <option value="none">I Don't Mind</option>
+      </select>
+      <br />
       <button type="submit">Next</button>
       <button type="button" onClick={backStep}>Back</button>
     </form>

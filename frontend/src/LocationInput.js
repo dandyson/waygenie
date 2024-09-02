@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const LocationInput = ({ nextStep, backStep }) => {
   const [location, setLocation] = useState('');
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (location) {
@@ -12,7 +13,6 @@ const LocationInput = ({ nextStep, backStep }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-            {location}
       <label>Where are you visiting?</label>
       <input 
         type="text" 
