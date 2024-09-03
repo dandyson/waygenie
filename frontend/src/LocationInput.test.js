@@ -7,7 +7,7 @@ test('renders LocationInput and handles input correctly', () => {
   const mockBackStep = jest.fn();
   render(<LocationInput nextStep={mockNextStep} backStep={mockBackStep} />);
 
-  const input = screen.getByPlaceholderText('Enter a city');
+  const input = screen.getByPlaceholderText('Enter a location...');
   fireEvent.change(input, { target: { value: 'London' } });
   expect(input.value).toBe('London');
 
