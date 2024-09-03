@@ -27,18 +27,17 @@ const App = () => {
     
   };
 
-  switch (step) {
-    case 1:
-      return <LocationInput nextStep={(location) => nextStep({ location })} backStep={() => backStep()} />;
-    case 2:
-      return <DateTimeInput nextStep={(startTime, endTime) => nextStep({ startTime, endTime })} backStep={() => backStep()} />;
-    case 3:
-      return <InterestsInput nextStep={(interests) => nextStep({ interests })} backStep={() => backStep()} />;
-    case 4:
-      return <TravelStyleInput nextStep={(travelStyle) => nextStep({ travelStyle })} backStep={() => backStep()} />;
-    default:
-      return <div>Itinerary generated!</div>;
-  }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-blue-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        {step === 1 && <LocationInput nextStep={(location) => nextStep({ location })} backStep={backStep} />}
+        {step === 2 && <DateTimeInput nextStep={(startTime, endTime) => nextStep({ startTime, endTime })} backStep={backStep} />}
+        {step === 3 && <InterestsInput nextStep={(interests) => nextStep({ interests })} backStep={backStep} />}
+        {step === 4 && <TravelStyleInput nextStep={(travelStyle) => nextStep({ travelStyle })} backStep={backStep} />}
+        {step > 4 && <div>Itinerary generated!</div>}
+      </div>
+    </div>
+  );
 };
 
 export default App;
