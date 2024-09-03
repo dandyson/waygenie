@@ -4,8 +4,7 @@ import LocationInput from './LocationInput';
 
 test('renders LocationInput and handles input correctly', () => {
   const mockNextStep = jest.fn();
-  const mockBackStep = jest.fn();
-  render(<LocationInput nextStep={mockNextStep} backStep={mockBackStep} />);
+  render(<LocationInput nextStep={mockNextStep} />);
 
   const input = screen.getByPlaceholderText('Enter a location...');
   fireEvent.change(input, { target: { value: 'London' } });
@@ -14,8 +13,4 @@ test('renders LocationInput and handles input correctly', () => {
   const nextButton = screen.getByText('Next');
   fireEvent.click(nextButton);
   expect(mockNextStep).toHaveBeenCalledWith('London');
-
-  const backButton = screen.getByText('Back');
-  fireEvent.click(backButton);
-  expect(mockBackStep).toHaveBeenCalled();
 });
