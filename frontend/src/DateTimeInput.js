@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DateTimeInput = ({ nextStep, backStep }) => {
   const [startDate, setStartDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
+
+  useEffect(() => {
+    const now = new Date();
+    const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+
+    // Set default values for start date, start time, end date, and end time
+    setStartDate(formattedDate);
+    setStartTime(formattedTime);
+
+    const endDate = new Date(now.getTime() + 60 * 60 * 1000); // Add one hour
+    const endDateFormatted = endDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const endTimeFormatted = endDate.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+
+    setEndDate(endDateFormatted);
+    setEndTime(endTimeFormatted);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,13 +40,13 @@ const DateTimeInput = ({ nextStep, backStep }) => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           className="w-12 h-12 text-blue-500"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
           />
         </svg>
@@ -39,57 +56,54 @@ const DateTimeInput = ({ nextStep, backStep }) => {
         onSubmit={handleSubmit}
       >
         <div className="mb-6 text-center">
-          <h4
-            className="block text-gray-700 font-extrabold mb-2 text-3xl"
-          >
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             When will you be visiting?
           </h4>
-          <p className="mb-6">Please provide a start and end date for your trip, including the times</p>
+          <p className="mb-4">Please provide a start and end date for your trip, including the times</p>
         </div>
-        <div className="flex flex-col items-center w-full">
-  <div className="flex items-center space-x-4 mb-4 w-full max-w-md">
-    <div className="flex flex-col w-1/2">
-      <label htmlFor="start-date" className="block text-gray-700 text-sm font-medium mb-1">Start Date:</label>
-      <input
-        id="start-date"
-        type="date"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-      />
-      <label htmlFor="start-time" className="block text-gray-700 text-sm font-medium mb-1">Start Time:</label>
-      <input
-        id="start-time"
-        type="time"
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value)}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      />
-    </div>
-    <div className="flex items-center">
-      <p className="text-gray-700">To</p>
-    </div>
-    <div className="flex flex-col w-1/2">
-      <label htmlFor="end-date" className="block text-gray-700 text-sm font-medium mb-1">End Date:</label>
-      <input
-        id="end-date"
-        type="date"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-      />
-      <label htmlFor="end-time" className="block text-gray-700 text-sm font-medium mb-1">End Time:</label>
-      <input
-        id="end-time"
-        type="time"
-        value={endTime}
-        onChange={(e) => setEndTime(e.target.value)}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      />
-    </div>
-  </div>
-</div>
-
+        <div className="flex flex-col w-full space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between md:space-x-4 md:space-y-0">
+            <div className="flex flex-col w-full md:w-1/2">
+              <label htmlFor="start-date" className="block text-gray-700 text-sm font-medium mb-1">Start Date:</label>
+              <input
+                id="start-date"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+              />
+              <label htmlFor="start-time" className="block text-gray-700 text-sm font-medium mb-1">Start Time:</label>
+              <input
+                id="start-time"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+            <div className="flex items-center md:mx-4 my-4 md:my-0">
+              <p className="text-gray-700 text-center">To:</p>
+            </div>
+            <div className="flex flex-col w-full md:w-1/2">
+              <label htmlFor="end-date" className="block text-gray-700 text-sm font-medium mb-1">End Date:</label>
+              <input
+                id="end-date"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+              />
+              <label htmlFor="end-time" className="block text-gray-700 text-sm font-medium mb-1">End Time:</label>
+              <input
+                id="end-time"
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+          </div>
+        </div>
         <div className="flex items-center justify-between w-full mt-6">
           <button
             type="button"
