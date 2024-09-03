@@ -34,7 +34,12 @@ const App = () => {
         {step === 2 && <DateTimeInput nextStep={(startTime, endTime) => nextStep({ startTime, endTime })} backStep={backStep} />}
         {step === 3 && <InterestsInput nextStep={(interests) => nextStep({ interests })} backStep={backStep} />}
         {step === 4 && <TravelStyleInput nextStep={(travelStyle) => nextStep({ travelStyle })} backStep={backStep} />}
-        {step > 4 && <div>Itinerary generated!</div>}
+        {step > 4 && <div>
+          <div class="flex flex-col justify-center items-center text-center">
+            <h4 class="block text-gray-700 font-extrabold mb-2 text-3xl mb-8">Generating Itinerary...</h4>
+            <div class="w-12 h-12 rounded-full animate-spin border-4 border-solid border-green-500 border-t-transparent"></div>
+          </div>
+        </div>}
       </div>
     </div>
   );

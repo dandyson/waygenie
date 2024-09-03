@@ -35,18 +35,18 @@ test('renders App and navigates through steps', () => {
   fireEvent.click(screen.getByText('Next'));
 
   // Step 4: TravelStyleInput
-  expect(screen.getByText("What's your travelling style?")).toBeInTheDocument();
-  
-  const selectElement = screen.getByLabelText("What's your travelling style?");
-  fireEvent.change(selectElement, { target: { value: 'laid-back' } });
-  expect(selectElement.value).toBe('laid-back');
+  const selectTravelStyle = screen.getByTestId('travel-style');
+  expect(selectTravelStyle).toBeInTheDocument();
+  ;
+  fireEvent.change(selectTravelStyle, { target: { value: 'laid-back' } });
+  expect(selectTravelStyle.value).toBe('laid-back');
   
   // test change of value
-  fireEvent.change(selectElement, { target: { value: 'everything' } });
-  expect(selectElement.value).toBe('everything');
+  fireEvent.change(selectTravelStyle, { target: { value: 'everything' } });
+  expect(selectTravelStyle.value).toBe('everything');
   
-  fireEvent.click(screen.getByText('Next'));
+  fireEvent.click(screen.getByText("Let's Go!"));
 
   // Final Step
-  expect(screen.getByText('Itinerary generated!')).toBeInTheDocument();
+  expect(screen.getByText('Generating Itinerary...')).toBeInTheDocument();
 });
