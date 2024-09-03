@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const TravelStyleInput = ({ nextStep, backStep }) => {
-  const [travelStyle, setTravelStyle] = useState('');
+  const [travelStyle, setTravelStyle] = useState('laid-back');
 
   const handleChange = (e) => {
     setTravelStyle(e.target.value);
@@ -21,13 +21,13 @@ const TravelStyleInput = ({ nextStep, backStep }) => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           className="w-12 h-12 text-blue-500"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
           />
         </svg>
@@ -50,6 +50,7 @@ const TravelStyleInput = ({ nextStep, backStep }) => {
           <select
             name="travel-style"
             id="travel-style"
+            data-testid="travel-style"
             value={travelStyle}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

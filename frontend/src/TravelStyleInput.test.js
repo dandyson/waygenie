@@ -8,8 +8,8 @@ test('renders TravelStyleInput and handles input correctly', () => {
   
   render(<TravelStyleInput nextStep={mockNextStep} backStep={mockBackStep} />);
   
-  // Select the dropdown element
-  const selectElement = screen.getByLabelText("What's your travelling style?");
+  // Select the dropdown element by its id
+  const selectElement = screen.getByTestId('travel-style');
   
   // Change the value of the select element
   fireEvent.change(selectElement, { target: { value: 'laid-back' } });
