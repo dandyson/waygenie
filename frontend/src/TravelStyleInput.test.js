@@ -16,7 +16,7 @@ test('renders TravelStyleInput and handles input correctly', () => {
   expect(selectElement.value).toBe('laid-back');
   
   // Submit the form
-  const nextButton = screen.getByText('Next');
+  const nextButton = screen.getByText("Let's Go!");
   fireEvent.click(nextButton);
   expect(mockNextStep).toHaveBeenCalledWith('laid-back');
   
