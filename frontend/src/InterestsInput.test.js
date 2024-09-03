@@ -11,9 +11,9 @@ test('renders InterestsInput and handles input correctly', () => {
   const interest2 = screen.getByPlaceholderText('Enter Interest 2');
   const interest3 = screen.getByPlaceholderText('Enter Interest 3');
 
-  fireEvent.change(screen.getByLabelText('Interest 1:'), { target: { value: 'History' } });
-  fireEvent.change(screen.getByLabelText('Interest 2:'), { target: { value: 'Coffee' } });
-  fireEvent.change(screen.getByLabelText('Interest 3:'), { target: { value: 'Parks' } });
+  fireEvent.change(screen.getByPlaceholderText('Enter Interest 1'), { target: { value: 'History' } });
+  fireEvent.change(screen.getByPlaceholderText('Enter Interest 2'), { target: { value: 'Coffee' } });
+  fireEvent.change(screen.getByPlaceholderText('Enter Interest 3'), { target: { value: 'Parks' } });
   fireEvent.change(interest1, { target: { value: 'History' } });
   fireEvent.change(interest2, { target: { value: 'Coffee' } });
   fireEvent.change(interest3, { target: { value: 'Parks' } });
