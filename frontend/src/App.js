@@ -28,7 +28,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(9,9,121,1)_0%,_rgba(0,99,255,1)_100%)]">
+    <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         {step === 1 && <LocationInput nextStep={(location) => nextStep({ location })} />}
         {step === 2 && <DateTimeInput nextStep={(startTime, endTime) => nextStep({ startTime, endTime })} backStep={backStep} />}
