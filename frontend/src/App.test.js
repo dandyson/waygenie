@@ -48,5 +48,5 @@ test('renders App and navigates through steps', () => {
   fireEvent.click(screen.getByText("Let's Go!"));
 
   // Final Step
-  expect(screen.getByText('Generating Itinerary...')).toBeInTheDocument();
+  expect(screen.getByText('YOUR ITINERARY:')).toBeInTheDocument();
 });
