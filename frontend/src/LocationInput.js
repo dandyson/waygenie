@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const LocationInput = ({ nextStep }) => {
-  const [location, setLocation] = useState('');
+const LocationInput = ({ formData, nextStep }) => {
+  const [location, setLocation] = useState(formData.location);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -9,6 +9,10 @@ const LocationInput = ({ nextStep }) => {
       nextStep(location);
     }
   };
+
+  useEffect(() => {
+    setLocation(formData.location);
+  }, [formData.location]);
 
   return (
     <div className="flex flex-col items-center justify-center p-6">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const TravelStyleInput = ({ nextStep, backStep }) => {
-  const [travelStyle, setTravelStyle] = useState('laid-back');
+const TravelStyleInput = ({ formData, nextStep, backStep }) => {
+  const [travelStyle, setTravelStyle] = useState(formData.travelStyle ? formData.travelStyle : 'laid-back');
 
   const handleChange = (e) => {
     setTravelStyle(e.target.value);

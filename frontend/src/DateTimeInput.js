@@ -1,35 +1,38 @@
 import React, { useState, useEffect } from 'react';
 
-const DateTimeInput = ({ nextStep, backStep }) => {
-  const [startDate, setStartDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [endTime, setEndTime] = useState('');
+const DateTimeInput = ({ nextStep, backStep, formData }) => {
+  const [startDate, setStartDate] = useState(formData.startDate || '');
+  const [startTime, setStartTime] = useState(formData.startTime || '');
+  const [endDate, setEndDate] = useState(formData.endDate || '');
+  const [endTime, setEndTime] = useState(formData.endTime || '');
 
   useEffect(() => {
-    const now = new Date();
-    const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-    const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+    if (!startDate || !startTime || !endDate || !endTime) {
+      const now = new Date();
+      const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
 
-    // Set default values for start date, start time, end date, and end time
-    setStartDate(formattedDate);
-    setStartTime(formattedTime);
+      if (!startDate) setStartDate(formData.startDate || formattedDate);
+      if (!startTime) setStartTime(formData.startTime || formattedTime);
 
-    const endDate = new Date(now.getTime() + 60 * 60 * 1000); // Add one hour
-    const endDateFormatted = endDate.toISOString().split('T')[0]; // YYYY-MM-DD format
-    const endTimeFormatted = endDate.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+      const endDateObj = new Date(now.getTime() + 60 * 60 * 1000); // Add one hour
+      const endDateFormatted = endDateObj.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const endTimeFormatted = endDateObj.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
 
-    setEndDate(endDateFormatted);
-    setEndTime(endTimeFormatted);
-  }, []);
+      if (!endDate) setEndDate(formData.endDate || endDateFormatted);
+      if (!endTime) setEndTime(formData.endTime || endTimeFormatted);
+    }
+  }, [startDate, startTime, endDate, endTime, formData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (startDate && startTime && endDate && endTime) {
       nextStep({
-        startTime: `${startDate}T${startTime}`,
-        endTime: `${endDate}T${endTime}`,
-      });
+        startDate: `${startDate}`,
+        startTime: `${startTime}`,
+        endDate: `${endDate}`,
+        endTime: `${endTime}`,
+      });      
     }
   };
 

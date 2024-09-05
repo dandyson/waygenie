@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const InterestsInput = ({ nextStep, backStep }) => {
-  const [interest1, setInterest1] = useState('');
-  const [interest2, setInterest2] = useState('');
-  const [interest3, setInterest3] = useState('');
+const InterestsInput = ({ formData, nextStep, backStep }) => {
+  const [interests, setInterests] = useState(formData.interests && formData.interests.length > 0 ? formData.interests : ['']);
+
+  useEffect(() => {
+    // Sync formData.interests to local state if it's an array
+    if (Array.isArray(formData.interests)) {
+      setInterests(formData.interests.length > 0 ? formData.interests : ['']);
+    }
+  }, [formData.interests]);
+
+  const handleChange = (index, value) => {
+    const newInterests = [...interests];
+    newInterests[index] = value;
+    setInterests(newInterests);
+  };
+
+  const addInterest = () => {
+    setInterests([...interests, '']);
+  };
+
+  const removeInterest = (index) => {
+    if (interests.length > 1) {
+      const newInterests = interests.filter((_, i) => i !== index);
+      setInterests(newInterests);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Collecting all interests in an array
-    const interests = [interest1, interest2, interest3].filter(Boolean);
-    if (interests.length > 0) {
-      nextStep(interests);
-    }
+    nextStep(interests);
   };
 
   return (
     <div className="flex flex-col items-center justify-center p-8">
-      <div className="mb-6">
+      <div className="mb-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -32,48 +50,42 @@ const InterestsInput = ({ nextStep, backStep }) => {
           />
         </svg>
       </div>
-      <form
-        className="flex flex-col items-center w-full max-w-md"
-        onSubmit={handleSubmit}
-      >
-        <div className="mb-4 w-full">
-          <div className="text-center mb-6">
-            <h4
-              className="block text-gray-700 font-extrabold mb-2 text-3xl"
-            >
-              What are your interests?
-            </h4>
-            <small>For example: Coffee, Hiking, Art, etc..</small>
+      
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+      <div className="mb-6 text-center">
+        <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">Your Interests</h4>
+        <p className="mb-4">Please provide your interests for the trip.</p>
+      </div>
+        {interests.map((interest, index) => (
+          <div key={index} className="mb-4 flex items-center">
+            <div className="w-full">
+              <input
+                type="text"
+                value={interest}
+                placeholder="Enter Interest..."
+                onChange={(e) => handleChange(index, e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+            {/* Only show remove button if there's more than one interest */}
+            {interests.length > 1 && index > 0 && (
+              <button
+                type="button"
+                onClick={() => removeInterest(index)}
+                className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+              >
+                Remove
+              </button>
+            )}
           </div>
-          <input
-            id="interest1"
-            type="text"
-            value={interest1}
-            onChange={(e) => setInterest1(e.target.value)}
-            placeholder="Enter Interest 1"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4 w-full">
-          <input
-            id="interest2"
-            type="text"
-            value={interest2}
-            onChange={(e) => setInterest2(e.target.value)}
-            placeholder="Enter Interest 2"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4 w-full">
-          <input
-            id="interest3"
-            type="text"
-            value={interest3}
-            onChange={(e) => setInterest3(e.target.value)}
-            placeholder="Enter Interest 3"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
+        ))}
+        <button
+          type="button"
+          onClick={addInterest}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add Interest
+        </button>
         <div className="flex items-center justify-between w-full mt-6">
           <button
             type="button"

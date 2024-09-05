@@ -24,14 +24,8 @@ test('renders App and navigates through steps', () => {
   fireEvent.click(screen.getByText('Next'));
 
   // Step 3: InterestsInput
-  expect(screen.getByPlaceholderText('Enter Interest 1')).toBeInTheDocument();
-  expect(screen.getByPlaceholderText('Enter Interest 2')).toBeInTheDocument();
-  expect(screen.getByPlaceholderText('Enter Interest 3')).toBeInTheDocument();
-
-  fireEvent.change(screen.getByPlaceholderText('Enter Interest 1'), { target: { value: 'History' } });
-  fireEvent.change(screen.getByPlaceholderText('Enter Interest 2'), { target: { value: 'Coffee' } });
-  fireEvent.change(screen.getByPlaceholderText('Enter Interest 3'), { target: { value: 'Parks' } });
-
+  expect(screen.getByPlaceholderText('Enter Interest...')).toBeInTheDocument();
+  fireEvent.change(screen.getByPlaceholderText('Enter Interest...'), { target: { value: 'History' } });
   fireEvent.click(screen.getByText('Next'));
 
   // Step 4: TravelStyleInput
