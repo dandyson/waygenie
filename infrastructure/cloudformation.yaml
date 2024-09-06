@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template to host the waygenie React app on S3 and serve it via CloudFront.
+Resources:
+  ReactAppBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "waygenie-${AWS::StackName}-bucket"
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+        ErrorDocument: "index.html"
+
+  BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      PolicyDocument:
+        Id: "WaygenieS3BucketPolicy"
+        Statement:
+          - Action: "s3:GetObject"
+            Effect: "Allow"
+            Resource: !Sub "${ReactAppBucket.Arn}/*"
+            Principal: "*"
+
+  CloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt ReactAppBucket.DomainName
+            Id: !Ref ReactAppBucket
+            S3OriginConfig: {}
+        Enabled: true
+        DefaultCacheBehavior:
+          AllowedMethods: ["GET", "HEAD", "OPTIONS"]
+          CachedMethods: ["GET", "HEAD"]
+          TargetOriginId: !Ref ReactAppBucket
+          ViewerProtocolPolicy: "redirect-to-https"
+          MinTTL: 0
+          MaxTTL: 31536000
+          DefaultTTL: 86400
+        DefaultRootObject: "index.html"
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
