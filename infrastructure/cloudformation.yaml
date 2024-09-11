@@ -6,25 +6,29 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: waygenieapp
-      AccessControl: PublicRead # visitors need to be able to access the sie
       WebsiteConfiguration: # this makes the S3 Bucket a static website/app
         IndexDocument: index.html # default object served when visiting S3 domain
         ErrorDocument: index.html # just send to app, let React handle errors and routing
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
 
   # Add a Bucket Policy that lets public visitors access the web app
   MyBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: waygenieappd
+      Bucket: !Ref MyBucket # attach policy to the created bucket
       PolicyDocument:
         Id: MyPolicy
         Version: 2012-10-17
-        Statement: # lets the public access/view the contents of your Bucket, i.e. web app
+        Statement: 
           - Sid: PublicReadForGetBucketObjects
             Effect: Allow
             Principal: '*' # wildcard, allow all requests
             Action: 's3:GetObject'
-            Resource: !Join ['', ['arn:aws:s3:::', waygenieapp, /*]]
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref MyBucket, '/*']]
 
 Outputs:
   WebsiteURL:
