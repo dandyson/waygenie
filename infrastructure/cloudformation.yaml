@@ -1,12 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 
+Parameters: # params passed to "--parameter-overrides" in CLI
+  BucketName:
+    Description: Unique name for your bucket. This will be in the S3 url to your React app.
+    Type: String
+
 Resources:
-  # Create an S3 Bucket that serves a static website (i.e. React app)
   MyBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: waygenieapp
-      WebsiteConfiguration: # this makes the S3 Bucket a static website/app
+      BucketName: !Ref BucketName
+      #  ----- TODO: this causes an error not listed in the error stacktrace when trying to deploy
+      # AccessControl: PublicRead
+      WebsiteConfiguration:
         IndexDocument: index.html # default object served when visiting S3 domain
         ErrorDocument: index.html # just send to app, let React handle errors and routing
       PublicAccessBlockConfiguration:
@@ -15,7 +21,6 @@ Resources:
         BlockPublicPolicy: false
         RestrictPublicBuckets: false
 
-  # Add a Bucket Policy that lets public visitors access the web app
   MyBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -26,7 +31,7 @@ Resources:
         Statement: 
           - Sid: PublicReadForGetBucketObjects
             Effect: Allow
-            Principal: '*' # wildcard, allow all requests
+            Principal: '*'
             Action: 's3:GetObject'
             Resource: !Join ['', ['arn:aws:s3:::', !Ref MyBucket, '/*']]
 
