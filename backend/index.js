@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 // API route
 app.get('/api', (req, res) => {
-  res.send('Welcome to WayGenie API Deploy Test');
+  res.send('Welcome to WayGenie API');
 });
 
 app.listen(PORT, () => {
