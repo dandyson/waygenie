@@ -51,6 +51,8 @@ jobs:
       - name: Deploy backend to Heroku
         run: |
           git remote add heroku https://git.heroku.com/waygenie.git
+          echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
           git push heroku main
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
