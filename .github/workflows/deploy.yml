@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # For Heroku deployment - cannot use shallow clone, so fetch the full history to ensure a non-shallow clone
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -51,6 +53,7 @@ jobs:
       - name: Deploy backend to Heroku
         run: |
           git remote add heroku https://git.heroku.com/waygenie.git
+          git fetch --all --unshallow  # Ensure we have the full repository history
           echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
           git push heroku main
         env:
