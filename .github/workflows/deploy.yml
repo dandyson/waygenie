@@ -50,3 +50,11 @@ jobs:
         working-directory: backend
         run: npm install
 
+      # Backend deployment to Heroku using git subtree
+      - name: Deploy backend to Heroku
+        run: |
+          git subtree push --prefix backend https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git main
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+
