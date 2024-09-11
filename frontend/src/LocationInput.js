@@ -42,7 +42,7 @@ const LocationInput = ({ formData, nextStep }) => {
           >
             Where are you going?
           </h4>
-          <p className="mb-4">Please enter a city that you plan to visit</p>
+          <p className="mb-4">Please enter a city that you plan to visit!!</p>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
             type="text"
