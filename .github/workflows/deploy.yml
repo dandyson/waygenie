@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy backend to Heroku
         run: |
-          git remote add heroku https://git.heroku.com/your-heroku-app-name.git
+          git remote add heroku https://git.heroku.com/waygenie.git
           git push heroku main
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
