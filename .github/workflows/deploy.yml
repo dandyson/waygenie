@@ -51,11 +51,10 @@ jobs:
         run: npm install
 
       - name: Deploy backend to Heroku
-        run: |
-          git remote add heroku https://git.heroku.com/waygenie.git
-          git fetch --all --unshallow  # Ensure we have the full repository history
-          echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
-          git push heroku main
+        uses: akshatmittal/heroku-deploy@v1.0.0
+        with:
+          app-name: waygenie
+          heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
