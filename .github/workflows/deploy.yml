@@ -51,7 +51,9 @@ jobs:
         run: npm install
 
       - name: Deploy backend to Heroku
-        run: |
-          git remote add heroku https://git.heroku.com/waygenie.git
-          git push heroku main
+      run: |
+        git remote add heroku https://git.heroku.com/waygenie.git
+        git push heroku main
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
