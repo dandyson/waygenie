@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // API route
 app.get('/api', (req, res) => {
-  res.send('Welcome to WayGenie API');
+  res.send('Welcome to WayGenie API Deploy Test');
 });
 
 // Serve the React app for any other route
