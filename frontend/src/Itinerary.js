@@ -21,7 +21,7 @@ const Itinerary = ({ resetStep }) => {
 				<div>
 				<h2 className="text-center text-3xl font-bold">YOUR ITINERARY:</h2>
 				<hr className="mt-4 mb-8"></hr>
-        <ul role="list" className="m-8 max-w-screen-md">
+        <ul className="m-8 max-w-screen-md">
           <li className="group relative flex flex-col pb-8 pl-7 last:pb-0">
             <div className="absolute bottom-0 left-[calc(0.25rem-0.5px)] top-0 w-px bg-blue-700/10 group-first:top-3"></div>
             <div className="absolute left-0 top-2 h-2 w-2 rounded-full border border-sky-300 bg-zinc-950"></div>
