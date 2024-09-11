@@ -1,43 +1,32 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Description: Template to host the waygenie React app on S3 and serve it via CloudFront.
+AWSTemplateFormatVersion: 2010-09-09
+
 Resources:
-  ReactAppBucket:
-    Type: "AWS::S3::Bucket"
+  # Create an S3 Bucket that serves a static website (i.e. React app)
+  MyBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: "waygenie-${AWS::StackName}-bucket"
-      AccessControl: PublicRead
-      WebsiteConfiguration:
-        IndexDocument: "index.html"
-        ErrorDocument: "index.html"
+      BucketName: waygenieapp
+      AccessControl: PublicRead # visitors need to be able to access the sie
+      WebsiteConfiguration: # this makes the S3 Bucket a static website/app
+        IndexDocument: index.html # default object served when visiting S3 domain
+        ErrorDocument: index.html # just send to app, let React handle errors and routing
 
-  BucketPolicy:
-    Type: "AWS::S3::BucketPolicy"
+  # Add a Bucket Policy that lets public visitors access the web app
+  MyBucketPolicy:
+    Type: AWS::S3::BucketPolicy
     Properties:
+      Bucket: waygenieappd
       PolicyDocument:
-        Id: "WaygenieS3BucketPolicy"
-        Statement:
-          - Action: "s3:GetObject"
-            Effect: "Allow"
-            Resource: !Sub "${ReactAppBucket.Arn}/*"
-            Principal: "*"
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement: # lets the public access/view the contents of your Bucket, i.e. web app
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*' # wildcard, allow all requests
+            Action: 's3:GetObject'
+            Resource: !Join ['', ['arn:aws:s3:::', waygenieapp, /*]]
 
-  CloudFrontDistribution:
-    Type: "AWS::CloudFront::Distribution"
-    Properties:
-      DistributionConfig:
-        Origins:
-          - DomainName: !GetAtt ReactAppBucket.DomainName
-            Id: !Ref ReactAppBucket
-            S3OriginConfig: {}
-        Enabled: true
-        DefaultCacheBehavior:
-          AllowedMethods: ["GET", "HEAD", "OPTIONS"]
-          CachedMethods: ["GET", "HEAD"]
-          TargetOriginId: !Ref ReactAppBucket
-          ViewerProtocolPolicy: "redirect-to-https"
-          MinTTL: 0
-          MaxTTL: 31536000
-          DefaultTTL: 86400
-        DefaultRootObject: "index.html"
-        ViewerCertificate:
-          CloudFrontDefaultCertificate: true
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt MyBucket.WebsiteURL
+    Description: URL for website hosted on S3
