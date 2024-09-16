@@ -106,10 +106,9 @@ const Itinerary = ({ resetStep }) => {
                   d="M12 4.5v15m7.5-7.5h-15"
                 />
               </svg>
-
-              <button type="button" className="ms-2" onClick={reloadPage}>
-                Generate New Itinerary
-              </button>
+            </button>
+            <button type="button" className="ms-2" onClick={reloadPage}>
+              Generate New Itinerary
             </button>
           </div>
         </div>
