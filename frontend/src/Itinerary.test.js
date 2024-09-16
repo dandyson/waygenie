@@ -4,7 +4,9 @@ import { render, screen } from "@testing-library/react";
 import Itinerary from "./Itinerary";
 
 test("renders Itinerary component", () => {
-  render(<Itinerary />);
+  const mockResetStep = jest.fn();
+
+  render(<Itinerary resetStep={mockResetStep} />);
 
   // Check if the heading is in the document
   const headingElement = screen.getByText(/YOUR ITINERARY:/i);

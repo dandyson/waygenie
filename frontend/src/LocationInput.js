@@ -65,7 +65,7 @@ LocationInput.propTypes = {
     location: PropTypes.string,
   }).isRequired,
   nextStep: PropTypes.func.isRequired,
-  backStep: PropTypes.func.isRequired,
+  backStep: PropTypes.func,
 };
 
 export default LocationInput;
