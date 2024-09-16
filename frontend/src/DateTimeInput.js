@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 const DateTimeInput = ({ nextStep, backStep, formData }) => {
-  const [startDate, setStartDate] = useState(formData.startDate || '');
-  const [startTime, setStartTime] = useState(formData.startTime || '');
-  const [endDate, setEndDate] = useState(formData.endDate || '');
-  const [endTime, setEndTime] = useState(formData.endTime || '');
+  const [startDate, setStartDate] = useState(formData.startDate || "");
+  const [startTime, setStartTime] = useState(formData.startTime || "");
+  const [endDate, setEndDate] = useState(formData.endDate || "");
+  const [endTime, setEndTime] = useState(formData.endTime || "");
 
   useEffect(() => {
     if (!startDate || !startTime || !endDate || !endTime) {
       const now = new Date();
-      const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-      const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+      const formattedDate = now.toISOString().split("T")[0]; // YYYY-MM-DD format
+      const formattedTime = now.toTimeString().split(" ")[0].slice(0, 5); // HH:MM format
 
       if (!startDate) setStartDate(formData.startDate || formattedDate);
       if (!startTime) setStartTime(formData.startTime || formattedTime);
 
       const endDateObj = new Date(now.getTime() + 60 * 60 * 1000); // Add one hour
-      const endDateFormatted = endDateObj.toISOString().split('T')[0]; // YYYY-MM-DD format
-      const endTimeFormatted = endDateObj.toTimeString().split(' ')[0].slice(0, 5); // HH:MM format
+      const endDateFormatted = endDateObj.toISOString().split("T")[0]; // YYYY-MM-DD format
+      const endTimeFormatted = endDateObj
+        .toTimeString()
+        .split(" ")[0]
+        .slice(0, 5); // HH:MM format
 
       if (!endDate) setEndDate(formData.endDate || endDateFormatted);
       if (!endTime) setEndTime(formData.endTime || endTimeFormatted);
@@ -32,7 +36,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
         startTime: `${startTime}`,
         endDate: `${endDate}`,
         endTime: `${endTime}`,
-      });      
+      });
     }
   };
 
@@ -62,12 +66,20 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
           <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             When will you be visiting?
           </h4>
-          <p className="mb-4">Please provide a start and end date for your trip, including the times</p>
+          <p className="mb-4">
+            Please provide a start and end date for your trip, including the
+            times
+          </p>
         </div>
         <div className="flex flex-col w-full space-y-6">
           <div className="flex flex-col md:flex-row items-center justify-between md:space-x-4 md:space-y-0">
             <div className="flex flex-col w-full md:w-1/2">
-              <label htmlFor="start-date" className="block text-gray-700 text-sm font-medium mb-1">Start Date:</label>
+              <label
+                htmlFor="start-date"
+                className="block text-gray-700 text-sm font-medium mb-1"
+              >
+                Start Date:
+              </label>
               <input
                 id="start-date"
                 type="date"
@@ -75,7 +87,12 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 onChange={(e) => setStartDate(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
               />
-              <label htmlFor="start-time" className="block text-gray-700 text-sm font-medium mb-1">Start Time:</label>
+              <label
+                htmlFor="start-time"
+                className="block text-gray-700 text-sm font-medium mb-1"
+              >
+                Start Time:
+              </label>
               <input
                 id="start-time"
                 type="time"
@@ -88,7 +105,12 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
               <p className="text-gray-700 text-center">To:</p>
             </div>
             <div className="flex flex-col w-full md:w-1/2">
-              <label htmlFor="end-date" className="block text-gray-700 text-sm font-medium mb-1">End Date:</label>
+              <label
+                htmlFor="end-date"
+                className="block text-gray-700 text-sm font-medium mb-1"
+              >
+                End Date:
+              </label>
               <input
                 id="end-date"
                 type="date"
@@ -96,7 +118,12 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 onChange={(e) => setEndDate(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
               />
-              <label htmlFor="end-time" className="block text-gray-700 text-sm font-medium mb-1">End Time:</label>
+              <label
+                htmlFor="end-time"
+                className="block text-gray-700 text-sm font-medium mb-1"
+              >
+                End Time:
+              </label>
               <input
                 id="end-time"
                 type="time"
@@ -125,6 +152,17 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
       </form>
     </div>
   );
+};
+
+DateTimeInput.propTypes = {
+  nextStep: PropTypes.func.isRequired,
+  backStep: PropTypes.func.isRequired,
+  formData: PropTypes.shape({
+    startDate: PropTypes.string,
+    startTime: PropTypes.string,
+    endDate: PropTypes.string,
+    endTime: PropTypes.string,
+  }).isRequired,
 };
 
 export default DateTimeInput;
