@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 const LocationInput = ({ formData, nextStep }) => {
   const [location, setLocation] = useState(formData.location);
@@ -32,14 +33,9 @@ const LocationInput = ({ formData, nextStep }) => {
           />
         </svg>
       </div>
-      <form
-        className="flex flex-col items-center"
-        onSubmit={handleSubmit}
-      >
+      <form className="flex flex-col items-center" onSubmit={handleSubmit}>
         <div className="mb-4 text-center">
-          <h4
-            className="block text-gray-700 font-extrabold mb-2 text-3xl"
-          >
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             Where are you going?
           </h4>
           <p className="mb-4">Please enter a city that you plan to visit</p>
@@ -62,6 +58,14 @@ const LocationInput = ({ formData, nextStep }) => {
       </form>
     </div>
   );
+};
+
+LocationInput.propTypes = {
+  formData: PropTypes.shape({
+    location: PropTypes.string,
+  }).isRequired,
+  nextStep: PropTypes.func.isRequired,
+  backStep: PropTypes.func.isRequired,
 };
 
 export default LocationInput;

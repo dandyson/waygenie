@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 const TravelStyleInput = ({ formData, nextStep, backStep }) => {
-  const [travelStyle, setTravelStyle] = useState(formData.travelStyle ? formData.travelStyle : 'laid-back');
+  const [travelStyle, setTravelStyle] = useState(
+    formData.travelStyle ? formData.travelStyle : "laid-back",
+  );
 
   const handleChange = (e) => {
     setTravelStyle(e.target.value);
@@ -37,9 +40,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
         onSubmit={handleSubmit}
       >
         <div className="text-center mb-6">
-          <h4
-            className="block text-gray-700 font-extrabold mb-2 text-3xl"
-          >
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             What's your travelling style?
           </h4>
           <small className="text-gray-600">
@@ -78,6 +79,14 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
       </form>
     </div>
   );
+};
+
+TravelStyleInput.propTypes = {
+  formData: PropTypes.shape({
+    travelStyle: PropTypes.string,
+  }).isRequired,
+  nextStep: PropTypes.func.isRequired,
+  backStep: PropTypes.func.isRequired,
 };
 
 export default TravelStyleInput;

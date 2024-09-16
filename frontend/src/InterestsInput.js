@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 const InterestsInput = ({ formData, nextStep, backStep }) => {
-  const [interests, setInterests] = useState(formData.interests && formData.interests.length > 0 ? formData.interests : ['']);
+  const [interests, setInterests] = useState(
+    formData.interests && formData.interests.length > 0
+      ? formData.interests
+      : [""],
+  );
 
   useEffect(() => {
     // Sync formData.interests to local state if it's an array
     if (Array.isArray(formData.interests)) {
-      setInterests(formData.interests.length > 0 ? formData.interests : ['']);
+      setInterests(formData.interests.length > 0 ? formData.interests : [""]);
     }
   }, [formData.interests]);
 
@@ -17,7 +22,7 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
   };
 
   const addInterest = () => {
-    setInterests([...interests, '']);
+    setInterests([...interests, ""]);
   };
 
   const removeInterest = (index) => {
@@ -50,12 +55,14 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
           />
         </svg>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="w-full max-w-md">
-      <div className="mb-6 text-center">
-        <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">Your Interests</h4>
-        <p className="mb-4">Please provide your interests for the trip.</p>
-      </div>
+        <div className="mb-6 text-center">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
+            Your Interests
+          </h4>
+          <p className="mb-4">Please provide your interests for the trip.</p>
+        </div>
         {interests.map((interest, index) => (
           <div key={index} className="mb-4 flex items-center">
             <div className="w-full">
@@ -104,6 +111,14 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
       </form>
     </div>
   );
+};
+
+InterestsInput.propTypes = {
+  formData: PropTypes.shape({
+    interests: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  nextStep: PropTypes.func.isRequired,
+  backStep: PropTypes.func.isRequired,
 };
 
 export default InterestsInput;
