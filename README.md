@@ -2,7 +2,7 @@
     <img src="frontend/public/waygenie-logo.png" alt="WayGenie Logo" width="200">
 </div>
 
-# WayGenie
+# WayGenie - http://waygenie.s3-website.eu-west-2.amazonaws.com/
 
 ## Overview
 
