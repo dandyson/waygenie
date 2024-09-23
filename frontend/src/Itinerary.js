@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import HtmlRenderer from './tools/HtmlRenderer';
 
 const Itinerary = ({ aiResponse, resetStep }) => {
   const [isGenerating, setIsGenerating] = useState(true);
+  const [htmlContent, setHtmlContent] = useState('');
 
   useEffect(() => {
     if (aiResponse) {
@@ -27,13 +29,8 @@ const Itinerary = ({ aiResponse, resetStep }) => {
         <div>
           <h2 className="text-center text-3xl font-bold">YOUR ITINERARY:</h2>
           <hr className="mt-4 mb-8"></hr>
-          <div dangerouslySetInnerHTML={
-            { __html: aiResponse }
-          }></div>
-          <div>{aiResponse}</div>
+          <HtmlRenderer htmlContent={aiResponse} />
           <hr className="mt-4 mb-8"></hr>
-
-
 
 
 
