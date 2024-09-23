@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import HtmlRenderer from './tools/HtmlRenderer';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import HtmlRenderer from "../tools/HtmlRenderer";
 
 const Itinerary = ({ aiResponse, resetStep }) => {
   const [isGenerating, setIsGenerating] = useState(true);
-  const [htmlContent, setHtmlContent] = useState('');
 
   useEffect(() => {
     if (aiResponse) {
-      setIsGenerating(false);  // Stop loading spinner when AI response arrives
+      setIsGenerating(false); // Stop loading spinner when AI response arrives
     }
   }, [aiResponse]);
 
@@ -32,18 +32,25 @@ const Itinerary = ({ aiResponse, resetStep }) => {
           <HtmlRenderer htmlContent={aiResponse} />
           <hr className="mt-4 mb-8"></hr>
 
-
-
-
-
           <div className="flex items-center justify-between w-full">
             <button
               type="button"
               onClick={resetStep}
               className="flex items-center bg-slate-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                />
               </svg>
               <span className="ms-2">Edit Itinerary</span>
             </button>
@@ -52,8 +59,19 @@ const Itinerary = ({ aiResponse, resetStep }) => {
               onClick={reloadPage}
               className="flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
               </svg>
               <span className="ms-2">Generate New Itinerary</span>
             </button>
@@ -65,6 +83,7 @@ const Itinerary = ({ aiResponse, resetStep }) => {
 };
 
 Itinerary.propTypes = {
+  aiResponse: PropTypes.func.isRequired,
   resetStep: PropTypes.func.isRequired,
 };
 

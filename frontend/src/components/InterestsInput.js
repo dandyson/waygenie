@@ -34,7 +34,7 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    nextStep({interests});
+    nextStep({ interests });
   };
 
   return (
