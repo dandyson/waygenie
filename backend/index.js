@@ -22,14 +22,18 @@ app.get('/api', (req, res) => {
 
 // OpenAI
 app.post('/chat', async (req, res) => {
-  const { formData } = req.body;
+  const formData = req.body.prompt; // Access formData from prompt
+
+  console.log('Received formData:', formData);  // Log the formData to verify
 
   try {
-    const guide = "You are a travel Itinerary creator. Take the following data and make a itinerary out of it: ";
+    const guide = "You are a travel Itinerary creator. Take the following data and make an itinerary out of it: ";
+    
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo', // Use the appropriate model
+      model: 'gpt-4o',
       messages: [
-        { role: 'user', content: guide + formData},
+        { role: 'system', content: guide },
+        { role: 'user', content: JSON.stringify(formData) }, // Stringify formData for the user message
       ],
     });
 
@@ -41,6 +45,7 @@ app.post('/chat', async (req, res) => {
     res.status(500).json({ error: 'Failed to generate response' });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
