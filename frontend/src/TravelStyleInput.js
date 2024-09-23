@@ -13,7 +13,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (travelStyle) {
-      nextStep(travelStyle);
+      nextStep({ travelStyle });  // Pass travelStyle to next step
     }
   };
 
@@ -35,10 +35,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
           />
         </svg>
       </div>
-      <form
-        className="flex flex-col items-center w-full max-w-md"
-        onSubmit={handleSubmit}
-      >
+      <form className="flex flex-col items-center w-full max-w-md" onSubmit={handleSubmit}>
         <div className="text-center mb-6">
           <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             What's your travelling style?
