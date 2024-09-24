@@ -12,7 +12,12 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.REACT_APP_FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: false,
+}));
+
 app.use(bodyParser.json());
 
 // API routes
@@ -21,14 +26,13 @@ app.get('/api', (req, res) => {
 });
 
 app.post('/chat', async (req, res) => {
-  const formData = req.body.prompt; // Access formData from prompty
+  const formData = req.body.prompt; // Access formData from prompt
 
   try {
     const guide = 
     `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
 
     Your response must be a JSON object that follows this exact structure:
-
     {
         "introduction": "Welcome to your laid-back, coffee-inspired day trip in the bustling city of London. This itinerary is designed to provide you with a relaxing experience, immersing you in the rich coffee culture of the city. Enjoy your journey!",
         "itinerary": "<ul className='m-8 max-w-screen-md'>",
@@ -41,12 +45,9 @@ app.post('/chat', async (req, res) => {
     }
 
     ### Requirements:
-
     1. **Travel Proximity**: Ensure that all events are close enough to each other to avoid significant back-and-forth travel or long transit times.
-          
     2. **Food Recommendations**: 
       - Recommend well-reviewed, pleasant food places. If the travelStyle is "ASAP," suggest fast food options.
-
     3. **Travel Suggestions**: 
       - Specify how to travel between events, including which bus, train, or walking directions to use.
 
@@ -59,8 +60,6 @@ app.post('/chat', async (req, res) => {
 
     Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
 
-
-  
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
