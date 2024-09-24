@@ -12,6 +12,8 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+console.log('CORS Origin:', process.env.REACT_APP_FRONTEND_URL);
+
 app.use(cors({
   origin: process.env.REACT_APP_FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
