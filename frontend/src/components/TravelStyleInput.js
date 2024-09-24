@@ -13,7 +13,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (travelStyle) {
-      nextStep(travelStyle);
+      nextStep({ travelStyle }); // Pass travelStyle to next step
     }
   };
 

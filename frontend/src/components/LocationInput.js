@@ -7,7 +7,7 @@ const LocationInput = ({ formData, nextStep }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (location) {
-      nextStep(location);
+      nextStep({ location });
     }
   };
 
