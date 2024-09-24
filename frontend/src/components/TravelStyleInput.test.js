@@ -63,7 +63,7 @@ describe("TravelStyleInput", () => {
       const nextButton = screen.getByText("Let's Go!");
       fireEvent.click(nextButton);
       expect(mockNextStep).toHaveBeenCalledTimes(1);
-      expect(mockNextStep).toHaveBeenCalledWith({"travelStyle": "everything"});
+      expect(mockNextStep).toHaveBeenCalledWith({ travelStyle: "everything" });
     });
 
     it("calls backStep function when user clicks back button", () => {
