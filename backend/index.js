@@ -12,12 +12,12 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-console.log('CORS Origin:', process.env.REACT_APP_FRONTEND_URL);
+const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL];
 
 app.use(cors({
-  origin: process.env.REACT_APP_FRONTEND_URL,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: false,
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: false,
 }));
 
 app.use(bodyParser.json());
@@ -63,7 +63,7 @@ app.post('/chat', async (req, res) => {
     Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
       messages: [
         { role: 'system', content: guide },
         { role: 'user', content: JSON.stringify(formData) }, // Stringify formData for the user message
