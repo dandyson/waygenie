@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-const Itinerary = ({ aiResponse, resetStep }) => {
+const Itinerary = ({ aiResponse }) => {
   const [isGenerating, setIsGenerating] = useState(true);
   const [error, setError] = useState(null);
 
