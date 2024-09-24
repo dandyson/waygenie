@@ -30,9 +30,12 @@ const App = () => {
       setStep(5);
 
       try {
-        const response = await axios.post(`${process.env.API_URL}/chat`, {
-          prompt: updatedFormData,
-        });
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/chat`,
+          {
+            prompt: updatedFormData,
+          },
+        );
         setAiResponse(response.data);
       } catch (error) {
         setAiResponse({
