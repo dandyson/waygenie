@@ -35,8 +35,12 @@ const App = () => {
         });
         setAiResponse(response.data);
       } catch (error) {
-        console.error("Error fetching AI response:", error);
-        setAiResponse("Failed to generate itinerary");
+        setAiResponse({
+          introduction: "",
+          events: [],
+          travelMethods: "",
+          error: "Failed to generate itinerary"
+        });
       }
     } else {
       setStep(step + 1);
