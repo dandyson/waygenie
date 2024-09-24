@@ -39,7 +39,7 @@ const App = () => {
           introduction: "",
           events: [],
           travelMethods: "",
-          error: "Failed to generate itinerary"
+          error: "Failed to generate itinerary",
         });
       }
     } else {
