@@ -24,7 +24,7 @@ describe("LocationInput", () => {
       expect(input.value).toBe("Paris");
       const nextButton = screen.getByText("Next");
       fireEvent.click(nextButton);
-      expect(mockNextStep).toHaveBeenCalledWith("Paris");
+      expect(mockNextStep).toHaveBeenCalledWith({"location": "Paris"});
     });
 
     test("does not call nextStep if input is empty", () => {

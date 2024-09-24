@@ -140,7 +140,7 @@ describe("InterestsInput component", () => {
     test("calls nextStep with updated interests", () => {
       const nextButton = screen.getByText("Next");
       fireEvent.click(nextButton);
-      expect(mockNextStep).toHaveBeenCalledWith(["Parks"]);
+      expect(mockNextStep).toHaveBeenCalledWith({"interests": ["Parks"]});
     });
   });
 
