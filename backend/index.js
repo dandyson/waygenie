@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL];
+const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL, 'http://localhost:3000'];
 
 app.use(cors({
     origin: allowedOrigins,
@@ -34,16 +34,23 @@ app.post('/chat', async (req, res) => {
     const guide = 
     `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
 
-    Your response must be a JSON object that follows this exact structure:
+    Your response must be a JSON object that follows this exact structure, but please do not use this content, make your own from the formData provided:
     {
-        "introduction": "Welcome to your laid-back, coffee-inspired day trip in the bustling city of London. This itinerary is designed to provide you with a relaxing experience, immersing you in the rich coffee culture of the city. Enjoy your journey!",
-        "itinerary": "<ul className='m-8 max-w-screen-md'>",
-        "events": [
-            { "title": "Visit to the British Museum", "time": "10:20 AM - 11:20 AM", "description": "Start your day with a visit to the British Museum. Explore the Enlightenment Gallery, which showcases the age of reason, science, and the power of collecting. Don't forget to grab a coffee at the museum's café." },
-            { "title": "Visit to Monmouth Coffee Company", "time": "11:40 AM - 12:10 PM", "description": "Enjoy a cup of coffee at Monmouth Coffee Company, a well-reviewed coffee shop known for its quality beans and brewing methods." },
-            { "title": "Lunch at The Espresso Room", "time": "12:30 PM - 1:30 PM", "description": "Have a laid-back lunch at The Espresso Room, a café that serves excellent coffee and light meals. Their avocado toast is a must-try." }
-        ],
-        "travelMethods": "This itinerary involves walking and the use of public transportation. The London Underground, also known as the Tube, is a convenient and efficient way to get around the city. To reach Monmouth Coffee Company from the British Museum, take the tube from Tottenham Court Road Station to Covent Garden Station. From Monmouth Coffee Company to The Espresso Room, it's a short walk that will take around 10 minutes."
+      "introduction": "Introduction based on the location and travel style.",
+      "itinerary": "<ul>",
+      "events": [
+        {
+          "title": "Event 1 based on user interests",
+          "time": "Specific time range",
+          "description": "Event description."
+        },
+        {
+          "title": "Event 2 based on user interests",
+          "time": "Specific time range",
+          "description": "Event description."
+        }
+      ],
+      "travelMethods": "How to travel between events (walking, public transport, etc.)."
     }
 
     ### Requirements:
@@ -63,7 +70,7 @@ app.post('/chat', async (req, res) => {
     Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4',
       messages: [
         { role: 'system', content: guide },
         { role: 'user', content: JSON.stringify(formData) }, // Stringify formData for the user message
