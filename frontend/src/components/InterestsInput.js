@@ -96,7 +96,7 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
         <div className="flex items-center justify-between w-full mt-6">
           <button
             type="button"
-            className="bg-slate-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-slate-700 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline back-button"
             onClick={backStep}
           >
             Back
