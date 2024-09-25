@@ -24,12 +24,12 @@ describe('Navigation and Input', () => {
     // Step 1: User provides destination
     cy.get('input').type('London'); 
     cy.contains('Next').click(); 
-    cy.contains('When will you be visiting?'); d
+    cy.contains('When will you be visiting?');
 
     // Step 2: User inputs visit details
     cy.get('#start-date').type('2024-01-01'); 
     cy.get('#start-time').type('09:00'); 
-    cy.get('#end-date').type('2024-01-01'); e
+    cy.get('#end-date').type('2024-01-01');
     cy.get('#end-time').type('17:00'); 
     cy.contains('Next').click(); 
     cy.contains('Your Interests'); 
@@ -99,7 +99,7 @@ describe('Navigation and Input', () => {
 
     // Return to Step 4
     cy.contains('Next').click(); 
-    cy.contains("What's your travelling style?"); n
+    cy.contains("What's your travelling style?");
 
     // Validate travel style selection
     cy.get('#travel-style').should('have.value', 'laid-back'); 
@@ -163,7 +163,7 @@ describe('Interests multiple inputs testing', () => {
     cy.get('input[type="text"]').eq(2).should('have.value', 'Photography');
 
     // Click remove button on second input
-    cy.get('.remove-button').eq(1).click();
+    cy.get('button:contains("Remove")').eq(0).click();
     cy.get('input[type="text"]').should('have.length', 2);
     cy.get('input[type="text"]').eq(1).should('have.value', 'Photography');
   });
