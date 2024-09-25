@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL];
+const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL, 'http://localhost:3000'];
 
 app.use(cors({
     origin: allowedOrigins,
