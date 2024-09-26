@@ -75,6 +75,63 @@ The frontend should be accessible at http://localhost:3000 (or the port specifie
 
 The backend API will be available at http://localhost:5000 (or the port specified in your backend setup).
 
+### Extra steps
+
+## Frontend Testing
+
+If you would like to run tests in the application, first make sure you are in the /frontend directory:
+
+```bash
+cd frontend
+```
+<br>
+
+You can then run them as follows:
+
+
+### **React Scripts/Jest**
+
+Run the following command to run the tests:
+
+```bash
+npm run test
+```
+
+If you would like to see the coverage run this command:
+
+```bash
+npm run test:total
+```
+
+<br>
+
+### **Cypress E2E Testing**
+
+WayGenie includes Cypress End-to-End testing on the frontend - to run these tests, first make sure you are in the /frontend directory:
+
+```bash
+cd frontend
+```
+
+Then run this command:
+
+```bash
+npm run cypress
+```
+
+This will open the cypress window. Then follow these steps:
+
+1. Within the window, select the **E2E Testing** option.
+2. You will then be asked to choose a browser. Select any browser you wish.
+3. This will open the browser you selected.
+
+Once the browser has opened, you will be taken to the Cypress dashboard. The tests will be within the **specs**.
+
+From here, select any of the files and the tests will run!
+
+<br>
+
+
 ### Troubleshooting
 
 If you encounter issues, consider the following:

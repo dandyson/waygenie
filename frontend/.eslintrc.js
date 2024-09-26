@@ -15,9 +15,10 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
+    'plugin:cypress/recommended',
     "plugin:prettier/recommended", // Add Prettier last
   ],
-  plugins: ["react", "jsx-a11y", "@typescript-eslint", "prettier"],
+  plugins: ["react", "jsx-a11y", "@typescript-eslint", "cypress", "prettier"],
   rules: {
     "prettier/prettier": "error", // Prettier rules
     "react/no-unescaped-entities": "off", // Turned this off so I dont have to escape my apostrophes in any text I write in the components (I dont feel I need this rule in)
@@ -29,9 +30,10 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["**/*.test.js", "**/*.test.jsx"],
+      files: ["**/*.test.js", "**/*.test.jsx", "cypress/**/*.js"],
       env: {
         jest: true,
+        'cypress/globals': true,
       },
     },
   ],

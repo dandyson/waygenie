@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # For Heroku deployment - cannot use shallow clone, so fetch the full history to ensure a non-shallow clone
+          fetch-depth: 0  # Fetch the full history to avoid issues with Heroku deployment
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -49,6 +49,24 @@ jobs:
           REACT_APP_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
         run: npm run build
+
+      - name: Install Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Run E2E tests 🧪
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 60
+        env:
+          CYPRESS_RUN_SPECIFIED: true
+          CYPRESS_SPEC: cypress/e2e/app-e2e.cy.js
+          CYPRESS_LOG: true
+          CYPRESS_LOG_LEVEL: debug
 
       - name: Upload frontend to S3
         run: |
