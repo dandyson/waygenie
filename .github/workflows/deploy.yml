@@ -50,11 +50,6 @@ jobs:
           REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
         run: npm run build
 
-      - name: Install Xvfb
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-
       - name: Run E2E tests 🧪
         uses: cypress-io/github-action@v6
         with:
@@ -62,6 +57,7 @@ jobs:
           start: npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 60
+          browser: chrome  # Specify Chrome as the browser
         env:
           CYPRESS_RUN_SPECIFIED: true
           CYPRESS_SPEC: cypress/e2e/app-e2e.cy.js
