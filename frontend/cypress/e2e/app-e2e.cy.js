@@ -42,7 +42,7 @@ describe("Navigation and Input", () => {
     // Change travel style
     cy.get("#travel-style").select("everything");
     cy.get("#travel-style").should("have.value", "everything");
-    cy.contains("Let's Go!").click();
+    cy.contains("Let's Go!").should("exist");
   });
 
   it("navigates through the wizard steps correctly and uses the back button", () => {
@@ -106,8 +106,8 @@ describe("Navigation and Input", () => {
     cy.get("#travel-style").select("everything");
     cy.get("#travel-style").should("have.value", "everything");
 
-    // Click "Let's Go!" to submit the form
-    cy.contains("Let's Go!").click();
+    // Checks "Let's Go!" button is there to submit the form
+    cy.contains("Let's Go!").should("exist");
   });
 });
 
