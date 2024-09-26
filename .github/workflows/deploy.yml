@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # For Heroku deployment - cannot use shallow clone, so fetch the full history to ensure a non-shallow clone
+          fetch-depth: 0  # Fetch the full history to avoid issues with Heroku deployment
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
