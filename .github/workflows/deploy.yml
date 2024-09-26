@@ -2,8 +2,9 @@ name: Deploy to S3 and Heroku
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   deploy:
