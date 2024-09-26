@@ -54,7 +54,7 @@ describe("OpenAI API Call", () => {
     cy.contains("Let's Go!").click();
 
     // Assert that the spinner is visible
-    cy.get('div[role="status"]', { timeout: 10000 }).should('be.visible');
+    cy.get('div[role="status"]', { timeout: 10000 }).should("be.visible");
 
     // Wait for the API call to complete
     cy.wait("@getItinerary");
