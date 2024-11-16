@@ -14,7 +14,6 @@ const fetchItinerary = async (formData) => {
     );
 
     const jobId = initialResponse.data.jobId;
-    console.log(`Job queued with ID: ${jobId}`);
 
     // Step 2: Poll for the status of the job
     while (Date.now() - startTime < POLLING_TIMEOUT) {
