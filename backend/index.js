@@ -2,91 +2,91 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const OpenAI = require('openai');
+const chatQueue = require('./jobs/queue');
+const Redis = require('ioredis');
 require('dotenv').config();
+require('./jobs/worker');
 
-// OpenAI Config
+const app = express();
+const PORT = process.env.PORT || 5000;
+const redisConnection = new Redis(process.env.REDISCLOUD_URL);
+
+// Configure OpenAI instance
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
+// Configure CORS
 const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL, 'http://localhost:3000'];
-
-app.use(cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: false,
-}));
+app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: false }));
 
 app.use(bodyParser.json());
 
-// API routes
-app.get('/api', (req, res) => {
-  res.send('Welcome to WayGenie API');
-});
+// Basic API route
+app.get('/api', (req, res) => res.send('Welcome to WayGenie API'));
 
+// Chat route for generating travel itineraries
 app.post('/chat', async (req, res) => {
-  const formData = req.body.prompt; // Access formData from prompt
+  
+  const formData = req.body.prompt;
+  
+  if (!formData) {
+    return res.status(400).json({ error: 'Prompt data is missing from the request' });
+  }
+
+  // Validate required fields
+  const requiredFields = ['location', 'startDate', 'endDate', 'startTime', 'endTime', 'interests', 'travelStyle'];
+  const missingFields = requiredFields.filter(field => !formData[field]);
+
+  if (missingFields.length > 0) {
+    return res.status(400).json({ error: `Missing fields: ${missingFields.join(', ')}` });
+  }
 
   try {
-    const guide = 
-    `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
+    // Add a job to the queue
+    const job = await chatQueue.add('generateItinerary', formData);
 
-    Your response must be a JSON object that follows this exact structure, but please do not use this content, make your own from the formData provided:
-    {
-      "introduction": "Introduction based on the location and travel style.",
-      "itinerary": "<ul>",
-      "events": [
-        {
-          "title": "Event 1 based on user interests",
-          "time": "Specific time range",
-          "description": "Event description."
-        },
-        {
-          "title": "Event 2 based on user interests",
-          "time": "Specific time range",
-          "description": "Event description."
-        }
-      ],
-      "travelMethods": "How to travel between events (walking, public transport, etc.)."
-    }
-
-    ### Requirements:
-    1. **Travel Proximity**: Ensure that all events are close enough to each other to avoid significant back-and-forth travel or long transit times.
-    2. **Food Recommendations**: 
-      - Recommend well-reviewed, pleasant food places. If the travelStyle is "ASAP," suggest fast food options.
-    3. **Travel Suggestions**: 
-      - Specify how to travel between events, including which bus, train, or walking directions to use.
-
-    ### Itinerary Data:
-    - Location: ${formData.location}
-    - Date: ${formData.startDate} to ${formData.endDate}
-    - Time: ${formData.startTime} to ${formData.endTime}
-    - Interests: ${formData.interests.join(', ')}
-    - Travel Style: ${formData.travelStyle}
-
-    Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: guide },
-        { role: 'user', content: JSON.stringify(formData) }, // Stringify formData for the user message
-      ],
-      max_tokens: 1000,
-      temperature: 0.7,
-    });
-
-    const response = completion.choices[0].message.content;
-
-    res.send(response);
+    res.status(202).json({ message: 'Job queued', jobId: job.id });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to generate response' });
+    console.error('Error adding job to queue:', error);
+    res.status(500).json({ error: 'Failed to queue job' });
   }
 });
 
+// Check a job's status
+app.get('/chat/status/:jobId', async (req, res) => {
+  const jobId = req.params.jobId;
+  
+  try {
+    // Find the job in the queue
+    const job = await chatQueue.getJob(jobId);
+
+    if (!job) {
+      return res.status(404).json({ status: 'Job not found' });
+    }
+
+    const isCompleted = await job.isCompleted();
+    const isFailed = await job.isFailed();
+
+    if (isCompleted) {
+      // Job completed, return the result
+      const result = await job.returnvalue;
+      res.json({ status: 'completed', result });
+    } else if (isFailed) {
+      // Job failed, return the error
+      const error = await job.failedReason;
+      res.json({ status: 'failed', error });
+    } else {
+      // Job is still in progress
+      res.json({ status: 'in-progress' });
+    }
+  } catch (error) {
+    console.error('Error fetching job status:', error);
+    res.status(500).json({ status: 'error', error: 'Could not fetch job status' });
+  }
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -5,7 +5,7 @@ import DateTimeInput from "./components/DateTimeInput";
 import InterestsInput from "./components/InterestsInput";
 import TravelStyleInput from "./components/TravelStyleInput";
 import Itinerary from "./components/Itinerary";
-import axios from "axios";
+import fetchItinerary from "./api/fetchItinerary";
 
 const App = () => {
   const [step, setStep] = useState(1);
@@ -20,30 +20,22 @@ const App = () => {
   });
   const [aiResponse, setAiResponse] = useState(null);
 
-  // Function to handle moving to the next step
   const nextStep = async (data) => {
     const updatedFormData = { ...formData, ...data };
     setFormData(updatedFormData);
 
     if (step === 4) {
-      // Immediately move to the next step so a spinner can be shown whilst waiting for the API response
-      setStep(5);
+      setStep(5); // Move to step 5 to show the spinner
+
+      const response = await fetchItinerary(updatedFormData);
 
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/chat`,
-          {
-            prompt: updatedFormData,
-          },
-        );
-        setAiResponse(response.data);
-      } catch (error) {
-        setAiResponse({
-          introduction: "",
-          events: [],
-          travelMethods: "",
-          error: "Failed to generate itinerary",
-        });
+        const parsedResponse =
+          typeof response === "string" ? JSON.parse(response) : response;
+        setAiResponse(parsedResponse);
+      } catch (err) {
+        console.error("Error parsing itinerary response:", err);
+        setAiResponse(null);
       }
     } else {
       setStep(step + 1);
