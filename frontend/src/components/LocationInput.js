@@ -42,6 +42,7 @@ const LocationInput = ({ formData, nextStep }) => {
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
             type="text"
+            name="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Enter a location..."
