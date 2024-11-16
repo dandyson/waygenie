@@ -70,7 +70,6 @@ const worker = new Worker(
 
     // Retrieve the result and send it back
     const response = result.choices[0].message.content;
-    console.log("Generated response:", response);
 
     return response;
   },

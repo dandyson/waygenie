@@ -10,8 +10,6 @@ const Itinerary = ({ aiResponse, resetStep }) => {
     if (aiResponse) {
       setIsGenerating(false);
 
-      console.log(aiResponse);
-
       try {
         // If aiResponse is a string, try to parse it into an object
         const parsed =
