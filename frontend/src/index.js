@@ -1,16 +1,16 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Auth0Provider } from "@auth0/auth0-react";
 import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 import './index.css';
 import './App.css';
 
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
+const router = createBrowserRouter([
+  {
+    path: "*",
+    element: (
       <Auth0Provider
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
@@ -26,6 +26,18 @@ root.render(
           <App />
         </AuthProvider>
       </Auth0Provider>
-    </BrowserRouter>
+    )
+  }
+], {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true
+  }
+});
+
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

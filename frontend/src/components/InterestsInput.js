@@ -59,7 +59,7 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
       <form onSubmit={handleSubmit} className="w-full max-w-md">
         <div className="mb-6 text-center">
           <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
-            Your Interests
+            What are your Interests?
           </h4>
           <p className="mb-4">Please provide your interests for the trip.</p>
         </div>

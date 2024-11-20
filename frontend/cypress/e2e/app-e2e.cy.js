@@ -32,7 +32,7 @@ describe("Navigation and Input", () => {
     cy.get("#end-date").type("2024-01-01");
     cy.get("#end-time").type("17:00");
     cy.contains("Next").click();
-    cy.contains("Your Interests");
+    cy.contains("What are your Interests?");
 
     // Step 3: User inputs interests
     cy.get('input[type="text"]').type("Coffee");
@@ -68,11 +68,11 @@ describe("Navigation and Input", () => {
 
     // Proceed to Step 3
     cy.contains("Next").click();
-    cy.contains("Your Interests");
+    cy.contains("What are your Interests?");
 
     // Go back to Step 2
     cy.get(".back-button").click();
-    cy.contains("Your Interests").should("not.exist");
+    cy.contains("What are your Interests?").should("not.exist");
     cy.contains("When will you be visiting?");
     // Verify input values are maintained
     cy.get("#start-date").should("have.value", "2024-01-01");
@@ -82,7 +82,7 @@ describe("Navigation and Input", () => {
 
     // Return to Step 3
     cy.contains("Next").click();
-    cy.contains("Your Interests");
+    cy.contains("What are your Interests?");
 
     // Step 3: User provides interests
     cy.get('input[type="text"]').type("Coffee");
@@ -94,7 +94,7 @@ describe("Navigation and Input", () => {
     // Go back to Step 3
     cy.get(".back-button").click();
     cy.contains("What's your travelling style?").should("not.exist");
-    cy.contains("Your Interests");
+    cy.contains("What are your Interests?");
     cy.get('input[type="text"]').should("have.value", "Coffee");
 
     // Return to Step 4
@@ -126,7 +126,7 @@ describe("Interests multiple inputs testing", () => {
     cy.get("#end-date").type("2024-01-01");
     cy.get("#end-time").type("17:00");
     cy.contains("Next").click();
-    cy.contains("Your Interests");
+    cy.contains("What are your Interests?");
   });
 
   it("should initially display one input field", () => {

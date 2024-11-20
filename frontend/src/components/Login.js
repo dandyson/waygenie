@@ -4,7 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 const Login = () => {
   const { loginWithRedirect } = useAuth0();
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]">
+    <div data-testid="login-component" className="min-h-screen flex items-center justify-center p-8 bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <div className="mb-6 flex justify-center">
           <svg
@@ -27,6 +27,7 @@ const Login = () => {
             Welcome to WayGenie!
           </h4>
           <p>The AI Travel Planner</p>
+          <p className="mt-4 text-gray-600">Please login to start planning your trip</p>
         </div>
         <div className="flex flex-col items-center justify-center p-6">
           <button

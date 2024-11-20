@@ -17,16 +17,6 @@ describe("DateTimeInput", () => {
 
   describe("initial rendering", () => {
     test("renders DateTimeInput with default values", () => {
-      // const data = {
-      //   location: "",
-      //   startDate: "",
-      //   startTime: "",
-      //   endDate: "",
-      //   endTime: "",
-      //   interests: [],
-      //   travelStyle: "",
-      // }
-      // Initialise
       render(
         <DateTimeInput
           nextStep={(data) => {
