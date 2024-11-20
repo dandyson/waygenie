@@ -1,70 +1,82 @@
-import fetchItinerary from './fetchItinerary';
-import { makeAuthenticatedRequest } from '../utils/api';
+import fetchItinerary from "./fetchItinerary";
+import { makeAuthenticatedRequest } from "../utils/api";
 
-// Mock the entire module
-jest.mock('../utils/api', () => ({
-  makeAuthenticatedRequest: jest.fn().mockImplementation(async (endpoint, method, token, data) => {
-    if (!data.prompt.location) {
-      throw new Error('Invalid input data');
-    }
-    return Promise.resolve(data);
-  })
-}));
+jest.mock("../utils/api");
 
-describe('fetchItinerary', () => {
-  const mockToken = 'test-token';
+describe("fetchItinerary", () => {
   const mockFormData = {
-    location: 'Paris',
-    startDate: '2024-01-01',
-    startTime: '09:00',
-    endDate: '2024-01-03',
-    endTime: '17:00',
-    interests: ['History', 'Food'],
-    travelStyle: 'Relaxed'
+    location: "Paris",
+    startDate: "2023-12-01",
+    startTime: "09:00",
+    endDate: "2023-12-02",
+    endTime: "18:00",
+    interests: ["art", "history"],
+    travelStyle: "relaxed",
   };
+  const mockToken = "mockAccessToken";
 
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('successfully fetches itinerary', async () => {
-    const mockResponse = {
-      days: [{ activities: ['Visit Eiffel Tower'] }]
-    };
-    makeAuthenticatedRequest.mockResolvedValue(mockResponse);
+  it("should return the final itinerary result when the job completes successfully", async () => {
+    makeAuthenticatedRequest
+      .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
+      .mockResolvedValueOnce({ status: "completed", result: { 
+        introduction: "Welcome to your trip!", 
+        events: [{ name: "Louvre Tour", time: "10:00 AM" }], 
+        travelMethods: "walking" 
+      }});
 
     const result = await fetchItinerary(mockFormData, mockToken);
-    
-    expect(makeAuthenticatedRequest).toHaveBeenCalledWith(
-      '/api/itinerary',
-      'POST',
+
+    expect(result).toEqual({
+      introduction: "Welcome to your trip!",
+      events: [{ name: "Louvre Tour", time: "10:00 AM" }],
+      travelMethods: "walking",
+    });
+
+    expect(makeAuthenticatedRequest).toHaveBeenCalledTimes(2);
+    expect(makeAuthenticatedRequest).toHaveBeenNthCalledWith(
+      1,
+      "/api/itinerary",
+      "POST",
       mockToken,
       { prompt: mockFormData }
     );
-    expect(result).toEqual(mockResponse);
+    expect(makeAuthenticatedRequest).toHaveBeenNthCalledWith(
+      2,
+      "/api/itinerary/status/12345",
+      "GET",
+      mockToken
+    );
   });
 
-  test('handles API errors', async () => {
-    makeAuthenticatedRequest.mockRejectedValue(new Error('API error'));
+  it("should throw an error if the job fails", async () => {
+    makeAuthenticatedRequest
+      .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
+      .mockResolvedValueOnce({ status: "failed" }); // Polling response
 
-    const result = await fetchItinerary(mockFormData, mockToken);
-    expect(result).toEqual({
-      introduction: "",
-      events: [],
-      error: "Failed to generate itinerary",
-      travelMethods: ""
-    });
+    await expect(fetchItinerary(mockFormData, mockToken)).rejects.toThrow(
+      "Job failed to complete."
+    );
   });
 
-  test('handles empty location', async () => {
-    const invalidData = { ...mockFormData, location: '' };
-    const result = await fetchItinerary(invalidData, mockToken);
-    
-    expect(result).toEqual({
-      introduction: "",
-      events: [],
-      error: "Failed to generate itinerary",
-      travelMethods: ""
-    });
+  it("should throw a timeout error if the polling exceeds the timeout period", async () => {
+    makeAuthenticatedRequest
+      .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
+      .mockResolvedValue({ status: "in_progress" }); // Polling response (repeated)
+
+    jest.useFakeTimers(); // Simulate polling timeout
+
+    const fetchPromise = fetchItinerary(mockFormData, mockToken);
+
+    jest.advanceTimersByTime(30000); // Simulate 30 seconds passing
+
+    await expect(fetchPromise).rejects.toThrow(
+      "Request timed out. Please try again later."
+    );
+
+    jest.useRealTimers(); // Cleanup fake timers
   });
-}); 
+});

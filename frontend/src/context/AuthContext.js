@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
           setError(null);
         }
       } catch (error) {
-        setError(error.message || 'Failed to get authentication token');
+        setError(error.message || "Failed to get authentication token");
         setToken(null);
       }
     };
@@ -26,10 +27,14 @@ export const AuthProvider = ({ children }) => {
   }, [isAuthenticated, getAccessTokenSilently]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, error }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
