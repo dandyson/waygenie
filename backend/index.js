@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.get('/api', checkJwt, (req, res) => res.send('Welcome to WayGenie API'));
 
 // Chat route for generating travel itineraries
-app.post('/chat', checkJwt, async (req, res) => {
+app.post('/api/itinerary', checkJwt, async (req, res) => {
   
   const formData = req.body.prompt;
   
@@ -55,7 +55,7 @@ app.post('/chat', checkJwt, async (req, res) => {
 });
 
 // Check a job's status
-app.get('/chat/status/:jobId', checkJwt, async (req, res) => {
+app.get('/api/itinerary/status/:jobId', checkJwt, async (req, res) => {
   const jobId = req.params.jobId;
   
   try {
