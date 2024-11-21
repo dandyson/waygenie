@@ -48,21 +48,17 @@ Cypress.Commands.add("login", (overrides = {}) => {
 
 // This command logs into the app so the tests can run what they need to
 Cypress.Commands.add("loginToApp", () => {
-  cy.log('Starting login process');
-  
-  cy.session('auth0', () => {
-    cy.log('Initiating auth0 session');
-    cy.visit('/');
-    cy.origin(
-      Cypress.env('auth0_domain'),
-      { args: {} },
-      () => {
-        cy.log('Inside auth0 domain');
-        cy.get('input[type="email"]').type(Cypress.env('auth_username'));
-        cy.get('input[type="password"]').type(Cypress.env('auth_password'));
-        cy.get('button[type="submit"]').click();
-      }
-    );
-    cy.url().should('include', '/');
+  cy.log("Starting login process");
+
+  cy.session("auth0", () => {
+    cy.log("Initiating auth0 session");
+    cy.visit("/");
+    cy.origin(Cypress.env("auth0_domain"), { args: {} }, () => {
+      cy.log("Inside auth0 domain");
+      cy.get('input[type="email"]').type(Cypress.env("auth_username"));
+      cy.get('input[type="password"]').type(Cypress.env("auth_password"));
+      cy.get('button[type="submit"]').click();
+    });
+    cy.url().should("include", "/");
   });
 });
