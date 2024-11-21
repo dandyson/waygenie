@@ -27,6 +27,8 @@
     "build": "react-scripts build",
     "lint": "eslint src/**/*.js cypress/**/*.js",
     "lint:fix": "eslint src/**/*.js cypress/**/*.js --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx}\"",
     "provision": "aws cloudformation deploy --template-file ../infrastructure/cloudformation.yaml --stack-name waygenie-bucket-stack --parameter-overrides BucketName=waygenie",
     "upload": "aws s3 sync build/ s3://waygenie --delete",
     "deploy": "npm run build && npm run upload",

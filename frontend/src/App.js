@@ -7,12 +7,13 @@ import InterestsInput from "./components/InterestsInput";
 import TravelStyleInput from "./components/TravelStyleInput";
 import Itinerary from "./components/Itinerary";
 import fetchItinerary from "./api/fetchItinerary";
-import { useNavigate, Routes, Route } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
-import NavBar from './components/NavBar';
+import { useNavigate, Routes, Route } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import NavBar from "./components/NavBar";
 
 const App = () => {
-  const { isAuthenticated, isLoading, user, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, isLoading, user, getAccessTokenSilently } =
+    useAuth0();
 
   const [step, setStep] = useState(1);
   const [error, setError] = useState(null);
@@ -51,7 +52,9 @@ const App = () => {
         setAiResponse(parsedResponse);
       } catch (err) {
         console.error("Error parsing itinerary response:", err);
-        setError("There was an error generating your itinerary - please try again.");
+        setError(
+          "There was an error generating your itinerary - please try again.",
+        );
         setAiResponse(null);
       }
     } else {
@@ -79,8 +82,8 @@ const App = () => {
 
   return (
     <Routes>
-      <Route 
-        path="/" 
+      <Route
+        path="/"
         element={
           <>
             <NavBar />
@@ -89,7 +92,12 @@ const App = () => {
                 {(() => {
                   switch (step) {
                     case 1:
-                      return <LocationInput formData={formData} nextStep={nextStep} />;
+                      return (
+                        <LocationInput
+                          formData={formData}
+                          nextStep={nextStep}
+                        />
+                      );
                     case 2:
                       return (
                         <DateTimeInput
@@ -116,16 +124,25 @@ const App = () => {
                       );
                     case 5:
                       return (
-                        <Itinerary aiResponse={aiResponse} resetStep={resetStep} error={error} />
+                        <Itinerary
+                          aiResponse={aiResponse}
+                          resetStep={resetStep}
+                          error={error}
+                        />
                       );
                     default:
-                      return <LocationInput formData={formData} nextStep={nextStep} />;
+                      return (
+                        <LocationInput
+                          formData={formData}
+                          nextStep={nextStep}
+                        />
+                      );
                   }
                 })()}
               </div>
             </div>
           </>
-        } 
+        }
       />
     </Routes>
   );

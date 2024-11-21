@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 import fetchItinerary from "./api/fetchItinerary";
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 jest.mock("axios");
@@ -12,13 +12,13 @@ jest.useFakeTimers();
 // Mock Auth0
 jest.mock("@auth0/auth0-react");
 
-function renderWithRouter(ui, { route = '/' } = {}) {
+function renderWithRouter(ui, { route = "/" } = {}) {
   const router = createMemoryRouter(
     [
       {
-        path: '*',
-        element: ui
-      }
+        path: "*",
+        element: ui,
+      },
     ],
     {
       initialEntries: [route],
@@ -28,9 +28,9 @@ function renderWithRouter(ui, { route = '/' } = {}) {
         v7_fetcherPersist: true,
         v7_normalizeFormMethod: true,
         v7_partialHydration: true,
-        v7_skipActionErrorRevalidation: true
-      }
-    }
+        v7_skipActionErrorRevalidation: true,
+      },
+    },
   );
 
   return render(<RouterProvider router={router} />);
@@ -51,7 +51,9 @@ describe("App Component Authentication", () => {
     renderWithRouter(<App />);
 
     expect(screen.getByTestId("login-component")).toBeInTheDocument();
-    expect(screen.getByText("Please login to start planning your trip")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please login to start planning your trip"),
+    ).toBeInTheDocument();
   });
 
   test("shows loading state while Auth0 is initializing", () => {
@@ -75,7 +77,9 @@ describe("App Component Authentication", () => {
     renderWithRouter(<App />);
 
     expect(screen.getByTestId("login-component")).toBeInTheDocument();
-    expect(screen.getByText("Please login to start planning your trip")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please login to start planning your trip"),
+    ).toBeInTheDocument();
   });
 });
 
@@ -98,7 +102,6 @@ describe("App Component Form Navigation", () => {
   test("navigates through form steps correctly", async () => {
     renderWithRouter(<App />);
 
-
     // Step 1: Location Input
     expect(screen.getByText("Where are you going?")).toBeInTheDocument();
     const locationInput = screen.getByPlaceholderText("Enter a location...");
@@ -107,7 +110,9 @@ describe("App Component Form Navigation", () => {
 
     // Step 2: DateTime should now be visible
     await waitFor(() => {
-      expect(screen.getByText(/When will you be visiting?/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/When will you be visiting?/i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -119,7 +124,6 @@ describe("App Component Form Navigation", () => {
 
     renderWithRouter(<App />);
 
-
     // Step 1: Location
     const locationInput = screen.getByPlaceholderText("Enter a location...");
     fireEvent.change(locationInput, { target: { value: "Paris" } });
@@ -127,7 +131,9 @@ describe("App Component Form Navigation", () => {
 
     // Step 2: DateTime
     await waitFor(() => {
-      expect(screen.getByText(/When will you be visiting?/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/When will you be visiting?/i),
+      ).toBeInTheDocument();
     });
 
     fireEvent.change(screen.getByLabelText("Start Date:"), {
@@ -155,12 +161,11 @@ describe("App Component Form Navigation", () => {
     });
 
     fireEvent.click(screen.getByText("Next"));
-    
 
     // Step 4: Travel Style
     await waitFor(() => {
       expect(
-        screen.getByText(/What's your travelling style?/i)
+        screen.getByText(/What's your travelling style?/i),
       ).toBeInTheDocument();
     });
 
@@ -170,7 +175,7 @@ describe("App Component Form Navigation", () => {
     await waitFor(() => {
       expect(console.error).toHaveBeenCalledWith(
         "Error parsing itinerary response:",
-        mockError
+        mockError,
       );
     });
   });
