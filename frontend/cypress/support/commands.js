@@ -48,41 +48,21 @@ Cypress.Commands.add("login", (overrides = {}) => {
 
 // This command logs into the app so the tests can run what they need to
 Cypress.Commands.add("loginToApp", () => {
-  // Check if we already have cached auth state
-  const cachedAuth = Cypress.env("auth_cache");
-
-  if (cachedAuth) {
-    // Restore all auth-related items from cache
-    cy.window().then((win) => {
-      Object.keys(cachedAuth).forEach((key) => {
-        win.localStorage.setItem(key, cachedAuth[key]);
-      });
-    });
-    cy.visit("/");
-    return;
-  }
-
-  // Otherwise do full login
-  cy.visit("/");
-  cy.get('[data-cy="login-button"]').click();
-
-  cy.origin("https://dev-5gel523jsbsvscyz.uk.auth0.com", () => {
-    cy.get('input[name="email"]').type(Cypress.env("auth_username"));
-    cy.get('input[name="password"]').type(Cypress.env("auth_password"));
-    cy.get('button[type="submit"]').click();
-  });
-
-  cy.url().should("equal", "http://localhost:3000/");
-
-  // Cache all auth-related localStorage items
-  cy.window().then((win) => {
-    const authItems = {};
-    for (let i = 0; i < win.localStorage.length; i++) {
-      const key = win.localStorage.key(i);
-      if (key.includes("auth0") || key.includes("@@auth0spajs@@")) {
-        authItems[key] = win.localStorage.getItem(key);
+  cy.log('Starting login process');
+  
+  cy.session('auth0', () => {
+    cy.log('Initiating auth0 session');
+    cy.visit('/');
+    cy.origin(
+      Cypress.env('auth0_domain'),
+      { args: {} },
+      () => {
+        cy.log('Inside auth0 domain');
+        cy.get('input[type="email"]').type(Cypress.env('auth_username'));
+        cy.get('input[type="password"]').type(Cypress.env('auth_password'));
+        cy.get('button[type="submit"]').click();
       }
-    }
-    Cypress.env("auth_cache", authItems);
+    );
+    cy.url().should('include', '/');
   });
 });
