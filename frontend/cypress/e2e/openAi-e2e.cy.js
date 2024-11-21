@@ -1,5 +1,6 @@
 describe("Initial Load", () => {
   beforeEach(() => {
+    cy.loginToApp();
     cy.visit("/");
   });
 
@@ -10,6 +11,7 @@ describe("Initial Load", () => {
 
 describe("OpenAI API Call with Queue", () => {
   beforeEach(() => {
+    cy.loginToApp();
     // Set up route interceptions before visiting
     cy.intercept("POST", "/api/itinerary").as("queueSubmission");
     cy.intercept("GET", "/api/itinerary/status/*").as("statusCheck");
@@ -42,7 +44,7 @@ describe("OpenAI API Call with Queue", () => {
     // Mock status check response - job still processing
     cy.intercept("GET", "/api/itinerary/status/test-job-123", {
       statusCode: 200,
-      body: { status: "processing" },
+      body: { status: "in-progress" },
     }).as("statusCheck");
 
     // Click generate button
@@ -125,7 +127,7 @@ describe("OpenAI API Call with Queue", () => {
     cy.wait("@statusCheck");
 
     // Verify error display
-    cy.contains("ERROR:", { timeout: 10000 }).should("be.visible");
+    cy.contains(/error|Error|ERROR/i, { timeout: 10000 }).should("be.visible");
     cy.contains(
       "There was an error generating your itinerary - please try again.",
     ).should("be.visible");

@@ -75,7 +75,30 @@ jobs:
           REDISCLOUD_URL: "redis://localhost:6379"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
+      # Run E2E tests, only run auth tests on merge with main
       - name: Run E2E tests 🧪
+        if: github.ref != 'refs/heads/main'
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          start: npm start
+          wait-on: |
+            http://localhost:3000/
+            http://localhost:5000/
+          wait-on-timeout: 120
+          browser: chrome
+          env: grepTags="-@auth"  # Exclude auth tests
+        env:
+          CYPRESS_BASE_URL: http://localhost:3000
+          CYPRESS_AUTH_USERNAME: ${{ secrets.CYPRESS_AUTH_USERNAME }}
+          CYPRESS_AUTH_PASSWORD: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
+          CYPRESS_API_URL: http://localhost:5000
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          REDISCLOUD_URL: "redis://localhost:6379"
+      
+      - name: Run full E2E tests including auth 🧪
+        if: github.ref == 'refs/heads/main'
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
@@ -87,6 +110,8 @@ jobs:
           browser: chrome
         env:
           CYPRESS_BASE_URL: http://localhost:3000
+          CYPRESS_AUTH_USERNAME: ${{ secrets.CYPRESS_AUTH_USERNAME }}
+          CYPRESS_AUTH_PASSWORD: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
           CYPRESS_API_URL: http://localhost:5000
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

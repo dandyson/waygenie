@@ -15,6 +15,7 @@ const App = () => {
   const { isAuthenticated, isLoading, user, getAccessTokenSilently } = useAuth0();
 
   const [step, setStep] = useState(1);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     location: "",
     startDate: "",
@@ -40,16 +41,17 @@ const App = () => {
 
     if (step === 4) {
       setStep(5); // Move to step 5 to show the spinner
+      setError(null);
 
       try {
         const token = await getAccessTokenSilently();
         const response = await fetchItinerary(updatedFormData, token);
-
         const parsedResponse =
           typeof response === "string" ? JSON.parse(response) : response;
         setAiResponse(parsedResponse);
       } catch (err) {
         console.error("Error parsing itinerary response:", err);
+        setError("There was an error generating your itinerary - please try again.");
         setAiResponse(null);
       }
     } else {
@@ -114,7 +116,7 @@ const App = () => {
                       );
                     case 5:
                       return (
-                        <Itinerary aiResponse={aiResponse} resetStep={resetStep} />
+                        <Itinerary aiResponse={aiResponse} resetStep={resetStep} error={error} />
                       );
                     default:
                       return <LocationInput formData={formData} nextStep={nextStep} />;

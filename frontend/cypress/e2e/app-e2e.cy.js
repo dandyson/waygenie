@@ -1,66 +1,68 @@
 // Step 1: Initial question displayed
 describe("Initial Load", () => {
   beforeEach(() => {
+    cy.loginToApp();
     cy.visit("/");
   });
 
   it("displays the welcome question", () => {
-    cy.contains("Where are you going?");
+    cy.contains("Where are you going?").should("be.visible");
   });
 });
 
 // Step 2: Navigation and user input handling
 describe("Navigation and Input", () => {
   beforeEach(() => {
+    cy.loginToApp();
     cy.visit("/");
   });
 
   it('does not navigate on clicking "Next" without input', () => {
     cy.contains("Next").click();
-    cy.contains("Where are you going?");
+    cy.contains("Where are you going?").should("be.visible");
   });
 
   it("navigates through the wizard steps correctly", () => {
     // Step 1: User provides destination
-    cy.get("input").type("London");
+    cy.get('input[name="location"]').should("be.visible").type("London");
     cy.contains("Next").click();
-    cy.contains("When will you be visiting?");
+    cy.contains("When will you be visiting?").should("be.visible");
 
     // Step 2: User inputs visit details
-    cy.get("#start-date").type("2024-01-01");
-    cy.get("#start-time").type("09:00");
-    cy.get("#end-date").type("2024-01-01");
-    cy.get("#end-time").type("17:00");
+    cy.get("#start-date").should("be.visible").type("2024-01-01");
+    cy.get("#start-time").should("be.visible").type("09:00");
+    cy.get("#end-date").should("be.visible").type("2024-01-01");
+    cy.get("#end-time").should("be.visible").type("17:00");
     cy.contains("Next").click();
-    cy.contains("What are your Interests?");
+    cy.contains("What are your Interests?").should("be.visible");
 
     // Step 3: User inputs interests
-    cy.get('input[type="text"]').type("Coffee");
+    cy.get('input[type="text"]').should("be.visible").type("Coffee");
     cy.contains("Next").click();
-    cy.contains("What's your travelling style?");
+    cy.contains("What's your travelling style?").should("be.visible");
     cy.get("#travel-style").should("have.value", "laid-back");
     // Change travel style
     cy.get("#travel-style").select("everything");
     cy.get("#travel-style").should("have.value", "everything");
-    cy.contains("Let's Go!").should("exist");
+    cy.contains("Let's Go!").should("be.visible");
   });
 
   it("navigates through the wizard steps correctly and uses the back button", () => {
     // Step 1: User provides destination
-    cy.get("input").type("London");
+    cy.get('input[name="location"]').should("be.visible").type("London");
 
     // Proceed to Step 2
-    cy.contains("Next").click(); // Click Next
-    cy.contains("When will you be visiting?");
+    cy.contains("Next").click();
+    cy.contains("When will you be visiting?").should("be.visible");
 
     // Go back to Step 1
-    cy.get(".back-button").click();
-    cy.contains("Where are you going?");
-    cy.get("input").should("have.value", "London");
+    cy.contains("Back").click();
+    cy.contains("Where are you going?").should("be.visible");
+    cy.get('input[name="location"]').should("have.value", "London");
 
     // Back to Step 2
     cy.contains("Next").click();
-    cy.contains("When will you be visiting?");
+    cy.contains("When will you be visiting?").should("be.visible");
     cy.get("#start-date").type("2024-01-01");
     cy.get("#start-time").type("09:00");
     cy.get("#end-date").type("2024-01-01");
@@ -68,12 +70,12 @@ describe("Navigation and Input", () => {
 
     // Proceed to Step 3
     cy.contains("Next").click();
-    cy.contains("What are your Interests?");
+    cy.contains("What are your Interests?").should("be.visible");
 
     // Go back to Step 2
-    cy.get(".back-button").click();
+    cy.get("button").contains("Back").should("be.visible").click();
     cy.contains("What are your Interests?").should("not.exist");
-    cy.contains("When will you be visiting?");
+    cy.contains("When will you be visiting?").should("be.visible");
     // Verify input values are maintained
     cy.get("#start-date").should("have.value", "2024-01-01");
     cy.get("#start-time").should("have.value", "09:00");
@@ -82,24 +84,24 @@ describe("Navigation and Input", () => {
 
     // Return to Step 3
     cy.contains("Next").click();
-    cy.contains("What are your Interests?");
+    cy.contains("What are your Interests?").should("be.visible");
 
     // Step 3: User provides interests
     cy.get('input[type="text"]').type("Coffee");
 
     // Proceed to Step 4
     cy.contains("Next").click();
-    cy.contains("What's your travelling style?");
+    cy.contains("What's your travelling style?").should("be.visible");
 
     // Go back to Step 3
-    cy.get(".back-button").click();
+    cy.get("button").contains("Back").should("be.visible").click();
     cy.contains("What's your travelling style?").should("not.exist");
-    cy.contains("What are your Interests?");
+    cy.contains("What are your Interests?").should("be.visible");
     cy.get('input[type="text"]').should("have.value", "Coffee");
 
     // Return to Step 4
     cy.contains("Next").click();
-    cy.contains("What's your travelling style?");
+    cy.contains("What's your travelling style?").should("be.visible");
 
     // Validate travel style selection
     cy.get("#travel-style").should("have.value", "laid-back");
@@ -107,26 +109,24 @@ describe("Navigation and Input", () => {
     cy.get("#travel-style").should("have.value", "everything");
 
     // Checks "Let's Go!" button is there to submit the form
-    cy.contains("Let's Go!").should("exist");
+    cy.contains("Let's Go!").should("be.visible");
   });
 });
 
 // Step 3: Testing multiple interests input
 describe("Interests multiple inputs testing", () => {
   beforeEach(() => {
+    cy.loginToApp();
     cy.visit("/");
-    // Step 1: User provides destination
-    cy.get("input").type("London");
+    // Navigate to interests page
+    cy.get('input[name="location"]').should("be.visible").type("London");
     cy.contains("Next").click();
-    cy.contains("When will you be visiting?");
-
-    // Step 2: User inputs visit details
-    cy.get("#start-date").type("2024-01-01");
-    cy.get("#start-time").type("09:00");
-    cy.get("#end-date").type("2024-01-01");
-    cy.get("#end-time").type("17:00");
+    cy.get("#start-date").should("be.visible").type("2024-01-01");
+    cy.get("#start-time").should("be.visible").type("09:00");
+    cy.get("#end-date").should("be.visible").type("2024-01-01");
+    cy.get("#end-time").should("be.visible").type("17:00");
     cy.contains("Next").click();
-    cy.contains("What are your Interests?");
+    cy.contains("What are your Interests?").should("be.visible");
   });
 
   it("should initially display one input field", () => {
@@ -135,7 +135,6 @@ describe("Interests multiple inputs testing", () => {
 
   it('should add a new input field when clicking "Add Interest"', () => {
     cy.get('input[type="text"]').should("have.length", 1);
-
     cy.contains("Add Interest").click();
     cy.get('input[type="text"]').should("have.length", 2);
   });

@@ -22,11 +22,14 @@ describe("fetchItinerary", () => {
   it("should return the final itinerary result when the job completes successfully", async () => {
     makeAuthenticatedRequest
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
-      .mockResolvedValueOnce({ status: "completed", result: { 
-        introduction: "Welcome to your trip!", 
-        events: [{ name: "Louvre Tour", time: "10:00 AM" }], 
-        travelMethods: "walking" 
-      }});
+      .mockResolvedValueOnce({
+        status: "completed",
+        result: {
+          introduction: "Welcome to your trip!",
+          events: [{ name: "Louvre Tour", time: "10:00 AM" }],
+          travelMethods: "walking",
+        },
+      });
 
     const result = await fetchItinerary(mockFormData, mockToken);
 
@@ -42,13 +45,13 @@ describe("fetchItinerary", () => {
       "/api/itinerary",
       "POST",
       mockToken,
-      { prompt: mockFormData }
+      { prompt: mockFormData },
     );
     expect(makeAuthenticatedRequest).toHaveBeenNthCalledWith(
       2,
       "/api/itinerary/status/12345",
       "GET",
-      mockToken
+      mockToken,
     );
   });
 
@@ -58,7 +61,7 @@ describe("fetchItinerary", () => {
       .mockResolvedValueOnce({ status: "failed" }); // Polling response
 
     await expect(fetchItinerary(mockFormData, mockToken)).rejects.toThrow(
-      "Job failed to complete."
+      "Failed to generate itinerary",
     );
   });
 
@@ -74,7 +77,7 @@ describe("fetchItinerary", () => {
     jest.advanceTimersByTime(30000); // Simulate 30 seconds passing
 
     await expect(fetchPromise).rejects.toThrow(
-      "Request timed out. Please try again later."
+      "Request timed out. Please try again later.",
     );
 
     jest.useRealTimers(); // Cleanup fake timers

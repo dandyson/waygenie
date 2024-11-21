@@ -21,7 +21,11 @@ describe("makeAuthenticatedRequest", () => {
     const mockResponse = { data: mockData };
     axios.get.mockResolvedValue(mockResponse);
 
-    const result = await makeAuthenticatedRequest(mockEndpoint, "GET", mockToken);
+    const result = await makeAuthenticatedRequest(
+      mockEndpoint,
+      "GET",
+      mockToken,
+    );
 
     expect(axios.get).toHaveBeenCalledWith(
       `${process.env.REACT_APP_API_URL}${mockEndpoint}`,
@@ -30,7 +34,7 @@ describe("makeAuthenticatedRequest", () => {
           Authorization: `Bearer ${mockToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     expect(result).toEqual(mockData);
   });
@@ -43,7 +47,7 @@ describe("makeAuthenticatedRequest", () => {
       mockEndpoint,
       "POST",
       mockToken,
-      mockData
+      mockData,
     );
 
     expect(axios.post).toHaveBeenCalledWith(
@@ -54,7 +58,7 @@ describe("makeAuthenticatedRequest", () => {
           Authorization: `Bearer ${mockToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     expect(result).toEqual(mockData);
   });

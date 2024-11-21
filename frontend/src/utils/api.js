@@ -6,8 +6,6 @@ export const makeAuthenticatedRequest = async (
   token,
   data = null,
 ) => {
-  console.log("Making request to:", process.env.REACT_APP_API_URL + endpoint);
-
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,12 +29,8 @@ export const makeAuthenticatedRequest = async (
     }
     return response.data;
   } catch (error) {
-    console.log("Request failed:", {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      config: error.config,
-    });
-    throw error;
+    throw new Error(
+      error.response?.data?.error || error.message || "Request failed",
+    );
   }
 };
