@@ -70,19 +70,21 @@ jobs:
 
       - name: Start backend server
         working-directory: backend
-        run: npm start & 
+        run: |
+          npm start &
+          sleep 10  # Give the server time to start
         env:
           REDISCLOUD_URL: "redis://localhost:6379"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      # Run E2E tests, only run auth tests on merge with main
+      # Then run Cypress tests
       - name: Run E2E tests 🧪
         if: github.ref != 'refs/heads/main'
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
           start: npm start
-          wait-on: 'http://localhost:3000, http://localhost:5000'
+          wait-on: 'http://localhost:3000, http://localhost:5000/health'  # Add a health check endpoint
           wait-on-timeout: 120
           browser: chrome
           config: pageLoadTimeout=120000
