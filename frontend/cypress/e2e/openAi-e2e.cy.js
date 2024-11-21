@@ -1,7 +1,6 @@
 describe("Initial Load", () => {
   beforeEach(() => {
     cy.loginToApp();
-    cy.visit("/");
   });
 
   it("displays the welcome question", () => {
@@ -15,8 +14,6 @@ describe("OpenAI API Call with Queue", () => {
     // Set up route interceptions before visiting
     cy.intercept("POST", "/api/itinerary").as("queueSubmission");
     cy.intercept("GET", "/api/itinerary/status/*").as("statusCheck");
-
-    cy.visit("/");
 
     // Fill out the form with more robust selectors and waiting
     cy.get('input[name="location"]').should("be.visible").type("London");

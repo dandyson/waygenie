@@ -1,20 +1,6 @@
-// Step 1: Initial question displayed
-describe("Initial Load", () => {
-  beforeEach(() => {
-    cy.loginToApp();
-    cy.visit("/");
-  });
-
-  it("displays the welcome question", () => {
-    cy.contains("Where are you going?").should("be.visible");
-  });
-});
-
-// Step 2: Navigation and user input handling
 describe("Navigation and Input", () => {
   beforeEach(() => {
     cy.loginToApp();
-    cy.visit("/");
   });
 
   it('does not navigate on clicking "Next" without input', () => {
@@ -117,7 +103,6 @@ describe("Navigation and Input", () => {
 describe("Interests multiple inputs testing", () => {
   beforeEach(() => {
     cy.loginToApp();
-    cy.visit("/");
     // Navigate to interests page
     cy.get('input[name="location"]').should("be.visible").type("London");
     cy.contains("Next").click();
