@@ -12,8 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import NavBar from "./components/NavBar";
 
 const App = () => {
-  const { isAuthenticated, isLoading, getAccessTokenSilently } =
-    useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   const [step, setStep] = useState(1);
   const [error, setError] = useState(null);
