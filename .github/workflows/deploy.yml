@@ -86,53 +86,36 @@ jobs:
 
       # Then run Cypress tests
       - name: Run E2E tests 🧪
-        if: github.ref != 'refs/heads/main'
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: frontend
-          start: npm start
-          wait-on: 'http://localhost:3000, http://localhost:5000/health'
-          wait-on-timeout: 120
-          browser: chrome
-        env:
-          CYPRESS_auth_url: ${{ secrets.AUTH0_DOMAIN }}
-          CYPRESS_auth_audience: ${{ secrets.AUTH0_AUDIENCE }}
-          CYPRESS_auth_username: ${{ secrets.CYPRESS_AUTH_USERNAME }}
-          CYPRESS_auth_password: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
-          CYPRESS_auth_client_id: ${{ secrets.AUTH0_CLIENT_ID }}
-          CYPRESS_auth_client_secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          CYPRESS_BASE_URL: 'http://localhost:3000'
-          CYPRESS_API_URL: 'http://localhost:5000'
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          REDISCLOUD_URL: 'redis://localhost:6379'
-          CI: true
-          PORT: 3000
-
-      - name: Run full E2E tests including auth 🧪
-        if: github.ref == 'refs/heads/main'
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
           start: npm start
           wait-on: |
-            http://localhost:3000/
-            http://localhost:5000/
+            http://localhost:3000
+            http://localhost:5000/health
           wait-on-timeout: 120
           browser: chrome
+          config: |
+            baseUrl=http://localhost:3000
+            chromeWebSecurity=false
+            experimentalModifyObstructiveThirdPartyCode=true
+          record: false
         env:
+          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
           CYPRESS_auth_url: ${{ secrets.AUTH0_DOMAIN }}
           CYPRESS_auth_audience: ${{ secrets.AUTH0_AUDIENCE }}
           CYPRESS_auth_username: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_auth_password: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
           CYPRESS_auth_client_id: ${{ secrets.AUTH0_CLIENT_ID }}
           CYPRESS_auth_client_secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          CYPRESS_BASE_URL: 'http://localhost:3000'
-          CYPRESS_API_URL: 'http://localhost:5000'
+          DEBUG: "cypress:*"
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REDISCLOUD_URL: 'redis://localhost:6379'
           CI: true
+          PORT: 3000
 
       - name: Store test artifacts
         if: always()

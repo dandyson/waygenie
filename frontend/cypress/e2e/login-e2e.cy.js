@@ -1,11 +1,30 @@
 describe("login", () => {
   beforeEach(() => {
-    // Clear any existing auth state
+    // Add debugging logs
+    cy.log('Starting test with URL:', Cypress.config('baseUrl'));
+    
+    // Clear state
     cy.clearLocalStorage();
     cy.clearCookies();
+    
+    // Visit with error logging
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        cy.spy(win.console, 'error').as('consoleError');
+        cy.spy(win.console, 'warn').as('consoleWarn');
+      },
+      failOnStatusCode: false
+    });
   });
 
   it("should successfully log into our app", () => {
+    // Log any console errors
+    cy.get('@consoleError').then((errorLogs) => {
+      if (errorLogs.callCount > 0) {
+        cy.log('Console errors:', errorLogs.args);
+      }
+    });
+
     // Start from the home page
     cy.visit("http://localhost:3000");
 
