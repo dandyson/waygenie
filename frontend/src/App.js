@@ -7,12 +7,12 @@ import InterestsInput from "./components/InterestsInput";
 import TravelStyleInput from "./components/TravelStyleInput";
 import Itinerary from "./components/Itinerary";
 import fetchItinerary from "./api/fetchItinerary";
-import { useNavigate, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import NavBar from "./components/NavBar";
 
 const App = () => {
-  const { isAuthenticated, isLoading, user, getAccessTokenSilently } =
+  const { isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0();
 
   const [step, setStep] = useState(1);
