@@ -92,6 +92,7 @@ jobs:
           CYPRESS_BASE_URL: 'http://localhost:3000'
           CYPRESS_AUTH_USERNAME: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_AUTH_PASSWORD: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
+          CYPRESS_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           CYPRESS_API_URL: 'http://localhost:5000'
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -114,6 +115,7 @@ jobs:
           CYPRESS_BASE_URL: http://localhost:3000
           CYPRESS_AUTH_USERNAME: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_AUTH_PASSWORD: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
+          CYPRESS_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           CYPRESS_API_URL: http://localhost:5000
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

@@ -53,10 +53,15 @@ Cypress.Commands.add("loginToApp", () => {
   cy.session("auth0", () => {
     cy.log("Initiating auth0 session");
     cy.visit("/");
-    cy.origin(Cypress.env("auth0_domain"), { args: {} }, () => {
+    const auth0Domain = Cypress.env("AUTH0_DOMAIN");
+    if (!auth0Domain) {
+      throw new Error("AUTH0_DOMAIN environment variable is not set");
+    }
+
+    cy.origin(auth0Domain, { args: {} }, () => {
       cy.log("Inside auth0 domain");
-      cy.get('input[type="email"]').type(Cypress.env("auth_username"));
-      cy.get('input[type="password"]').type(Cypress.env("auth_password"));
+      cy.get('input[type="email"]').type(Cypress.env("AUTH_USERNAME"));
+      cy.get('input[type="password"]').type(Cypress.env("AUTH_PASSWORD"));
       cy.get('button[type="submit"]').click();
     });
     cy.url().should("include", "/");
