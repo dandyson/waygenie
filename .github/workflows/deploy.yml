@@ -82,20 +82,18 @@ jobs:
         with:
           working-directory: frontend
           start: npm start
-          wait-on: |
-            http://localhost:3000
-            http://localhost:5000
+          wait-on: 'http://localhost:3000, http://localhost:5000'
           wait-on-timeout: 120
           browser: chrome
           config: pageLoadTimeout=120000
         env:
-          CYPRESS_BASE_URL: http://localhost:3000
+          CYPRESS_BASE_URL: 'http://localhost:3000'
           CYPRESS_AUTH_USERNAME: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_AUTH_PASSWORD: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
-          CYPRESS_API_URL: http://localhost:5000
+          CYPRESS_API_URL: 'http://localhost:5000'
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          REDISCLOUD_URL: "redis://localhost:6379"
+          REDISCLOUD_URL: 'redis://localhost:6379'
           CI: true
           PORT: 3000
 
