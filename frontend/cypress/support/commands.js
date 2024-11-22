@@ -63,10 +63,8 @@ Cypress.Commands.add("loginToApp", () => {
       },
     },
     ({ username, password }) => {
-      // More robust login handling
-      cy.get('input[type="email"],input[name="email"],input[name="username"]', {
-        timeout: 20000,
-      })
+      // Handle login
+      cy.get('input[type="email"],input[name="email"]', { timeout: 20000 })
         .should("be.visible")
         .type(username, { force: true });
 
@@ -76,32 +74,28 @@ Cypress.Commands.add("loginToApp", () => {
 
       cy.get('button[type="submit"]').click();
 
-      // More comprehensive consent screen handling
-      cy.get("body").then(($body) => {
-        // Check for various possible consent button selectors
-        const consentButtons = [
-          'button[value="accept"]',
-          "button.consent-accept",
-          'button[type="submit"]',
-          'button:contains("Accept")',
-          'button:contains("Continue")',
-        ];
+      // Handle consent screen and wait for redirect
+      cy.url().should("include", "/consent");
+      cy.get('button:contains("Accept")', { timeout: 10000 })
+        .should("be.visible")
+        .click();
 
-        const buttonSelector = consentButtons.join(",");
-
-        if ($body.find(buttonSelector).length > 0) {
-          cy.log("Consent screen detected");
-          cy.get(buttonSelector, { timeout: 10000 })
-            .should("be.visible")
-            .click({ force: true });
-        } else {
-          cy.log("No consent screen detected");
-        }
-      });
+      // Wait for redirect to start
+      cy.url().should("not.include", "/consent");
     },
   );
 
-  // More robust success verification
-  cy.url({ timeout: 10000 }).should("include", Cypress.config("baseUrl"));
+  // Wait longer for the redirect back to our app
+  cy.url({ timeout: 30000 }).should("eq", `${Cypress.config("baseUrl")}/`);
+
+  // Add retry logic if needed
+  cy.get("body").then(($body) => {
+    if ($body.find('[data-cy="login-button"]').length > 0) {
+      cy.log("Still on login page, retrying login...");
+      cy.get('[data-cy="login-button"]').click();
+    }
+  });
+
+  // Final verification
   cy.contains("Where are you going?", { timeout: 10000 }).should("be.visible");
 });
