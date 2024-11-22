@@ -62,6 +62,9 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           REACT_APP_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
+          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_TEST_DOMAIN }}
+          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
+          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_TEST_AUDIENCE }}
         run: npm run build
 
       - name: Install dependencies for backend
@@ -76,15 +79,28 @@ jobs:
         env:
           REDISCLOUD_URL: "redis://localhost:6379"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_TEST_DOMAIN }}
+          AUTH0_AUDIENCE: ${{ secrets.AUTH0_TEST_AUDIENCE }}
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_TEST_CLIENT_SECRET }}
           PORT: 5000
           NODE_ENV: 'test'
           FRONTEND_URL: 'http://localhost:3000'
 
-      # Then run Cypress tests
+      - name: Debug Environment
+        run: |
+          echo "Checking frontend..."
+          curl -v http://localhost:3000 || true
+          echo "Checking backend..."
+          curl -v http://localhost:5000/health || true
+          echo "Environment variables set:"
+          env | grep -E 'REACT_APP_|CYPRESS_|AUTH0_' | sort
+          echo "Process list:"
+          ps aux | grep -E 'node|npm'
+          echo "Network ports:"
+          netstat -tulpn || true
+
+      # Then run Cypress tests 🧪
       - name: Run E2E tests 🧪
         uses: cypress-io/github-action@v6
         with:
@@ -92,6 +108,7 @@ jobs:
           start: npm start
           wait-on: |
             http://localhost:3000
+            http://localhost:5000/health  # Add this to ensure backend is ready
           wait-on-timeout: 120
           browser: chrome
           config: |
@@ -100,19 +117,25 @@ jobs:
             experimentalModifyObstructiveThirdPartyCode=true
           record: false
         env:
-          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-          CYPRESS_auth_url: ${{ secrets.AUTH0_DOMAIN }}
-          CYPRESS_auth_audience: ${{ secrets.AUTH0_AUDIENCE }}
+          # Auth0 Test Environment Variables
+          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_TEST_DOMAIN }}
+          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
+          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_TEST_AUDIENCE }}
+          
+          # Cypress Auth0 Variables
+          CYPRESS_auth_url: ${{ secrets.AUTH0_TEST_DOMAIN }}
+          CYPRESS_auth_client_id: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
+          CYPRESS_auth_client_secret: ${{ secrets.AUTH0_TEST_CLIENT_SECRET }}
           CYPRESS_auth_username: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_auth_password: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
-          CYPRESS_auth_client_id: ${{ secrets.AUTH0_CLIENT_ID }}
-          CYPRESS_auth_client_secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          DEBUG: "cypress:*"
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          
+          # API and Backend Variables
+          REACT_APP_API_URL: "http://localhost:5000"  # Point to local backend
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REDISCLOUD_URL: 'redis://localhost:6379'
+          
+          # Debug and CI Variables
+          DEBUG: "cypress:*"
           CI: true
           PORT: 3000
 
