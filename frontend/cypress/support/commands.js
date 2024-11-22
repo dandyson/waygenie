@@ -74,28 +74,18 @@ Cypress.Commands.add("loginToApp", () => {
 
       cy.get('button[type="submit"]').click();
 
-      // Handle consent screen and wait for redirect
-      cy.url().should("include", "/consent");
-      cy.get('button:contains("Accept")', { timeout: 10000 })
-        .should("be.visible")
-        .click();
-
-      // Wait for redirect to start
-      cy.url().should("not.include", "/consent");
+      // Handle consent screen if it appears
+      cy.get("body").then(($body) => {
+        if ($body.find('button:contains("Accept")').length > 0) {
+          cy.get('button:contains("Accept")', { timeout: 10000 })
+            .should("be.visible")
+            .click({ force: true });
+        }
+      });
     },
   );
 
-  // Wait longer for the redirect back to our app
+  // Wait for redirect back to our app
   cy.url({ timeout: 30000 }).should("eq", `${Cypress.config("baseUrl")}/`);
-
-  // Add retry logic if needed
-  cy.get("body").then(($body) => {
-    if ($body.find('[data-cy="login-button"]').length > 0) {
-      cy.log("Still on login page, retrying login...");
-      cy.get('[data-cy="login-button"]').click();
-    }
-  });
-
-  // Final verification
   cy.contains("Where are you going?", { timeout: 10000 }).should("be.visible");
 });
