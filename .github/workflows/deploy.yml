@@ -106,9 +106,7 @@ jobs:
         with:
           working-directory: frontend
           start: npm start
-          wait-on: |
-            http://localhost:3000
-            http://localhost:5000/health
+          wait-on: 'http://localhost:3000, http://localhost:5000/health'
           wait-on-timeout: 120
           browser: chrome
           config: |
