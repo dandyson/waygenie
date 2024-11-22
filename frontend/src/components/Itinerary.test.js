@@ -52,21 +52,27 @@ describe("Itinerary Component", () => {
   });
 
   test("handles error in AI response", () => {
-    const mockAiResponse = {
-      introduction: "",
-      events: [],
-      travelMethods: "",
-      error: "Failed to generate itinerary",
-    };
-    const mockResetStep = jest.fn();
-
-    render(<Itinerary aiResponse={mockAiResponse} resetStep={mockResetStep} />);
+    render(
+      <Itinerary
+        aiResponse={null}
+        resetStep={jest.fn()}
+        error="There was an error generating your itinerary - please try again."
+      />,
+    );
 
     // Check if the error message is rendered
     const errorMessage = screen.getByText(
       /There was an error generating your itinerary - please try again./i,
     );
     expect(errorMessage).toBeInTheDocument();
+
+    // Verify error icon (SVG) is present
+    const errorIcon = document.querySelector("svg"); // Or use getByRole if you add role="img" to the SVG
+    expect(errorIcon).toBeInTheDocument();
+
+    // Verify try again button is present
+    const tryAgainButton = screen.getByRole("button", { name: /Try Again/i });
+    expect(tryAgainButton).toBeInTheDocument();
   });
 
   test("handles no AI response gracefully", () => {

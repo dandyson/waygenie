@@ -1,44 +1,50 @@
-import axios from "axios";
+import { makeAuthenticatedRequest } from "../utils/api";
 
-const POLLING_INTERVAL = 2000; // Poll every 2 seconds
-const POLLING_TIMEOUT = 30000; // Timeout after 30 seconds
+const POLLING_INTERVAL = 2000;
+const POLLING_TIMEOUT = 30000;
 
-const fetchItinerary = async (formData) => {
+const fetchItinerary = async (formData, token) => {
   const startTime = Date.now();
 
   try {
-    // Step 1: Add the job to the queue via /chat endpoint (only called once)
-    const initialResponse = await axios.post(
-      `${process.env.REACT_APP_API_URL}/chat`,
+    // Step 1: Add the job to the queue
+    const initialResponse = await makeAuthenticatedRequest(
+      "/api/itinerary",
+      "POST",
+      token,
       { prompt: formData },
     );
 
-    const jobId = initialResponse.data.jobId;
+    const jobId = initialResponse.jobId;
 
-    // Step 2: Poll for the status of the job
+    // Step 2: Poll for status
     while (Date.now() - startTime < POLLING_TIMEOUT) {
-      const statusResponse = await axios.get(
-        `${process.env.REACT_APP_API_URL}/chat/status/${jobId}`,
+      const statusResponse = await makeAuthenticatedRequest(
+        `/api/itinerary/status/${jobId}`,
+        "GET",
+        token,
       );
 
-      if (statusResponse.data.status === "completed") {
-        return statusResponse.data.result; // Return the result when the job is complete
-      } else if (statusResponse.data.status === "failed") {
-        throw new Error("Job failed to complete.");
+      if (statusResponse.status === "completed") {
+        return statusResponse.result;
+      } else if (statusResponse.status === "failed") {
+        throw new Error(statusResponse.error || "Failed to generate itinerary");
       }
 
-      await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL)); // Wait for the next poll
+      // Only wait if the job is still processing
+      if (statusResponse.status === "in-progress") {
+        await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
+      } else {
+        throw new Error("Invalid job status");
+      }
     }
 
     throw new Error("Request timed out. Please try again later.");
   } catch (error) {
-    console.error(error);
-    return {
-      introduction: "",
-      events: [],
-      travelMethods: "",
-      error: "Failed to generate itinerary",
-    };
+    throw new Error(
+      error.message ||
+        "There was an error generating your itinerary - please try again.",
+    );
   }
 };
 

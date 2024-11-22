@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const OpenAI = require('openai');
 const chatQueue = require('./jobs/queue');
 const Redis = require('ioredis');
+const checkJwt = require('./middleware/auth');
 require('dotenv').config();
 require('./jobs/worker');
 
@@ -23,10 +24,10 @@ app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PUT', 'DELETE']
 app.use(bodyParser.json());
 
 // Basic API route
-app.get('/api', (req, res) => res.send('Welcome to WayGenie API'));
+app.get('/api', checkJwt, (req, res) => res.send('Welcome to WayGenie API'));
 
 // Chat route for generating travel itineraries
-app.post('/chat', async (req, res) => {
+app.post('/api/itinerary', checkJwt, async (req, res) => {
   
   const formData = req.body.prompt;
   
@@ -54,7 +55,7 @@ app.post('/chat', async (req, res) => {
 });
 
 // Check a job's status
-app.get('/chat/status/:jobId', async (req, res) => {
+app.get('/api/itinerary/status/:jobId', checkJwt, async (req, res) => {
   const jobId = req.params.jobId;
   
   try {
@@ -84,6 +85,10 @@ app.get('/chat/status/:jobId', async (req, res) => {
     console.error('Error fetching job status:', error);
     res.status(500).json({ status: 'error', error: 'Could not fetch job status' });
   }
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // Start server

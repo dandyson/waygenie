@@ -1,6 +1,6 @@
 describe("Initial Load", () => {
   beforeEach(() => {
-    cy.visit("/");
+    cy.loginToApp();
   });
 
   it("displays the welcome question", () => {
@@ -10,11 +10,10 @@ describe("Initial Load", () => {
 
 describe("OpenAI API Call with Queue", () => {
   beforeEach(() => {
+    cy.loginToApp();
     // Set up route interceptions before visiting
-    cy.intercept("POST", "/chat").as("queueSubmission");
-    cy.intercept("GET", "/chat/status/*").as("statusCheck");
-
-    cy.visit("/");
+    cy.intercept("POST", "/api/itinerary").as("queueSubmission");
+    cy.intercept("GET", "/api/itinerary/status/*").as("statusCheck");
 
     // Fill out the form with more robust selectors and waiting
     cy.get('input[name="location"]').should("be.visible").type("London");
@@ -34,15 +33,15 @@ describe("OpenAI API Call with Queue", () => {
 
   it("displays a spinner while job is processing", () => {
     // Mock successful queue submission
-    cy.intercept("POST", "/chat", {
+    cy.intercept("POST", "/api/itinerary", {
       statusCode: 200,
       body: { jobId: "test-job-123" },
     }).as("queueSubmission");
 
     // Mock status check response - job still processing
-    cy.intercept("GET", "/chat/status/test-job-123", {
+    cy.intercept("GET", "/api/itinerary/status/test-job-123", {
       statusCode: 200,
-      body: { status: "processing" },
+      body: { status: "in-progress" },
     }).as("statusCheck");
 
     // Click generate button
@@ -75,13 +74,13 @@ describe("OpenAI API Call with Queue", () => {
     };
 
     // Mock successful queue submission
-    cy.intercept("POST", "/chat", {
+    cy.intercept("POST", "/api/itinerary", {
       statusCode: 200,
       body: { jobId: "test-job-123" },
     }).as("queueSubmission");
 
     // Mock status check response - job completed
-    cy.intercept("GET", "/chat/status/test-job-123", {
+    cy.intercept("GET", "/api/itinerary/status/test-job-123", {
       statusCode: 200,
       body: {
         status: "completed",
@@ -105,13 +104,13 @@ describe("OpenAI API Call with Queue", () => {
 
   it("handles job processing errors gracefully", () => {
     // Mock successful queue submission but failed processing
-    cy.intercept("POST", "/chat", {
+    cy.intercept("POST", "/api/itinerary", {
       statusCode: 200,
       body: { jobId: "test-job-123" },
     }).as("queueSubmission");
 
     // Mock status check response - job failed
-    cy.intercept("GET", "/chat/status/test-job-123", {
+    cy.intercept("GET", "/api/itinerary/status/test-job-123", {
       statusCode: 500,
       body: {
         status: "failed",
@@ -125,7 +124,7 @@ describe("OpenAI API Call with Queue", () => {
     cy.wait("@statusCheck");
 
     // Verify error display
-    cy.contains("ERROR:", { timeout: 10000 }).should("be.visible");
+    cy.contains(/error|Error|ERROR/i, { timeout: 10000 }).should("be.visible");
     cy.contains(
       "There was an error generating your itinerary - please try again.",
     ).should("be.visible");
@@ -136,13 +135,13 @@ describe("OpenAI API Call with Queue", () => {
 
   it("allows starting over after completion", () => {
     // Mock successful queue submission
-    cy.intercept("POST", "/chat", {
+    cy.intercept("POST", "/api/itinerary", {
       statusCode: 200,
       body: { jobId: "test-job-123" },
     }).as("queueSubmission");
 
     // Mock status check response - job completed
-    cy.intercept("GET", "/chat/status/test-job-123", {
+    cy.intercept("GET", "/api/itinerary/status/test-job-123", {
       statusCode: 200,
       body: {
         status: "completed",
