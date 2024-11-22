@@ -33,11 +33,34 @@ describe("login", () => {
     cy.get('[data-cy="login-button"]').click();
 
     // Now handle Auth0 login on their domain
-    cy.origin("https://dev-5gel523jsbsvscyz.uk.auth0.com", () => {
-      cy.get('input[name="email"]').type(Cypress.env("auth_username"));
-      cy.get('input[name="password"]').type(Cypress.env("auth_password"));
-      cy.get('button[type="submit"]').click();
-    });
+    cy.origin(
+      "https://dev-5gel523jsbsvscyz.uk.auth0.com",
+      {
+        args: {
+          username: Cypress.env("auth_username"),
+          password: Cypress.env("auth_password"),
+        },
+      },
+      ({ username, password }) => {
+        // Handle login
+        cy.get('input[name="email"]').type(username, { force: true });
+        cy.get('input[name="password"]').type(password, { force: true });
+        cy.get('button[type="submit"]').click();
+
+        // Handle consent screen
+        cy.get("body").then(($body) => {
+          if (
+            $body.find('button.consent-accept, button[value="accept"]').length >
+            0
+          ) {
+            cy.log("Consent screen detected, accepting...");
+            cy.get('button.consent-accept, button[value="accept"]').click();
+          } else {
+            cy.log("No consent screen detected, continuing...");
+          }
+        });
+      },
+    );
 
     // Back on your app domain, verify login success
     cy.url().should("equal", "http://localhost:3000/");

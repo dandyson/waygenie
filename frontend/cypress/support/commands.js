@@ -48,41 +48,60 @@ Cypress.Commands.add("login", (overrides = {}) => {
 
 // This command logs into the app so the tests can run what they need to
 Cypress.Commands.add("loginToApp", () => {
-  // Check if we already have cached auth state
-  const cachedAuth = Cypress.env("auth_cache");
+  cy.clearLocalStorage();
+  cy.clearCookies();
 
-  if (cachedAuth) {
-    // Restore all auth-related items from cache
-    cy.window().then((win) => {
-      Object.keys(cachedAuth).forEach((key) => {
-        win.localStorage.setItem(key, cachedAuth[key]);
-      });
-    });
-    cy.visit("/");
-    return;
-  }
-
-  // Otherwise do full login
   cy.visit("/");
   cy.get('[data-cy="login-button"]').click();
 
-  cy.origin(Cypress.env("auth_url"), () => {
-    cy.get('input[name="email"]').type(Cypress.env("auth_username"));
-    cy.get('input[name="password"]').type(Cypress.env("auth_password"));
-    cy.get('button[type="submit"]').click();
-  });
+  cy.origin(
+    Cypress.env("auth_url"),
+    {
+      args: {
+        username: Cypress.env("auth_username"),
+        password: Cypress.env("auth_password"),
+      },
+    },
+    ({ username, password }) => {
+      // More robust login handling
+      cy.get('input[type="email"],input[name="email"],input[name="username"]', {
+        timeout: 20000,
+      })
+        .should("be.visible")
+        .type(username, { force: true });
 
-  cy.url().should("equal", "http://localhost:3000/");
+      cy.get('input[type="password"]', { timeout: 10000 })
+        .should("be.visible")
+        .type(password, { force: true });
 
-  // Cache all auth-related localStorage items
-  cy.window().then((win) => {
-    const authItems = {};
-    for (let i = 0; i < win.localStorage.length; i++) {
-      const key = win.localStorage.key(i);
-      if (key.includes("auth0") || key.includes("@@auth0spajs@@")) {
-        authItems[key] = win.localStorage.getItem(key);
-      }
-    }
-    Cypress.env("auth_cache", authItems);
-  });
+      cy.get('button[type="submit"]').click();
+
+      // More comprehensive consent screen handling
+      cy.get("body").then(($body) => {
+        // Check for various possible consent button selectors
+        const consentButtons = [
+          'button[value="accept"]',
+          "button.consent-accept",
+          'button[type="submit"]',
+          'button:contains("Accept")',
+          'button:contains("Continue")',
+        ];
+
+        const buttonSelector = consentButtons.join(",");
+
+        if ($body.find(buttonSelector).length > 0) {
+          cy.log("Consent screen detected");
+          cy.get(buttonSelector, { timeout: 10000 })
+            .should("be.visible")
+            .click({ force: true });
+        } else {
+          cy.log("No consent screen detected");
+        }
+      });
+    },
+  );
+
+  // More robust success verification
+  cy.url({ timeout: 10000 }).should("include", Cypress.config("baseUrl"));
+  cy.contains("Where are you going?", { timeout: 10000 }).should("be.visible");
 });
