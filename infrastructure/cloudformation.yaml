@@ -1,8 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Parameters: # params passed to "--parameter-overrides" in CLI
+Parameters:
   BucketName:
     Description: Unique name for your bucket. This will be in the S3 url to your React app.
+    Type: String
+  DomainName:
+    Description: The domain name for your website (e.g., example.com)
     Type: String
 
 Resources:
@@ -35,7 +38,37 @@ Resources:
             Action: 's3:GetObject'
             Resource: !Join ['', ['arn:aws:s3:::', !Ref MyBucket, '/*']]
 
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: redirect-to-https
+          TargetOriginId: S3Origin
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+        Origins:
+          - DomainName: !Select [2, !Split ["/", !GetAtt MyBucket.WebsiteURL]]
+            Id: S3Origin
+            CustomOriginConfig:
+              OriginProtocolPolicy: http-only
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginSSLProtocols: 
+                - TLSv1.2
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+        HttpVersion: http2
+
 Outputs:
   WebsiteURL:
     Value: !GetAtt MyBucket.WebsiteURL
     Description: URL for website hosted on S3
+  CloudFrontDomainName:
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Description: Domain name of CloudFront distribution
