@@ -5,12 +5,12 @@ const NavBar = () => {
   const { logout, user } = useAuth0();
 
   const handleLogout = () => {
-    const cloudFrontUrl =
-      process.env.REACT_APP_CLOUDFRONT_URL ||
-      "https://d1tl42qtzfxokv.cloudfront.net";
+    const cloudFrontUrl = process.env.REACT_APP_CLOUDFRONT_URL || "https://d1tl42qtzfxokv.cloudfront.net";
     console.log("Logging out to:", cloudFrontUrl);
     logout({
-      returnTo: cloudFrontUrl,
+      logoutParams: {
+        returnTo: cloudFrontUrl
+      }
     });
   };
 
