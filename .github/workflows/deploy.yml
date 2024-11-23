@@ -68,14 +68,6 @@ jobs:
           REACT_APP_CLOUDFRONT_URL: "${{ secrets.REACT_APP_CLOUDFRONT_URL }}"
         run: npm run build
 
-      - name: Debug Environment Variables
-        run: |
-          echo "CLOUDFRONT URL length: ${#REACT_APP_CLOUDFRONT_URL}"
-          echo "CLOUDFRONT URL is set: $([[ -n $REACT_APP_CLOUDFRONT_URL ]] && echo 'YES' || echo 'NO')"
-        env:
-          REACT_APP_CLOUDFRONT_URL: "${{ secrets.REACT_APP_CLOUDFRONT_URL }}"
-
-
       - name: Install dependencies for backend
         working-directory: backend
         run: npm install
@@ -207,9 +199,3 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-
-      - name: Debug production env variables
-        run: |
-          echo "REACT_APP_AUTH0_DOMAIN is set: ${{ secrets.AUTH0_DOMAIN != '' }}"
-          echo "REACT_APP_AUTH0_CLIENT_ID is set: ${{ secrets.AUTH0_CLIENT_ID != '' }}"
-          echo "REACT_APP_AUTH0_AUDIENCE is set: ${{ secrets.AUTH0_AUDIENCE != '' }}"
