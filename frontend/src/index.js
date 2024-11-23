@@ -24,7 +24,7 @@ const router = createBrowserRouter(
           skipRedirectCallback={window.location.pathname === "/callback"}
           cookieOptions={{
             sameSite: "none",
-            secure: true
+            secure: true,
           }}
         >
           <AuthProvider>
