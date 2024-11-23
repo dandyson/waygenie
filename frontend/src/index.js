@@ -22,6 +22,10 @@ const router = createBrowserRouter(
           cacheLocation="localstorage"
           useRefreshTokens={true}
           skipRedirectCallback={window.location.pathname === "/callback"}
+          cookieOptions={{
+            sameSite: "none",
+            secure: true,
+          }}
         >
           <AuthProvider>
             <App />

@@ -10,7 +10,9 @@ const NavBar = () => {
       "https://d1tl42qtzfxokv.cloudfront.net";
     console.log("Logging out to:", cloudFrontUrl);
     logout({
-      returnTo: cloudFrontUrl,
+      logoutParams: {
+        returnTo: cloudFrontUrl,
+      },
     });
   };
 

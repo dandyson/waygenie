@@ -70,7 +70,8 @@ jobs:
 
       - name: Debug Environment Variables
         run: |
-          echo "CLOUDFRONT URL: $REACT_APP_CLOUDFRONT_URL"
+          echo "CLOUDFRONT URL length: ${#REACT_APP_CLOUDFRONT_URL}"
+          echo "CLOUDFRONT URL is set: $([[ -n $REACT_APP_CLOUDFRONT_URL ]] && echo 'YES' || echo 'NO')"
         env:
           REACT_APP_CLOUDFRONT_URL: "${{ secrets.REACT_APP_CLOUDFRONT_URL }}"
 
