@@ -68,6 +68,12 @@ jobs:
           REACT_APP_CLOUDFRONT_URL: ${{ secrets.REACT_APP_CLOUDFRONT_URL }}
         run: npm run build
 
+      - name: Debug Environment Variables
+        run: echo "CLOUDFRONT URL: $REACT_APP_CLOUDFRONT_URL"
+        env:
+          REACT_APP_CLOUDFRONT_URL: ${{ secrets.REACT_APP_CLOUDFRONT_URL }}
+
+
       - name: Install dependencies for backend
         working-directory: backend
         run: npm install
