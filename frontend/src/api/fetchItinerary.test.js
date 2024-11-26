@@ -56,12 +56,16 @@ describe("fetchItinerary", () => {
   });
 
   it("should throw an error if the job fails", async () => {
+    ``;
     makeAuthenticatedRequest
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
-      .mockResolvedValueOnce({ status: "failed" }); // Polling response
+      .mockResolvedValueOnce({
+        status: "failed",
+        error: "Failed to generate itinerary: Job type not recognized",
+      }); // Add error message
 
     await expect(fetchItinerary(mockFormData, mockToken)).rejects.toThrow(
-      "Failed to generate itinerary",
+      "Failed to generate itinerary: Job type not recognized",
     );
   });
 
