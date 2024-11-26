@@ -56,7 +56,6 @@ describe("fetchItinerary", () => {
   });
 
   it("should throw an error if the job fails", async () => {
-    ``;
     makeAuthenticatedRequest
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
       .mockResolvedValueOnce({
