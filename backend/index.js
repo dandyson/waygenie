@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const OpenAI = require('openai');
-const chatQueue = require('./jobs/queue');
+const itineraryQueue = require('./jobs/queue');
 const Redis = require('ioredis');
 const checkJwt = require('./middleware/auth');
 require('dotenv').config();
@@ -63,7 +63,7 @@ app.post('/api/itinerary', checkJwt, async (req, res) => {
 
   try {
     // Add a job to the queue
-    const job = await chatQueue.add('generateItinerary', formData);
+    const job = await itineraryQueue.add('generateItinerary', formData);
 
     res.status(202).json({ message: 'Job queued', jobId: job.id });
   } catch (error) {
@@ -78,7 +78,7 @@ app.get('/api/itinerary/status/:jobId', checkJwt, async (req, res) => {
   
   try {
     // Find the job in the queue
-    const job = await chatQueue.getJob(jobId);
+    const job = await itineraryQueue.getJob(jobId);
 
     if (!job) {
       return res.status(404).json({ status: 'Job not found' });

@@ -12,8 +12,8 @@ const redisConnection = new Redis(process.env.REDISCLOUD_URL, {
 });
 
 // Create a new worker to process jobs
-const worker = new Worker(
-  "chatQueue",
+const itineraryWorker = new Worker(
+  "itineraryQueue",
   async (job) => {
 
     const formData = job.data;
@@ -77,11 +77,10 @@ const worker = new Worker(
   }
 );
 
-// Worker event listeners (optional)
-worker.on("completed", (job, returnValue) => {
+itineraryWorker.on("completed", (job, returnValue) => {
   console.log(`Job ${job.id} completed with result: ${returnValue}`);
 });
 
-worker.on("failed", (job, err) => {
+itineraryWorker.on("failed", (job, err) => {
   console.error(`Job ${job.id} failed with error: ${err.message}`);
 });

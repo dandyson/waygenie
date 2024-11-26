@@ -7,6 +7,6 @@ const connection = new Redis(process.env.REDISCLOUD_URL, {
 });
 
 // Create and export a new queue instance
-const chatQueue = new Queue('chatQueue', { connection });
+const itineraryQueue = new Queue('itineraryQueue', { connection });
 
-module.exports = chatQueue;
+module.exports = itineraryQueue;
