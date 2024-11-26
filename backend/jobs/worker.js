@@ -1,7 +1,6 @@
-const { Worker, Queue } = require("bullmq");
+const { Worker } = require("bullmq");
 const OpenAI = require('openai');
 const Redis = require("ioredis");
-const openai = require("openai"); // Ensure you've installed and configured OpenAI SDK
 
 const openaiChat = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
