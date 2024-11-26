@@ -1,25 +1,21 @@
-const { Worker, Queue } = require("bullmq");
+const { Worker } = require("bullmq");
 const OpenAI = require('openai');
 const Redis = require("ioredis");
-const openai = require("openai"); // Ensure you've installed and configured OpenAI SDK
 
 const openaiChat = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Redis configuration
 const redisConnection = new Redis(process.env.REDISCLOUD_URL, {
-  maxRetriesPerRequest: null, // Set maxRetriesPerRequest to null
+  maxRetriesPerRequest: null,
 });
 
-// Create a new worker to process jobs
-const worker = new Worker(
-  "chatQueue",
+const itineraryWorker = new Worker(
+  "itineraryQueue",
   async (job) => {
 
     const formData = job.data;
 
-    // Define the guide text for OpenAI
     const guide = `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
 
     Your response must be a JSON object that follows this exact structure, but please do not use this content, make your own from the formData provided:
@@ -57,7 +53,6 @@ const worker = new Worker(
 
     Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
 
-    // Simulate OpenAI API call (replace with actual logic)
     const result = await openaiChat.chat.completions.create({
       model: "gpt-4",
       messages: [
@@ -68,7 +63,6 @@ const worker = new Worker(
       temperature: 0.7,
     });
 
-    // Retrieve the result and send it back
     const response = result.choices[0].message.content;
 
     return response;
@@ -78,11 +72,10 @@ const worker = new Worker(
   }
 );
 
-// Worker event listeners (optional)
-worker.on("completed", (job, returnValue) => {
+itineraryWorker.on("completed", (job, returnValue) => {
   console.log(`Job ${job.id} completed with result: ${returnValue}`);
 });
 
-worker.on("failed", (job, err) => {
+itineraryWorker.on("failed", (job, err) => {
   console.error(`Job ${job.id} failed with error: ${err.message}`);
 });

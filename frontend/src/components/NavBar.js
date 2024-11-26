@@ -6,7 +6,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     const cloudFrontUrl = process.env.REACT_APP_CLOUDFRONT_URL;
-    console.log("Logging out to:", cloudFrontUrl);
+
     logout({
       logoutParams: {
         returnTo: cloudFrontUrl,
