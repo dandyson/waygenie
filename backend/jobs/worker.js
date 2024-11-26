@@ -1,9 +1,9 @@
 const { Worker } = require("bullmq");
-const OpenAI = require('openai');
+const OpenAI = require("openai");
 const Redis = require("ioredis");
 
 const openaiChat = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const redisConnection = new Redis(process.env.REDISCLOUD_URL, {
@@ -13,10 +13,10 @@ const redisConnection = new Redis(process.env.REDISCLOUD_URL, {
 const itineraryWorker = new Worker(
   "itineraryQueue",
   async (job) => {
+    if (job.name === "generateItinerary") {
+      const formData = job.data;
 
-    const formData = job.data;
-
-    const guide = `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
+      const guide = `You are a travel itinerary creator. Based on the provided details, generate a travel itinerary that is organized and easy to follow.
 
     Your response must be a JSON object that follows this exact structure, but please do not use this content, make your own from the formData provided:
     {
@@ -53,19 +53,22 @@ const itineraryWorker = new Worker(
 
     Use this information to create a detailed, structured itinerary tailored to the interests and travel style provided. Make sure to return the output as a valid JSON object, not as a string representation.`;
 
-    const result = await openaiChat.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        { role: "system", content: guide },
-        { role: "user", content: JSON.stringify(formData) }, // Stringify formData for the user message
-      ],
-      max_tokens: 1000,
-      temperature: 0.7,
-    });
+      const result = await openaiChat.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: guide },
+          { role: "user", content: JSON.stringify(formData) }, // Stringify formData for the user message
+        ],
+        max_tokens: 1000,
+        temperature: 0.7,
+      });
 
-    const response = result.choices[0].message.content;
+      const response = result.choices[0].message.content;
 
-    return response;
+      return response;
+    } else {
+      throw new Error(`Failed to generate itinerary: Job type not recognized: ${job.name}`);
+    }
   },
   {
     connection: redisConnection,
