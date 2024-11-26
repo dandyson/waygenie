@@ -12,12 +12,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const redisConnection = new Redis(process.env.REDISCLOUD_URL);
 
-// Configure OpenAI instance
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Configure CORS
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000' 
@@ -41,10 +39,8 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-// Basic API route
 app.get('/api', checkJwt, (req, res) => res.send('Welcome to WayGenie API'));
 
-// Chat route for generating travel itineraries
 app.post('/api/itinerary', checkJwt, async (req, res) => {
   
   const formData = req.body.prompt;
@@ -53,7 +49,6 @@ app.post('/api/itinerary', checkJwt, async (req, res) => {
     return res.status(400).json({ error: 'Prompt data is missing from the request' });
   }
 
-  // Validate required fields
   const requiredFields = ['location', 'startDate', 'endDate', 'startTime', 'endTime', 'interests', 'travelStyle'];
   const missingFields = requiredFields.filter(field => !formData[field]);
 
@@ -62,7 +57,6 @@ app.post('/api/itinerary', checkJwt, async (req, res) => {
   }
 
   try {
-    // Add a job to the queue
     const job = await itineraryQueue.add('generateItinerary', formData);
 
     res.status(202).json({ message: 'Job queued', jobId: job.id });
@@ -77,7 +71,6 @@ app.get('/api/itinerary/status/:jobId', checkJwt, async (req, res) => {
   const jobId = req.params.jobId;
   
   try {
-    // Find the job in the queue
     const job = await itineraryQueue.getJob(jobId);
 
     if (!job) {
@@ -88,15 +81,12 @@ app.get('/api/itinerary/status/:jobId', checkJwt, async (req, res) => {
     const isFailed = await job.isFailed();
 
     if (isCompleted) {
-      // Job completed, return the result
       const result = await job.returnvalue;
       res.json({ status: 'completed', result });
     } else if (isFailed) {
-      // Job failed, return the error
       const error = await job.failedReason;
       res.json({ status: 'failed', error });
     } else {
-      // Job is still in progress
       res.json({ status: 'in-progress' });
     }
   } catch (error) {
@@ -109,7 +99,6 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
