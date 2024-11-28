@@ -15,9 +15,13 @@ describe("OpenAI API Call with Queue", () => {
     cy.intercept("POST", "/api/itinerary").as("queueSubmission");
     cy.intercept("GET", "/api/itinerary/status/*").as("statusCheck");
 
-    // Fill out the form with more robust selectors and waiting
-    cy.get('input[name="location"]').should("be.visible").type("London");
-    cy.contains("button", "Next").click();
+    // Desktop view for consistent testing
+    cy.viewport(1024, 768);
+
+    // Click the London label and verify radio selection
+    cy.contains("label", "London").click();
+    cy.get('input[type="radio"][value="London"]').should("be.checked");
+    cy.contains("Next").click();
 
     cy.get("#start-date").should("be.visible").type("2024-01-01");
     cy.get("#start-time").should("be.visible").type("09:00");

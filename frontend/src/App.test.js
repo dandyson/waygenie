@@ -104,8 +104,9 @@ describe("App Component Form Navigation", () => {
 
     // Step 1: Location Input
     expect(screen.getByText("Where are you going?")).toBeInTheDocument();
-    const locationInput = screen.getByPlaceholderText("Enter a location...");
-    fireEvent.change(locationInput, { target: { value: "Paris" } });
+
+    // Select a city using radio button
+    fireEvent.click(screen.getByLabelText("London"));
     fireEvent.click(screen.getByText("Next"));
 
     // Step 2: DateTime should now be visible
@@ -125,8 +126,7 @@ describe("App Component Form Navigation", () => {
     renderWithRouter(<App />);
 
     // Step 1: Location
-    const locationInput = screen.getByPlaceholderText("Enter a location...");
-    fireEvent.change(locationInput, { target: { value: "Paris" } });
+    fireEvent.click(screen.getByLabelText("London"));
     fireEvent.click(screen.getByText("Next"));
 
     // Step 2: DateTime
@@ -154,12 +154,10 @@ describe("App Component Form Navigation", () => {
     await waitFor(() => {
       expect(screen.getByText(/What are your Interests?/i)).toBeInTheDocument();
     });
-    // Select interests
 
     fireEvent.change(screen.getByPlaceholderText("Enter Interest..."), {
       target: { value: "History" },
     });
-
     fireEvent.click(screen.getByText("Next"));
 
     // Step 4: Travel Style
