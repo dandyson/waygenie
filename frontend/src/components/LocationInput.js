@@ -131,6 +131,7 @@ const LocationInput = ({ formData, nextStep }) => {
             {showOtherCities && (
               <div className="mt-4">
                 <select
+                  data-testid="desktop-dropdown"
                   className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -149,9 +150,10 @@ const LocationInput = ({ formData, nextStep }) => {
             )}
           </div>
 
-          {/* Mobile View - Single Dropdown */}
+          {/* Mobile View */}
           <div className="md:hidden w-full">
             <select
+              data-testid="mobile-dropdown"
               className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
