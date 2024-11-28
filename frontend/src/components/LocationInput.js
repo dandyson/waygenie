@@ -97,9 +97,13 @@ const LocationInput = ({ formData, nextStep }) => {
                 <label
                   key={city}
                   className={`
-                    flex items-center p-3 border rounded-lg cursor-pointer
-                    ${location === city ? "border-blue-500 bg-blue-50" : "border-gray-200"}
-                    hover:border-blue-500 transition-colors
+                    flex items-center justify-center p-3 border cursor-pointer transition-colors
+                    ${
+                      location === city
+                        ? "bg-blue-500 hover:bg-blue-700 text-white font-bold"
+                        : "bg-white hover:bg-blue-100 text-blue-500"
+                    }
+                    rounded focus:outline-none focus:shadow-outline
                   `}
                 >
                   <input
@@ -111,7 +115,7 @@ const LocationInput = ({ formData, nextStep }) => {
                       setLocation(e.target.value);
                       setShowOtherCities(false);
                     }}
-                    className="mr-2"
+                    className="hidden"
                   />
                   {city}
                 </label>
@@ -120,9 +124,13 @@ const LocationInput = ({ formData, nextStep }) => {
             <div className="flex justify-center">
               <label
                 className={`
-                  flex items-center p-3 border rounded-lg cursor-pointer w-48
-                  ${showOtherCities ? "border-blue-500 bg-blue-50" : "border-gray-200"}
-                  hover:border-blue-500 transition-colors
+                  flex items-center justify-center w-48 p-3 border cursor-pointer transition-colors
+                  ${
+                    showOtherCities
+                      ? "bg-blue-500 hover:bg-blue-700 text-white font-bold"
+                      : "bg-white hover:bg-blue-100 text-blue-500"
+                  }
+                  rounded focus:outline-none focus:shadow-outline
                 `}
               >
                 <input
@@ -130,7 +138,7 @@ const LocationInput = ({ formData, nextStep }) => {
                   name="location"
                   checked={showOtherCities}
                   onChange={handleOtherCitiesClick}
-                  className="mr-2"
+                  className="hidden"
                 />
                 Other Cities
               </label>
