@@ -1,8 +1,49 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
+const UK_CITIES = {
+  England: [
+    "Bristol",
+    "Leeds",
+    "Leicester",
+    "Newcastle",
+    "Nottingham",
+    "Plymouth",
+    "Portsmouth",
+    "Sheffield",
+    "Southampton",
+  ],
+  Scotland: ["Aberdeen", "Dundee", "Glasgow", "Inverness", "Perth", "Stirling"],
+  Wales: ["Bangor", "Cardiff", "Newport", "Swansea"],
+  "Northern Ireland": ["Belfast", "Derry", "Lisburn", "Newry"],
+  "Historical Cities": [
+    "Canterbury",
+    "Durham",
+    "Exeter",
+    "Chester",
+    "Winchester",
+    "St Albans",
+    "Stratford-upon-Avon",
+    "Windsor",
+  ],
+};
+
+const POPULAR_UK_CITIES = [
+  "London",
+  "Edinburgh",
+  "Manchester",
+  "Birmingham",
+  "Liverpool",
+  "York",
+  "Bath",
+  "Cambridge",
+  "Oxford",
+  "Brighton",
+];
+
 const LocationInput = ({ formData, nextStep }) => {
   const [location, setLocation] = useState(formData.location);
+  const [showOtherCities, setShowOtherCities] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,16 +79,104 @@ const LocationInput = ({ formData, nextStep }) => {
           <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
             Where are you going?
           </h4>
-          <p className="mb-4">Please enter a city that you plan to visit</p>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
-            type="text"
-            name="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Enter a location..."
-          />
+
+          <p className="mb-4">Select a UK city to visit</p>
+
+          {/* Desktop View - Radio Buttons */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+              {POPULAR_UK_CITIES.map((city) => (
+                <label
+                  key={city}
+                  className={`
+                    flex items-center p-3 border rounded-lg cursor-pointer
+                    ${location === city ? "border-blue-500 bg-blue-50" : "border-gray-200"}
+                    hover:border-blue-500 transition-colors
+                  `}
+                >
+                  <input
+                    type="radio"
+                    name="location"
+                    value={city}
+                    checked={location === city}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setShowOtherCities(false);
+                    }}
+                    className="mr-2"
+                  />
+                  {city}
+                </label>
+              ))}
+            </div>
+            <div className="flex justify-center">
+              <label
+                className={`
+                  flex items-center p-3 border rounded-lg cursor-pointer w-48
+                  ${showOtherCities ? "border-blue-500 bg-blue-50" : "border-gray-200"}
+                  hover:border-blue-500 transition-colors
+                `}
+              >
+                <input
+                  type="radio"
+                  name="location"
+                  checked={showOtherCities}
+                  onChange={() => setShowOtherCities(true)}
+                  className="mr-2"
+                />
+                Other Cities
+              </label>
+            </div>
+
+            {showOtherCities && (
+              <div className="mt-4">
+                <select
+                  className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                >
+                  {Object.entries(UK_CITIES).map(([region, cities]) => (
+                    <optgroup key={region} label={region}>
+                      {cities.map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile View - Single Dropdown */}
+          <div className="md:hidden w-full">
+            <select
+              className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            >
+              <option value="">Select a city...</option>
+              <optgroup label="Popular Destinations">
+                {POPULAR_UK_CITIES.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </optgroup>
+              {Object.entries(UK_CITIES).map(([region, cities]) => (
+                <optgroup key={region} label={region}>
+                  {cities.sort().map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
         </div>
+
         <div>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
