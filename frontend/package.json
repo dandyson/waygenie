@@ -21,7 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test --coverage --detectOpenHandles --watchAll",
-    "test:total": "react-scripts test --coverage --coverageReporters='text-summary' --detectOpenHandles --watchAll",
+    "test:quiet": "FORCE_COLOR=true react-scripts test --silent --verbose false --reporters=default",
     "test:ci": "react-scripts test --detectOpenHandles",
     "cypress": "cypress open",
     "build": "react-scripts build",
