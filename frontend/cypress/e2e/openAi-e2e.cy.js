@@ -18,7 +18,9 @@ describe("OpenAI API Call with Queue", () => {
     // Desktop view for consistent testing
     cy.viewport(1024, 768);
 
-    cy.get('input[type="radio"][value="London"]').should("be.visible").click();
+    // Click the London label and verify radio selection
+    cy.contains("label", "London").click();
+    cy.get('input[type="radio"][value="London"]').should("be.checked");
     cy.contains("Next").click();
 
     cy.get("#start-date").should("be.visible").type("2024-01-01");

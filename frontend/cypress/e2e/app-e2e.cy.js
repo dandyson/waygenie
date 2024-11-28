@@ -14,10 +14,9 @@ describe("Navigation and Input", () => {
     });
 
     it("navigates through the wizard steps correctly", () => {
-      // Step 1: User selects destination via radio
-      cy.get('input[type="radio"][value="London"]')
-        .should("be.visible")
-        .click();
+      // Click the London label instead of the radio directly
+      cy.contains("label", "London").click();
+      cy.get('input[type="radio"][value="London"]').should("be.checked");
       cy.contains("Next").click();
       cy.contains("When will you be visiting?").should("be.visible");
 
@@ -41,7 +40,7 @@ describe("Navigation and Input", () => {
     });
 
     it("allows selecting from Other Cities dropdown", () => {
-      cy.get('input[type="radio"]').parent().contains("Other Cities").click();
+      cy.contains("label", "Other Cities").click();
 
       cy.get('[data-testid="desktop-dropdown"]')
         .should("be.visible")
@@ -51,8 +50,8 @@ describe("Navigation and Input", () => {
     });
 
     it("navigates through steps correctly and uses back button", () => {
-      // Step 1: Select destination
-      cy.get('input[type="radio"][value="London"]').click();
+      cy.contains("label", "London").click();
+      cy.get('input[type="radio"][value="London"]').should("be.checked");
 
       // Proceed to Step 2
       cy.contains("Next").click();
@@ -126,9 +125,12 @@ describe("Navigation and Input", () => {
 describe("Interests multiple inputs testing", () => {
   beforeEach(() => {
     cy.loginToApp();
-    // Navigate to interests page using desktop view
     cy.viewport(1024, 768);
-    cy.get('input[type="radio"][value="London"]').click();
+
+    // Select London using the label
+    cy.contains("label", "London").click();
+    cy.get('input[type="radio"][value="London"]').should("be.checked");
+
     cy.contains("Next").click();
     cy.get("#start-date").should("be.visible").type("2024-01-01");
     cy.get("#start-time").should("be.visible").type("09:00");
