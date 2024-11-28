@@ -104,15 +104,14 @@ describe("App Component Form Navigation", () => {
 
     // Step 1: Location Input
     expect(screen.getByText("Where are you going?")).toBeInTheDocument();
-    const locationInput = screen.getByPlaceholderText("Enter a location...");
-    fireEvent.change(locationInput, { target: { value: "Paris" } });
+    
+    // Select a city using radio button
+    fireEvent.click(screen.getByLabelText("London"));
     fireEvent.click(screen.getByText("Next"));
 
     // Step 2: DateTime should now be visible
     await waitFor(() => {
-      expect(
-        screen.getByText(/When will you be visiting?/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/When will you be visiting?/i)).toBeInTheDocument();
     });
   });
 
@@ -125,15 +124,12 @@ describe("App Component Form Navigation", () => {
     renderWithRouter(<App />);
 
     // Step 1: Location
-    const locationInput = screen.getByPlaceholderText("Enter a location...");
-    fireEvent.change(locationInput, { target: { value: "Paris" } });
+    fireEvent.click(screen.getByLabelText("London"));
     fireEvent.click(screen.getByText("Next"));
 
     // Step 2: DateTime
     await waitFor(() => {
-      expect(
-        screen.getByText(/When will you be visiting?/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/When will you be visiting?/i)).toBeInTheDocument();
     });
 
     fireEvent.change(screen.getByLabelText("Start Date:"), {
@@ -154,19 +150,15 @@ describe("App Component Form Navigation", () => {
     await waitFor(() => {
       expect(screen.getByText(/What are your Interests?/i)).toBeInTheDocument();
     });
-    // Select interests
 
     fireEvent.change(screen.getByPlaceholderText("Enter Interest..."), {
       target: { value: "History" },
     });
-
     fireEvent.click(screen.getByText("Next"));
 
     // Step 4: Travel Style
     await waitFor(() => {
-      expect(
-        screen.getByText(/What's your travelling style?/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/What's your travelling style?/i)).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("Let's Go!"));
