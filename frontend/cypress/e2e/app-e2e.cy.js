@@ -29,23 +29,20 @@ describe("Navigation and Input", () => {
       cy.contains("Next").click();
       cy.contains("What are your Interests?").should("be.visible");
 
-    // Step 3: User inputs interests
-    cy.get('input[type="text"]').should("be.visible").type("Coffee");
-    cy.contains("Next").click();
-    cy.contains("What's your travelling style?").should("be.visible");
-    cy.get("#travel-style").should("have.value", "laid-back");
-    // Change travel style
-    cy.get("#travel-style").select("everything");
-    cy.get("#travel-style").should("have.value", "everything");
-    cy.contains("Let's Go!").should("be.visible");
-  });
+      // Step 3: User inputs interests
+      cy.get('input[type="text"]').should("be.visible").type("Coffee");
+      cy.contains("Next").click();
+      cy.contains("What's your travelling style?").should("be.visible");
+      cy.get("#travel-style").should("have.value", "laid-back");
+      // Change travel style
+      cy.get("#travel-style").select("everything");
+      cy.get("#travel-style").should("have.value", "everything");
+      cy.contains("Let's Go!").should("be.visible");
+    });
 
     it("allows selecting from Other Cities dropdown", () => {
-      cy.get('input[type="radio"]')
-        .parent()
-        .contains("Other Cities")
-        .click();
-      
+      cy.get('input[type="radio"]').parent().contains("Other Cities").click();
+
       cy.get('[data-testid="desktop-dropdown"]')
         .should("be.visible")
         .select("Bristol");
@@ -84,11 +81,10 @@ describe("Navigation and Input", () => {
 
       it("shows only dropdown for location selection", () => {
         // Verify radio buttons are hidden
-        cy.get('input[type="radio"]').should('not.be.visible');
-        
+        cy.get('input[type="radio"]').should("not.be.visible");
+
         // Verify dropdown is visible
-        cy.get('[data-testid="mobile-dropdown"]')
-          .should("be.visible");
+        cy.get('[data-testid="mobile-dropdown"]').should("be.visible");
       });
 
       it("navigates through the wizard steps using mobile dropdown", () => {
@@ -106,7 +102,7 @@ describe("Navigation and Input", () => {
       });
 
       it("still shows only dropdown for location selection", () => {
-        cy.get('input[type="radio"]').should('not.be.visible');
+        cy.get('input[type="radio"]').should("not.be.visible");
         cy.get('[data-testid="mobile-dropdown"]').should("be.visible");
       });
 
