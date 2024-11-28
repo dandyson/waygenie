@@ -1,113 +1,120 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import LocationInput from "./LocationInput";
 
 describe("LocationInput", () => {
-  const formData = { location: "London" };
   const mockNextStep = jest.fn();
 
-  describe("initial rendering", () => {
-    test("renders with initial value from formData", () => {
-      render(<LocationInput formData={formData} nextStep={mockNextStep} />);
-      const londonRadio = screen.getByLabelText("London");
-      expect(londonRadio).toBeChecked();
-    });
+  beforeEach(() => {
+    mockNextStep.mockClear();
   });
 
-  describe("user interaction", () => {
-    test("allows selecting a city via radio buttons and submits form", () => {
-      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
-      
-      // Get and click London radio button
-      const londonRadio = screen.getByLabelText("London");
-      fireEvent.click(londonRadio);
-      
-      // Check if London is selected
-      expect(londonRadio).toBeChecked();
-      
-      // Submit form and verify
-      const nextButton = screen.getByText("Next");
-      fireEvent.click(nextButton);
-      expect(mockNextStep).toHaveBeenCalledWith({ location: "London" });
-    });
-  
-    test("shows dropdown when 'Other Cities' is selected", () => {
-      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
-      
-      // Initially, dropdown should not be visible
-      expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
-      
-      // Click 'Other Cities' radio
-      const otherRadio = screen.getByLabelText("Other Cities");
-      fireEvent.click(otherRadio);
-      
-      // Check if Other Cities is selected
-      expect(otherRadio).toBeChecked();
-      
-      // Check if dropdown appeared
-      const dropdown = screen.getByRole("combobox");
-      expect(dropdown).toBeInTheDocument();
-      
-      // Verify some cities are in the dropdown
-      const options = screen.getAllByRole("option");
-      expect(options.some(option => option.textContent === "Bristol")).toBeTruthy();
-      expect(options.some(option => option.textContent === "Glasgow")).toBeTruthy();
-    });
-  
-    test("selecting a city from dropdown works correctly", () => {
-      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
-      
-      // Click 'Other Cities' radio to show dropdown
-      fireEvent.click(screen.getByLabelText("Other Cities"));
-      
-      // Select a city from dropdown
-      const dropdown = screen.getByRole("combobox");
-      fireEvent.change(dropdown, { target: { value: "Bristol" } });
-      
-      // Submit form and verify
-      const nextButton = screen.getByText("Next");
-      fireEvent.click(nextButton);
-      expect(mockNextStep).toHaveBeenCalledWith({ location: "Bristol" });
-    });
-  
-    test("radio selection changes when different cities are clicked", () => {
-      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
-      
-      // Click London
-      const londonRadio = screen.getByLabelText("London");
-      fireEvent.click(londonRadio);
-      expect(londonRadio).toBeChecked();
-      
-      // Click Manchester
-      const manchesterRadio = screen.getByLabelText("Manchester");
-      fireEvent.click(manchesterRadio);
-      expect(manchesterRadio).toBeChecked();
-      expect(londonRadio).not.toBeChecked();
-    });
-
-    test("does not call nextStep if no location is selected", () => {
-      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
-      const nextButton = screen.getByText("Next");
-      fireEvent.click(nextButton);
-      expect(mockNextStep).not.toHaveBeenCalled();
+  describe("initialization", () => {
+    test("renders with initial value from formData", () => {
+      render(<LocationInput formData={{ location: "London" }} nextStep={mockNextStep} />);
+      expect(screen.getByLabelText("London")).toBeChecked();
     });
 
     test("updates selected location when formData changes", () => {
       const { rerender } = render(
         <LocationInput formData={{ location: "London" }} nextStep={mockNextStep} />
       );
-      
-      // Initial London radio should be checked
       expect(screen.getByLabelText("London")).toBeChecked();
-      
-      // Update formData to Manchester
+
       rerender(
         <LocationInput formData={{ location: "Manchester" }} nextStep={mockNextStep} />
       );
-      
-      // Manchester radio should now be checked
       expect(screen.getByLabelText("Manchester")).toBeChecked();
       expect(screen.getByLabelText("London")).not.toBeChecked();
+    });
+  });
+
+  describe("desktop view", () => {
+    test("renders popular cities as radio buttons", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      expect(screen.getByLabelText("London")).toBeInTheDocument();
+      expect(screen.getByLabelText("Edinburgh")).toBeInTheDocument();
+      expect(screen.getByLabelText("Manchester")).toBeInTheDocument();
+    });
+
+    test("allows switching between popular cities", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      
+      const londonRadio = screen.getByLabelText("London");
+      fireEvent.click(londonRadio);
+      expect(londonRadio).toBeChecked();
+
+      const manchesterRadio = screen.getByLabelText("Manchester");
+      fireEvent.click(manchesterRadio);
+      expect(manchesterRadio).toBeChecked();
+      expect(londonRadio).not.toBeChecked();
+    });
+
+    test("shows dropdown only when 'Other Cities' is selected", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      
+      expect(screen.queryByTestId("desktop-dropdown")).not.toBeInTheDocument();
+      fireEvent.click(screen.getByLabelText("Other Cities"));
+      
+      const dropdown = screen.getByTestId("desktop-dropdown");
+      expect(dropdown).toBeInTheDocument();
+      
+      const options = within(dropdown).getAllByRole("option");
+      expect(options.some(option => option.textContent === "Bristol")).toBeTruthy();
+    });
+
+    test("submits selected city from desktop dropdown", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      
+      fireEvent.click(screen.getByLabelText("Other Cities"));
+      const dropdown = screen.getByTestId("desktop-dropdown");
+      fireEvent.change(dropdown, { target: { value: "Bristol" } });
+      fireEvent.click(screen.getByText("Next"));
+
+      expect(mockNextStep).toHaveBeenCalledWith({ location: "Bristol" });
+    });
+  });
+
+  describe("mobile view", () => {
+    test("shows single dropdown with all cities", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+
+      const mobileDropdown = screen.getByTestId("mobile-dropdown");
+      expect(mobileDropdown).toBeInTheDocument();
+
+      const options = within(mobileDropdown).getAllByRole("option");
+      expect(options[0]).toHaveValue("");
+      expect(options[0]).toHaveTextContent("Select a city...");
+      expect(options.some(option => option.textContent === "London")).toBeTruthy();
+      expect(options.some(option => option.textContent === "Bristol")).toBeTruthy();
+      expect(options.some(option => option.textContent === "Edinburgh")).toBeTruthy();
+    });
+
+    test("submits selected city from mobile dropdown", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      
+      const mobileDropdown = screen.getByTestId("mobile-dropdown");
+      fireEvent.change(mobileDropdown, { target: { value: "Bristol" } });
+      fireEvent.click(screen.getByText("Next"));
+
+      expect(mockNextStep).toHaveBeenCalledWith({ location: "Bristol" });
+    });
+  });
+
+  describe("form submission", () => {
+    test("doesn't submit if no location selected", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      fireEvent.click(screen.getByText("Next"));
+      expect(mockNextStep).not.toHaveBeenCalled();
+    });
+
+    test("submits selected popular city", () => {
+      render(<LocationInput formData={{ location: "" }} nextStep={mockNextStep} />);
+      
+      fireEvent.click(screen.getByLabelText("London"));
+      fireEvent.click(screen.getByText("Next"));
+
+      expect(mockNextStep).toHaveBeenCalledWith({ location: "London" });
     });
   });
 });
