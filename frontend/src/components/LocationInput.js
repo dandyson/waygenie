@@ -115,7 +115,8 @@ const LocationInput = ({ formData, nextStep }) => {
                       setLocation(e.target.value);
                       setShowOtherCities(false);
                     }}
-                    className="hidden"
+                    className="absolute opacity-0 w-0 h-0" // Visually hidden but functionally present
+                    aria-label={`Select ${city}`}
                   />
                   {city}
                 </label>
