@@ -87,7 +87,7 @@ const App = () => {
           <>
             <NavBar />
             <div className="min-h-screen flex items-center justify-center p-8 bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]">
-              <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+              <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-max">
                 {(() => {
                   switch (step) {
                     case 1:
