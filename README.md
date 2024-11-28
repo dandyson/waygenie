@@ -6,23 +6,35 @@
 
 ## Overview
 
-Welcome to WayGenie! It is a React.js and Express.js Single Page Application (SPA) that uses AI to plan itineraries for travellers.
+WayGenie is a full-stack React.js and Express.js Single Page Application (SPA) that uses AI to plan itineraries for travellers. The application showcases:
+- OpenAI API integration for AI-powered suggestions
+- Auth0 authentication protecting API routes
+- Redis for job queue management
+- Cypress for end-to-end testing
+- AWS CloudFront for content delivery
 
+## Live Demo
 
-# WayGenie Setup Guide
+Visit [WayGenie](https://d1tl42qtzfxokv.cloudfront.net) to see the full application in action!
+
+****Demo credentials will be provided upon request.***
+
+## Local Development Setup
+
+This guide will help you set up a local development environment to explore the codebase and architecture. Note: The OpenAI integration is protected in production to manage API costs, but the setup below will let you explore all other features and code structure.
 
 ### Prerequisites
 
-Before running this project locally, ensure you have the following installed:
+Before running this project locally, ensure you have:
+1. **Node.js and npm**: For managing dependencies and running the application
+2. **Redis**: For the job queue system (optional if not testing AI features)
 
-1. **Node.js and npm**: Required for managing dependencies and running both frontend and backend applications.
+### Installation Steps
 
-### Step 1: Clone the Repository
-
-Clone the Waygenie repository to your local machine using:
-
+### Step 1: **Clone the Repository**
 ```bash
 git clone https://github.com/dandyson/waygenie.git
+cd waygenie
 ```
 
 Navigate into the project directory:
@@ -30,6 +42,7 @@ Navigate into the project directory:
 ```bash
 cd waygenie
 ```
+
 ### Step 2: Set Up the Backend
 
 Navigate to the backend directory:
@@ -129,17 +142,22 @@ Once the browser has opened, you will be taken to the Cypress dashboard. The tes
 
 From here, select any of the files and the tests will run!
 
-<br>
+
+## Understanding the Auth Layer
+
+The application uses Auth0 in production to protect costly API routes. For local development, focus on exploring the architecture and UI components
 
 
-### Troubleshooting
 
-If you encounter issues, consider the following:
+## Technical Details
 
-- **Port Conflicts:** Ensure no other services are running on the ports specified for the frontend or backend
-- **Environment Variables:** Verify that the .env file exists and contains the correct settings. The backend needs this for configuration.
-- **Dependency Issues:** Run npm install in both frontend and backend directories to ensure all dependencies are correctly installed.
+### Architecture Highlights
+- 🎯 Queue-based AI processing system
+- 🔒 Protected API routes for cost management
+- ⚡ Redis job management
+- 📱 Responsive design
+- 🧪 Comprehensive test coverage
 
-## 
+## Contact
 
-Thank you for using WayGenie! If you have any questions or suggestions, please don't hesitate to reach out.
+For full demo access or questions about this project, please reach out to dannydyson297@gmail.com
