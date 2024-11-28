@@ -56,6 +56,14 @@ const LocationInput = ({ formData, nextStep }) => {
     setLocation(formData.location);
   }, [formData.location]);
 
+  const handleOtherCitiesClick = () => {
+    setShowOtherCities(true);
+    // Set the first city from England as default selection
+    if (!location || POPULAR_UK_CITIES.includes(location)) {
+      setLocation(UK_CITIES.England[0]);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-6">
       <div className="mb-6">
@@ -121,7 +129,7 @@ const LocationInput = ({ formData, nextStep }) => {
                   type="radio"
                   name="location"
                   checked={showOtherCities}
-                  onChange={() => setShowOtherCities(true)}
+                  onChange={handleOtherCitiesClick}
                   className="mr-2"
                 />
                 Other Cities
