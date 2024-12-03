@@ -25,8 +25,8 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
 
   if (isGenerating) {
     return (
-      <div className="flex flex-col items-center justify-center">
-        <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl mb-8">
+      <div className="flex flex-col items-center justify-center p-8">
+        <h4 className="block text-gray-700 font-extrabold mb-2 text-xl sm:text-2xl md:text-4xl text-center sm:text-left mb-8">
           Generating Itinerary...
         </h4>
         <div
@@ -39,7 +39,7 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center p-8">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -55,7 +55,7 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
           />
         </svg>
 
-        <h3 className="text-3xl text-red-500 text-center font-semibold my-4">
+        <h3 className="text-2xl md:text-4xl text-red-500 text-center font-semibold my-4">
           ERROR:
         </h3>
         <p className="text-red-500 text-center text-lg" role="alert">
@@ -72,16 +72,18 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
   }
 
   return (
-    <div className="max-w-screen-md m-8">
+    <div className="max-w-screen-md m-2 px-6 py-4 sm:p-8">
       {parsedResponse && (
         <>
-          <h3 className="text-3xl text-center font-semibold mb-4">
+          <h3 className="text-3xl md:text-4xl text-center font-semibold mb-4">
             YOUR ITINERARY:
           </h3>
           <hr className="my-4" />
-          <p className="mb-4">{parsedResponse.introduction}</p>
+          <p className="mb-4 text-md sm:text-lg">
+            {parsedResponse.introduction}
+          </p>
           <h3 className="text-xl font-semibold mb-2">EVENTS:</h3>
-          <ul className="m-8 max-w-screen-md">
+          <ul className="max-w-screen-md m-2">
             {parsedResponse.events ? (
               parsedResponse.events.length > 0 ? (
                 parsedResponse.events.map((event, index) => (
@@ -95,10 +97,10 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
                       {event.time}
                     </p>
                     <hr className="my-2" />
-                    <h4 className="mt-2 font-display text-2xl font-semibold text-sky-500">
+                    <h4 className="font-display text-xl font-semibold text-sky-500 mt-2 mb-4">
                       {event.title}
                     </h4>
-                    <p>{event.description}</p>
+                    <p className="text-md">{event.description}</p>
                   </li>
                 ))
               ) : (
@@ -108,7 +110,10 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
               <li className="text-red-500">No events found.</li>
             )}
           </ul>
-          <p className="mt-4">{parsedResponse.travelMethods}</p>
+          <hr className="mt-10 mb-6"></hr>
+          <p className="mt-4 text-md sm:text-lg">
+            {parsedResponse.travelMethods}
+          </p>
         </>
       )}
       <button
