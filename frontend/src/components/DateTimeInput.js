@@ -31,7 +31,11 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
   const handleStartDateChange = (e) => {
     const newStartDate = e.target.value;
     setStartDate(newStartDate);
-    setEndDate(newStartDate); // Set end date to the same as start date
+
+    // Only set end date to the same as start date if the new start date is after the current end date
+    if (newStartDate > endDate) {
+      setEndDate(newStartDate); // Set end date to the same as start date
+    }
 
     // Calculate end time as one hour after the start time
     if (startTime) {
