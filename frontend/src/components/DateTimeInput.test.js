@@ -121,6 +121,26 @@ describe("DateTimeInput", () => {
       expect(startTimeInput.value).toBe("10:00");
     });
 
+    test("changing end date to before start date updates start date", () => {
+      const mockNextStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={() => {}}
+          formData={formData}
+        />,
+      );
+
+      const startDateInput = screen.getByLabelText("Start Date:");
+      const endDateInput = screen.getByLabelText("End Date:");
+
+      // Change end date to 2024-09-04 (before the current start date of 2024-09-05)
+      fireEvent.change(endDateInput, { target: { value: "2024-09-04" } });
+
+      // Check that start date is updated to the same as end date
+      expect(startDateInput.value).toBe("2024-09-04");
+    });
+
     test("calls backStep when back button is clicked", () => {
       const mockNextStep = jest.fn();
       const mockBackStep = jest.fn();
