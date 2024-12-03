@@ -178,3 +178,84 @@ describe("App Component Form Navigation", () => {
     });
   });
 });
+
+describe("App Component Error Handling", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    // Mock Auth0 for an authenticated user
+    useAuth0.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+      user: {
+        email: "test@example.com",
+        name: "Test User",
+      },
+      getAccessTokenSilently: jest.fn().mockResolvedValue("mock-token"),
+    });
+  });
+
+  test("handles malformed result field gracefully", async () => {
+    const mockResponse = {
+      status: "completed",
+      result: "{ invalid json }",
+    };
+
+    fetchItinerary.mockResolvedValueOnce(mockResponse); // Mock the API call
+
+    renderWithRouter(<App />);
+
+    // Step 1: Location
+    fireEvent.click(screen.getByLabelText("London"));
+    fireEvent.click(screen.getByText("Next"));
+
+    // Step 2: DateTime
+    await waitFor(() => {
+      expect(
+        screen.getByText(/When will you be visiting?/i),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText("Start Date:"), {
+      target: { value: "2024-09-01" },
+    });
+    fireEvent.change(screen.getByLabelText("Start Time:"), {
+      target: { value: "10:00" },
+    });
+    fireEvent.change(screen.getByLabelText("End Date:"), {
+      target: { value: "2024-09-02" },
+    });
+    fireEvent.change(screen.getByLabelText("End Time:"), {
+      target: { value: "15:00" },
+    });
+    fireEvent.click(screen.getByText("Next"));
+
+    // Step 3: Interests
+    await waitFor(() => {
+      expect(screen.getByText(/What are your Interests?/i)).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("Enter Interest..."), {
+      target: { value: "History" },
+    });
+    fireEvent.click(screen.getByText("Next"));
+
+    // Step 4: Travel Style
+    await waitFor(() => {
+      expect(
+        screen.getByText(/What's your travelling style?/i),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText("Let's Go!"));
+
+    // Wait for the error message to appear
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          /There was an error generating your itinerary - please try again./i,
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+});
