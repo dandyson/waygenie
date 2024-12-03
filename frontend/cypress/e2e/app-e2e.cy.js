@@ -125,17 +125,18 @@ describe("Navigation and Input", () => {
       cy.contains("label", "London").click();
       cy.get('input[type="radio"][value="London"]').should("be.checked");
       cy.contains("Next").click();
-      
+
       cy.get("#start-date").type("2024-01-04");
       cy.get("#end-date").type("2024-01-10");
-  
+
       // Change start date to a date before the end date
-      cy.get("#start-date").clear().type("2024-01-03");
-  
+      cy.get("#start-date").clear();
+      cy.get("#start-date").type("2024-01-03");
+
       // Check that end date remains unchanged
       cy.get("#end-date").should("have.value", "2024-01-10");
     });
-  
+
     it("should change end date when start date is set after end date", () => {
       cy.contains("label", "London").click();
       cy.get('input[type="radio"][value="London"]').should("be.checked");
@@ -143,10 +144,11 @@ describe("Navigation and Input", () => {
 
       cy.get("#start-date").type("2024-01-04");
       cy.get("#end-date").type("2024-01-10");
-  
+
       // Change start date to a date after the end date
-      cy.get("#start-date").clear().type("2024-01-11");
-  
+      cy.get("#start-date").clear();
+      cy.get("#start-date").type("2024-01-11");
+
       // Check that end date is updated to the same as start date
       cy.get("#end-date").should("have.value", "2024-01-11");
     });
