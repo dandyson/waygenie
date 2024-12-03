@@ -28,6 +28,66 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   }, [startDate, startTime, endDate, endTime, formData]);
 
+  const handleStartDateChange = (e) => {
+    const newStartDate = e.target.value;
+    setStartDate(newStartDate);
+    setEndDate(newStartDate); // Set end date to the same as start date
+
+    // Calculate end time as one hour after the start time
+    if (startTime) {
+      const [hours, minutes] = startTime.split(":").map(Number);
+      const endDateTime = new Date(newStartDate);
+      endDateTime.setHours(hours + 1, minutes); // Set end time to one hour later
+      setEndTime(endDateTime.toTimeString().split(" ")[0].slice(0, 5)); // Format to HH:MM
+    }
+  };
+
+  const handleStartTimeChange = (e) => {
+    const newStartTime = e.target.value;
+    setStartTime(newStartTime);
+
+    // Only update end time if it is not set or if the new start time is later than the current end time
+    if (!endTime || newStartTime >= endTime) {
+      // Calculate end time as one hour after the start time
+      if (startDate) {
+        const [hours, minutes] = newStartTime.split(":").map(Number);
+        const endDateTime = new Date(startDate);
+        endDateTime.setHours(hours + 1, minutes); // Set end time to one hour later
+        setEndTime(endDateTime.toTimeString().split(" ")[0].slice(0, 5)); // Format to HH:MM
+      }
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEndDate = e.target.value;
+    setEndDate(newEndDate);
+
+    // Check if the new end date is before the start date
+    if (newEndDate < startDate) {
+      setStartDate(newEndDate); // Set start date to the same as end date
+      // Calculate start time to be one hour before the end time if end time is set
+      if (endTime) {
+        const [hours, minutes] = endTime.split(":").map(Number);
+        const startDateTime = new Date(newEndDate);
+        startDateTime.setHours(hours - 1, minutes); // Set start time to one hour earlier
+        setStartTime(startDateTime.toTimeString().split(" ")[0].slice(0, 5)); // Format to HH:MM
+      }
+    }
+  };
+
+  const handleEndTimeChange = (e) => {
+    const newEndTime = e.target.value;
+    setEndTime(newEndTime);
+
+    // Check if the new end time is before the start time
+    if (startDate && newEndTime < startTime) {
+      const [hours, minutes] = newEndTime.split(":").map(Number);
+      const startDateTime = new Date(startDate);
+      startDateTime.setHours(hours - 1, minutes); // Set start time to one hour earlier
+      setStartTime(startDateTime.toTimeString().split(" ")[0].slice(0, 5)); // Format to HH:MM
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (startDate && startTime && endDate && endTime) {
@@ -84,7 +144,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 id="start-date"
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={handleStartDateChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
               />
               <label
@@ -97,7 +157,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 id="start-time"
                 type="time"
                 value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={handleStartTimeChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -115,7 +175,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 id="end-date"
                 type="date"
                 value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                onChange={handleEndDateChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
               />
               <label
@@ -128,7 +188,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 id="end-time"
                 type="time"
                 value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
+                onChange={handleEndTimeChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
