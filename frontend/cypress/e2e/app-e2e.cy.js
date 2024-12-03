@@ -70,6 +70,53 @@ describe("Navigation and Input", () => {
       cy.get("#end-date").type("2024-01-01");
       cy.get("#end-time").type("17:00");
     });
+
+    it("changing start time does not affect end time if end time is set", () => {
+      cy.contains("label", "London").click();
+      cy.get('input[type="radio"][value="London"]').should("be.checked");
+      cy.contains("Next").click();
+      cy.get("#start-date").type("2024-01-01");
+      cy.get("#start-time").type("09:00");
+      cy.get("#end-date").type("2024-01-01");
+      cy.get("#end-time").type("17:00");
+      // Change start time to 10:00
+      cy.get("#start-time").clear().type("10:00");
+
+      // Check that end time remains unchanged
+      cy.get("#end-time").should("have.value", "17:00");
+    });
+
+    it("changing end time to before start time updates start time", () => {
+      cy.contains("label", "London").click();
+      cy.get('input[type="radio"][value="London"]').should("be.checked");
+      cy.contains("Next").click();
+      cy.get("#start-date").type("2024-01-01");
+      cy.get("#start-time").type("12:06");
+      cy.get("#end-date").type("2024-01-01");
+      cy.get("#end-time").type("13:06");
+
+      // Change end time to 11:00 (before the current start time of 12:06)
+      cy.get("#end-time").clear().type("11:00");
+
+      // Check that start time is updated to 10:00 (one hour before the new end time)
+      cy.get("#start-time").should("have.value", "10:00");
+    });
+
+    it("changing end date to before start date updates start date", () => {
+      cy.contains("label", "London").click();
+      cy.get('input[type="radio"][value="London"]').should("be.checked");
+      cy.contains("Next").click();
+      cy.get("#start-date").type("2024-01-01");
+      cy.get("#start-time").type("09:00");
+      cy.get("#end-date").type("2024-01-01");
+      cy.get("#end-time").type("17:00");
+
+      // Change end date to 2023-12-31 (before the current start date of 2024-01-01)
+      cy.get("#end-date").clear().type("2023-12-31");
+
+      // Check that start date is updated to the same as end date
+      cy.get("#start-date").should("have.value", "2023-12-31");
+    });
   });
 
   describe("Mobile View", () => {
