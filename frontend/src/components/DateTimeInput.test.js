@@ -80,6 +80,104 @@ describe("DateTimeInput", () => {
       fireEvent.click(screen.getByText("Back"));
       expect(mockBackStep).toHaveBeenCalled();
     });
+
+    test("changing start time does not affect end time if end time is set", () => {
+      const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={mockBackStep}
+          formData={formData}
+        />,
+      );
+
+      const startTimeInput = screen.getByLabelText("Start Time:");
+      const endTimeInput = screen.getByLabelText("End Time:");
+
+      // Change start time to 10:00
+      fireEvent.change(startTimeInput, { target: { value: "10:00" } });
+
+      // Check that end time remains unchanged
+      expect(endTimeInput.value).toBe("13:06");
+    });
+
+    test("changing end time to before start time updates start time", () => {
+      const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={mockBackStep}
+          formData={formData}
+        />,
+      );
+
+      const startTimeInput = screen.getByLabelText("Start Time:");
+      const endTimeInput = screen.getByLabelText("End Time:");
+
+      // Change end time to 11:00 (before the current start time of 12:06)
+      fireEvent.change(endTimeInput, { target: { value: "11:00" } });
+
+      // Check that start time is updated to 10:00 (one hour before the new end time)
+      expect(startTimeInput.value).toBe("10:00");
+    });
+
+    test("changing end date to before start date updates start date", () => {
+      const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={mockBackStep}
+          formData={formData}
+        />,
+      );
+
+      const startDateInput = screen.getByLabelText("Start Date:");
+      const endDateInput = screen.getByLabelText("End Date:");
+
+      // Change end date to 2024-09-04 (before the current start date of 2024-09-05)
+      fireEvent.change(endDateInput, { target: { value: "2024-09-04" } });
+
+      // Check that start date is updated to the same as end date
+      expect(startDateInput.value).toBe("2024-09-04");
+    });
+
+    test("calls backStep when back button is clicked", () => {
+      const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={mockBackStep}
+          formData={formData}
+        />,
+      );
+      fireEvent.click(screen.getByText("Back"));
+      expect(mockBackStep).toHaveBeenCalled();
+    });
+
+    test("changing start date does not affect end date if start date is before end date", () => {
+      const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
+      render(
+        <DateTimeInput
+          nextStep={mockNextStep}
+          backStep={mockBackStep}
+          formData={formData}
+        />,
+      );
+
+      const startDateInput = screen.getByLabelText("Start Date:");
+      const endDateInput = screen.getByLabelText("End Date:");
+
+      // Change start date to 2024-09-04 (before the current end date of 2024-09-05)
+      fireEvent.change(startDateInput, { target: { value: "2024-09-04" } });
+
+      // Check that end date remains unchanged
+      expect(endDateInput.value).toBe("2024-09-05");
+    });
   });
 
   describe("rendering with provided formData", () => {
