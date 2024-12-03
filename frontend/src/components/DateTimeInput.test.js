@@ -83,10 +83,11 @@ describe("DateTimeInput", () => {
 
     test("changing start time does not affect end time if end time is set", () => {
       const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
-          backStep={() => {}}
+          backStep={mockBackStep}
           formData={formData}
         />,
       );
@@ -103,10 +104,11 @@ describe("DateTimeInput", () => {
 
     test("changing end time to before start time updates start time", () => {
       const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
-          backStep={() => {}}
+          backStep={mockBackStep}
           formData={formData}
         />,
       );
@@ -123,10 +125,11 @@ describe("DateTimeInput", () => {
 
     test("changing end date to before start date updates start date", () => {
       const mockNextStep = jest.fn();
+      const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
-          backStep={() => {}}
+          backStep={mockBackStep}
           formData={formData}
         />,
       );
