@@ -84,7 +84,7 @@ const LocationInput = ({ formData, nextStep }) => {
       </div>
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
         <div className="mb-4 text-center">
-          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-2xl md:text-4xl">
             Where are you going?
           </h4>
 

@@ -40,7 +40,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
         onSubmit={handleSubmit}
       >
         <div className="text-center mb-6">
-          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-2xl md:text-4xl">
             What's your travelling style?
           </h4>
           <small className="text-gray-600">
