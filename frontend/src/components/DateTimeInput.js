@@ -63,10 +63,10 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
         onSubmit={handleSubmit}
       >
         <div className="mb-6 text-center">
-          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-2xl md:text-4xl">
             When will you be visiting?
           </h4>
-          <p className="mb-4">
+          <p className="mb-4 text-lg">
             Please provide a start and end date for your trip, including the
             times
           </p>
@@ -76,7 +76,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
             <div className="flex flex-col w-full md:w-1/2">
               <label
                 htmlFor="start-date"
-                className="block text-gray-700 text-sm font-medium mb-1"
+                className="block text-gray-700 text-md font-medium mb-1"
               >
                 Start Date:
               </label>
@@ -85,11 +85,11 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
               />
               <label
                 htmlFor="start-time"
-                className="block text-gray-700 text-sm font-medium mb-1"
+                className="block text-gray-700 text-md font-medium mb-1"
               >
                 Start Time:
               </label>
@@ -107,7 +107,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
             <div className="flex flex-col w-full md:w-1/2">
               <label
                 htmlFor="end-date"
-                className="block text-gray-700 text-sm font-medium mb-1"
+                className="block text-gray-700 text-md font-medium mb-1"
               >
                 End Date:
               </label>
@@ -116,11 +116,11 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
               />
               <label
                 htmlFor="end-time"
-                className="block text-gray-700 text-sm font-medium mb-1"
+                className="block text-gray-700 text-md font-medium mb-1"
               >
                 End Time:
               </label>

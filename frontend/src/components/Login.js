@@ -26,7 +26,7 @@ const Login = () => {
           </svg>
         </div>
         <div className="mb-4 text-center">
-          <h4 className="block text-gray-700 font-extrabold mb-2 text-3xl">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-2xl md:text-4xl">
             Welcome to WayGenie!
           </h4>
           <p>The AI Travel Planner</p>
