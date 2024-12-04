@@ -16,7 +16,7 @@ const NavBar = ({ resetStep }) => {
   };
 
   return (
-    <nav className="w-full bg-transparent flex items-center justify-between p-4 bg-[#0063ff]">
+    <nav className="w-full flex items-center justify-between p-4 bg-nav-blue">
       <button onClick={resetStep}>
         <span className="text-white font-bold text-xl">WayGenie</span>
       </button>
