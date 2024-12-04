@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import PropTypes from "prop-types";
 
-const NavBar = () => {
+const NavBar = ({ resetStep }) => {
   const { logout, user } = useAuth0();
 
   const handleLogout = () => {
@@ -15,20 +16,24 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="fixed top-0 right-0 p-4 flex items-center gap-4">
-      {user && (
-        <>
-          <span className="text-white">{user.name}</span>
-          <button
-            onClick={handleLogout}
-            className="bg-white text-blue-600 hover:bg-blue-100 font-bold py-2 px-4 rounded transition-colors"
-          >
-            Log Out
-          </button>
-        </>
-      )}
+    <nav className="w-full bg-transparent flex items-center justify-between p-4 bg-[#0063ff]">
+      <button onClick={resetStep}>
+        <span className="text-white font-bold text-xl">WayGenie</span>
+      </button>
+
+      {user && <span className="text-white hidden md:block">{user.email}</span>}
+      <button
+        onClick={handleLogout}
+        className="bg-white text-blue-600 hover:bg-blue-100 font-bold py-2 px-4 rounded transition-colors"
+      >
+        Log Out
+      </button>
     </nav>
   );
+};
+
+NavBar.propTypes = {
+  resetStep: PropTypes.func.isRequired,
 };
 
 export default NavBar;
