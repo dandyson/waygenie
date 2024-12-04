@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'nav-blue': '#0063ff',
+      },
       fontFamily: {
         'DM': ['Fredoka', 'sans-serif'],
       },
