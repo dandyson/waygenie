@@ -54,7 +54,7 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
             data-testid="travel-style"
             value={travelStyle}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
             <option value="laid-back">Laid Back</option>
             <option value="everything">See as much as possible</option>
