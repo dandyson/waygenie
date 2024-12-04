@@ -35,7 +35,7 @@ const App = () => {
       // Moved return to the same line as the opening parenthesis
       <div className={backgroundStyle}>
         <div className="flex flex-col justify-center items-center bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-max">
-          <h4 className="block text-gray-700 font-extrabold mb-2 text-xl sm:text-2xl md:text-4xl text-center sm:text-left mb-8">
+          <h4 className="block text-gray-700 font-extrabold text-xl sm:text-2xl md:text-4xl text-center sm:text-left mb-8">
             Loading...
           </h4>
           <div
@@ -109,7 +109,7 @@ const App = () => {
         path="/"
         element={
           <>
-            <NavBar />
+            <NavBar resetStep={resetStep} />
             <div className={backgroundStyle}>
               <div className="bg-white p-1 sm:p-8 rounded-lg shadow-md w-full max-w-max">
                 {(() => {
