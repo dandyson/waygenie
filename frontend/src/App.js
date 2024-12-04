@@ -27,8 +27,24 @@ const App = () => {
   });
   const [aiResponse, setAiResponse] = useState(null);
 
+  const backgroundStyle =
+    "min-h-screen flex items-center justify-center p-8 bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]";
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      // Moved return to the same line as the opening parenthesis
+      <div className={backgroundStyle}>
+        <div className="flex flex-col justify-center items-center bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-max">
+          <h4 className="block text-gray-700 font-extrabold mb-2 text-xl sm:text-2xl md:text-4xl text-center sm:text-left mb-8">
+            Loading...
+          </h4>
+          <div
+            role="status"
+            className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"
+          ></div>
+        </div>
+      </div> // Added closing div for the outer div
+    );
   }
 
   if (!isAuthenticated) {
@@ -94,7 +110,7 @@ const App = () => {
         element={
           <>
             <NavBar />
-            <div className="min-h-screen flex items-center justify-center p-8 bg-[linear-gradient(0deg,_rgba(0,141,252,1)_0%,_rgba(4,4,247,1)_0%,_rgba(0,99,255,1)_100%)]">
+            <div className={backgroundStyle}>
               <div className="bg-white p-1 sm:p-8 rounded-lg shadow-md w-full max-w-max">
                 {(() => {
                   switch (step) {
