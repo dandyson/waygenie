@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 import "./index.css";
 import "./App.css";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 const router = createBrowserRouter(
   [
@@ -32,6 +33,10 @@ const router = createBrowserRouter(
           </AuthProvider>
         </Auth0Provider>
       ),
+    },
+    {
+      path: "/privacy",
+      element: <PrivacyPolicy />,
     },
   ],
   {
