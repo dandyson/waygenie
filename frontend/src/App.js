@@ -10,6 +10,7 @@ import fetchItinerary from "./api/fetchItinerary";
 import { Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import NavBar from "./components/NavBar";
+import CookieNotice from "./components/CookieNotice";
 
 const App = () => {
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
@@ -32,7 +33,6 @@ const App = () => {
 
   if (isLoading) {
     return (
-      // Moved return to the same line as the opening parenthesis
       <div className={backgroundStyle}>
         <div className="flex flex-col justify-center items-center bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-max">
           <h4 className="block text-gray-700 font-extrabold text-xl sm:text-2xl md:text-4xl text-center sm:text-left mb-8">
@@ -48,7 +48,12 @@ const App = () => {
   }
 
   if (!isAuthenticated) {
-    return <Login />;
+    return (
+      <>
+        <Login />
+        <CookieNotice />
+      </>
+    );
   }
 
   const nextStep = async (data) => {
@@ -164,6 +169,7 @@ const App = () => {
                 })()}
               </div>
             </div>
+            <CookieNotice />
           </>
         }
       />
