@@ -69,35 +69,34 @@ const PrivacyPolicy = () => {
           <p className="mb-4">We use the following third-party services:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>
-              Auth0 for authentication (See Auth0's privacy & compliance docs
-              here:{" "}
+              Auth0 for authentication (See Auth0's privacy & compliance docs{" "}
               <a
                 className="text-blue-600"
                 href="https://auth0.com/docs/secure/data-privacy-and-compliance"
               >
-                https://auth0.com/docs/secure/data-privacy-and-compliance
+                here
               </a>
               )
             </li>
             <li>
               OpenAI for itinerary generation (See OpenAI's privacy & compliance
-              docs here:{" "}
+              docs{" "}
               <a
                 className="text-blue-600"
                 href="https://openai.com/policies/privacy-policy/"
               >
-                https://openai.com/policies/privacy-policy/
+                here
               </a>
               )
             </li>
             <li>
               AWS CloudFront for content delivery (See AWS's privacy &
-              compliance docs here:{" "}
+              compliance docs{" "}
               <a
                 className="text-blue-600"
                 href="https://aws.amazon.com/privacy/"
               >
-                https://aws.amazon.com/privacy/
+                here
               </a>
               )
             </li>
