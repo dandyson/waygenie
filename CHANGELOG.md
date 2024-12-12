@@ -1,47 +1,38 @@
-# WayGenie Changelog 📝
+<div align="center">
+    <img src="frontend/public/waygenie-logo.png" alt="HomeMovieHub Logo" width="100">
+</div>
+
+# WayGenie Changelog
+
+## December 2024
+- 📝 Added third-party service privacy documentation links
+- 📝 Slight fix to links for better UX
+- 🔒 Added Privacy Policy and Cookie Notice components
+- 🎨 Fixed nav bg colour issue
+- 🎨 Changed layout of navbar & implemented resetstep
+- ✨ Added SVG icons for better visual feedback
+- 🕐 Amended dates/time handling and validation
+- 🔧 Enhanced JSON parsing for OpenAI responses
+- 💄 Improved font sizes and spacing for better readability
 
 ## November 2024
+- 🏗️ Added CloudFront integration for HTTPS support
+- 🔄 Implemented job queue system with Redis for OpenAI API calls
+- 🔐 Integrated Auth0 authentication with protected routes
+- 🧪 Enhanced test suite with Auth0 and Cypress improvements
+- ♿ Improved form accessibility and ARIA labels
+- 📚 Improved development practices (atomic commits, error logging)
+- 🚀 Optimized CI/CD pipeline and added test artifacts
+- 🔧 Enhanced API response handling and error management
 
-### Infrastructure & DevOps 🏗️
-- ✨ Added CloudFront integration for HTTPS support
-- 🔨 Experimented with Docker containerization (later removed due to complexity over frontend and backend being hosted in different places, but knowledge retained)
-- 🚀 Implemented CI/CD improvements - debugging variables & general knowledge of what order to put steps in for the workflow to run correctly
-- 🧪 Added Cypress test artifacts for failed test debugging - the screenshots and videos are helpful for debugging
-- Improved commit discipline with atomic commits
-- Learned and implemented commit squashing
-
-### Backend Improvements 🔧
-- 🔄 Implemented job queue system for OpenAI API calls
-  - Added Redis for job queue management
-  - Improved response handling for long-running AI operations
-  - Separated API request handling from AI processing
-  - Added job status tracking and error handling
-
-### Testing 🧪
-- Enhanced test suite
-  - Added Auth0 authentication testing
-  - Implemented proper mocking for authenticated routes
-  - Updated Cypress tests to handle authentication flows
-  - Fixed radio button interaction tests for better accessibility
-
-### Authentication 🔒
-- Integrated Auth0
-  - Added user authentication flow
-  - Implemented protected routes
-  - Added authentication state management
-  - Updated tests to handle authenticated states
-
-### UI/UX Improvements 🎨
-- Enhanced form accessibility
-  - Improved radio button handling
-  - Added proper ARIA labels to improve accessibility (more work to be done here soon)
-
-### Developer Experience 👩‍💻
-- Improved development practices
-  - Implemented atomic commits
-  - Added better error logging
-  - Enhanced test coverage
-  - Improved code documentation
-
----
-*Last updated: November 2024*
+## September 2024
+- 👷 Set up CI/CD pipeline
+- 🧪 Added Cypress E2E testing
+- ✅ Improved test coverage and reporting
+- 🤖 Implemented OpenAI integration
+- 🚨 Added ESLint and Prettier
+- 📝 Added README with setup instructions
+- 🚀 Set up Heroku and AWS S3 deployment
+- 💄 Added styling and UI components
+- 🎨 Implemented Tailwind CSS
+- 🎉 Initial commit with tests
