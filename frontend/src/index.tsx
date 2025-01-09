@@ -2,11 +2,11 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { AuthProvider } from "./context/AuthContext";
-import App from "./App";
+import { AuthProvider } from "./context/AuthContext.js";
+import App from "./App.tsx";
 import "./index.css";
 import "./App.css";
-import PrivacyPolicy from "./components/PrivacyPolicy";
+import PrivacyPolicy from "./components/PrivacyPolicy.tsx";
 
 const router = createBrowserRouter(
   [
