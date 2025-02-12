@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import { StepComponentProps } from "../types/api/index";
 
-const DateTimeInput = ({ nextStep, backStep, formData }) => {
+const DateTimeInput: React.FC<StepComponentProps> = ({ nextStep, backStep, formData }) => {
   const [startDate, setStartDate] = useState(formData.startDate || "");
   const [startTime, setStartTime] = useState(formData.startTime || "");
   const [endDate, setEndDate] = useState(formData.endDate || "");
@@ -28,7 +28,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   }, [startDate, startTime, endDate, endTime, formData]);
 
-  const handleStartDateChange = (e) => {
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStartDate = e.target.value;
     setStartDate(newStartDate);
 
@@ -46,7 +46,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   };
 
-  const handleStartTimeChange = (e) => {
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStartTime = e.target.value;
     setStartTime(newStartTime);
 
@@ -62,7 +62,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   };
 
-  const handleEndDateChange = (e) => {
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEndDate = e.target.value;
     setEndDate(newEndDate);
 
@@ -79,7 +79,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   };
 
-  const handleEndTimeChange = (e) => {
+  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEndTime = e.target.value;
     setEndTime(newEndTime);
 
@@ -92,7 +92,7 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (startDate && startTime && endDate && endTime) {
       nextStep({
@@ -216,17 +216,6 @@ const DateTimeInput = ({ nextStep, backStep, formData }) => {
       </form>
     </div>
   );
-};
-
-DateTimeInput.propTypes = {
-  nextStep: PropTypes.func.isRequired,
-  backStep: PropTypes.func.isRequired,
-  formData: PropTypes.shape({
-    startDate: PropTypes.string,
-    startTime: PropTypes.string,
-    endDate: PropTypes.string,
-    endTime: PropTypes.string,
-  }).isRequired,
 };
 
 export default DateTimeInput;

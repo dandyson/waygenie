@@ -1,4 +1,4 @@
-export interface FormData {
+export interface TripFormData {
   location: string;
   startDate: string;
   startTime: string;
@@ -6,6 +6,17 @@ export interface FormData {
   endTime: string;
   interests: string[];
   travelStyle: string;
+}
+
+export type NextStep = (data: Partial<TripFormData>) => Promise<void>;
+export type BackStep = () => void;
+export type ResetStep = () => void;
+
+export interface StepComponentProps {
+  formData: TripFormData;
+  nextStep: NextStep;
+  backStep: BackStep;
+  resetStep?: ResetStep;
 }
 
 export interface Event {

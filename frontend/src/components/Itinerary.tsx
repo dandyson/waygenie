@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { AIResponse, ItineraryData, Event } from "../types/api/index";
 
-const Itinerary = ({ aiResponse, resetStep, error }) => {
+type ItineraryProps = {
+  aiResponse: AIResponse | null;
+  resetStep: () => void;
+  error: string | null;
+}
+
+const Itinerary: React.FC<ItineraryProps> = ({ aiResponse, resetStep, error }) => {
   const [isGenerating, setIsGenerating] = useState(true);
-  const [parsedResponse, setParsedResponse] = useState(null);
+  const [parsedResponse, setParsedResponse] = useState<ItineraryData | null>(null);
 
   useEffect(() => {
     if (aiResponse || error) {
@@ -11,11 +17,10 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
 
       if (aiResponse) {
         try {
-          const parsed =
-            typeof aiResponse === "string"
-              ? JSON.parse(aiResponse)
-              : aiResponse;
-          setParsedResponse(parsed);
+          const result = typeof aiResponse.result === "string" 
+            ? JSON.parse(aiResponse.result) 
+            : aiResponse.result;
+          setParsedResponse(result as ItineraryData);
         } catch (err) {
           console.error("Error parsing response:", err);
         }
@@ -86,7 +91,7 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
           <ul className="max-w-screen-md m-2">
             {parsedResponse.events ? (
               parsedResponse.events.length > 0 ? (
-                parsedResponse.events.map((event, index) => (
+                parsedResponse.events.map((event: Event, index: number) => (
                   <li
                     key={index}
                     className="group relative flex flex-col pb-8 pl-7 last:pb-0"
@@ -139,25 +144,6 @@ const Itinerary = ({ aiResponse, resetStep, error }) => {
       </button>
     </div>
   );
-};
-
-Itinerary.propTypes = {
-  aiResponse: PropTypes.oneOfType([
-    PropTypes.shape({
-      introduction: PropTypes.string.isRequired,
-      events: PropTypes.arrayOf(
-        PropTypes.shape({
-          title: PropTypes.string.isRequired,
-          time: PropTypes.string.isRequired,
-          description: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-      travelMethods: PropTypes.string.isRequired,
-    }),
-    PropTypes.oneOf([null]),
-  ]),
-  resetStep: PropTypes.func.isRequired,
-  error: PropTypes.string,
 };
 
 export default Itinerary;

@@ -11,19 +11,20 @@ import { Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import NavBar from "./components/NavBar";
 import CookieNotice from "./components/CookieNotice";
+import { TripFormData } from "./types/api/index";
 
 const App = () => {
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   const [step, setStep] = useState(1);
-  const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<TripFormData>({
     location: "",
     startDate: "",
     startTime: "",
     endDate: "",
     endTime: "",
-    interests: [],
+    interests: [] as string[],
     travelStyle: "",
   });
   const [aiResponse, setAiResponse] = useState(null);
@@ -56,8 +57,8 @@ const App = () => {
     );
   }
 
-  const nextStep = async (data) => {
-    const updatedFormData = { ...formData, ...data };
+  const nextStep = async (data: Partial<TripFormData>) => {
+    const updatedFormData: TripFormData = { ...formData, ...data };
     setFormData(updatedFormData);
 
     if (step === 4) {
@@ -102,7 +103,7 @@ const App = () => {
       startTime: "",
       endDate: "",
       endTime: "",
-      interests: [],
+      interests: [] as string[],
       travelStyle: "",
     });
     setAiResponse(null);

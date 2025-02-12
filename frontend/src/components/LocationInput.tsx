@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { TripFormData } from "../types/api/index";
+
+interface LocationInputProps {
+  formData: TripFormData;
+  nextStep: (data: Partial<TripFormData>) => Promise<void>;
+}
 
 const UK_CITIES = {
   England: [
@@ -41,14 +46,14 @@ const POPULAR_UK_CITIES = [
   "Brighton",
 ];
 
-const LocationInput = ({ formData, nextStep }) => {
+const LocationInput: React.FC<LocationInputProps> = ({ formData, nextStep }) => {
   const [location, setLocation] = useState(formData.location);
   const [showOtherCities, setShowOtherCities] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (location) {
-      nextStep({ location });
+      await nextStep({ location });
     }
   };
 
@@ -207,14 +212,6 @@ const LocationInput = ({ formData, nextStep }) => {
       </form>
     </div>
   );
-};
-
-LocationInput.propTypes = {
-  formData: PropTypes.shape({
-    location: PropTypes.string,
-  }).isRequired,
-  nextStep: PropTypes.func.isRequired,
-  backStep: PropTypes.func,
 };
 
 export default LocationInput;

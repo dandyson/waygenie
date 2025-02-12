@@ -1,8 +1,12 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import PropTypes from "prop-types";
+import { ResetStep } from "../types/api/index";
 
-const NavBar = ({ resetStep }) => {
+type NavBarProps = {
+  resetStep: ResetStep;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ resetStep }) => {
   const { logout, user } = useAuth0();
 
   const handleLogout = () => {
@@ -30,10 +34,6 @@ const NavBar = ({ resetStep }) => {
       </button>
     </nav>
   );
-};
-
-NavBar.propTypes = {
-  resetStep: PropTypes.func.isRequired,
 };
 
 export default NavBar;

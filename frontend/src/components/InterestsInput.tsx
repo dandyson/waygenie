@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { TripFormData } from "../types/api/index";
 
-const InterestsInput = ({ formData, nextStep, backStep }) => {
+interface InterestsInputProps {
+  formData: TripFormData;
+  nextStep: (data: Partial<TripFormData>) => Promise<void>;
+  backStep: () => void;
+}
+
+const InterestsInput: React.FC<InterestsInputProps> = ({ nextStep, backStep, formData }) => {
   const [interests, setInterests] = useState(
     formData.interests && formData.interests.length > 0
       ? formData.interests
@@ -15,7 +22,7 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
     }
   }, [formData.interests]);
 
-  const handleChange = (index, value) => {
+  const handleChange = (index: number, value: string) => {
     const newInterests = [...interests];
     newInterests[index] = value;
     setInterests(newInterests);
@@ -25,16 +32,16 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
     setInterests([...interests, ""]);
   };
 
-  const removeInterest = (index) => {
+  const removeInterest = (index: number) => {
     if (interests.length > 1) {
       const newInterests = interests.filter((_, i) => i !== index);
       setInterests(newInterests);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    nextStep({ interests });
+    await nextStep({ interests });
   };
 
   return (
@@ -127,14 +134,6 @@ const InterestsInput = ({ formData, nextStep, backStep }) => {
       </form>
     </div>
   );
-};
-
-InterestsInput.propTypes = {
-  formData: PropTypes.shape({
-    interests: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
-  nextStep: PropTypes.func.isRequired,
-  backStep: PropTypes.func.isRequired,
 };
 
 export default InterestsInput;

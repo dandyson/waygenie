@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { StepComponentProps } from "../types/api/index";
 
-const TravelStyleInput = ({ formData, nextStep, backStep }) => {
+const TravelStyleInput: React.FC<StepComponentProps> = ({ formData, nextStep, backStep }) => {
   const [travelStyle, setTravelStyle] = useState(
     formData.travelStyle ? formData.travelStyle : "laid-back",
   );
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTravelStyle(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (travelStyle) {
-      nextStep({ travelStyle }); // Pass travelStyle to next step
+      await nextStep({ travelStyle });
     }
   };
 
@@ -79,14 +79,6 @@ const TravelStyleInput = ({ formData, nextStep, backStep }) => {
       </form>
     </div>
   );
-};
-
-TravelStyleInput.propTypes = {
-  formData: PropTypes.shape({
-    travelStyle: PropTypes.string,
-  }).isRequired,
-  nextStep: PropTypes.func.isRequired,
-  backStep: PropTypes.func.isRequired,
 };
 
 export default TravelStyleInput;
