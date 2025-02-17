@@ -34,7 +34,11 @@ export interface ItineraryData {
 
 export interface AIResponse {
   status: "completed" | "failed" | "in-progress";
-  result: string | ItineraryData; // Can be string because it needs to be parsed
+  result?: string | ItineraryData; // Result optional since it might not be present
   error?: string;
   jobId?: string;
+  introduction?: string;
+  itinerary?: string;
+  events?: Event[];
+  travelMethods?: string;
 }

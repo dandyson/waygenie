@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const makeAuthenticatedRequest = async (
-  endpoint,
-  method,
-  token,
-  data = null,
-) => {
+export const makeAuthenticatedRequest = async <T = any>(
+  endpoint: string,
+  method: string,
+  token: string,
+  data: any = null,
+): Promise<T> => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -26,11 +26,16 @@ export const makeAuthenticatedRequest = async (
         data,
         config,
       );
+    } else {
+      throw new Error(`Unsupported method: ${method}`);
     }
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || error.message || "Request failed",
-    );
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.error || error.message || "Request failed",
+      );
+    }
+    throw error;
   }
-};
+}; 

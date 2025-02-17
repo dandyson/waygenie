@@ -1,14 +1,15 @@
 import { makeAuthenticatedRequest } from "../utils/api";
+import { TripFormData, AIResponse, ItineraryData } from "../types/api/index";
 
 const POLLING_INTERVAL = 2000;
 const POLLING_TIMEOUT = 30000;
 
-const fetchItinerary = async (formData, token) => {
+const fetchItinerary = async (formData: TripFormData, token: string): Promise<AIResponse> => {
   const startTime = Date.now();
 
   try {
     // Step 1: Add the job to the queue
-    const initialResponse = await makeAuthenticatedRequest(
+    const initialResponse = await makeAuthenticatedRequest<{ jobId: string }>(
       "/api/itinerary",
       "POST",
       token,
@@ -19,14 +20,23 @@ const fetchItinerary = async (formData, token) => {
 
     // Step 2: Poll for status
     while (Date.now() - startTime < POLLING_TIMEOUT) {
-      const statusResponse = await makeAuthenticatedRequest(
+      const statusResponse = await makeAuthenticatedRequest<AIResponse>(
         `/api/itinerary/status/${jobId}`,
         "GET",
         token,
       );
 
       if (statusResponse.status === "completed") {
-        return statusResponse.result;
+        // Ensure we return a consistent structure
+        const result = typeof statusResponse.result === 'string'
+          ? JSON.parse(statusResponse.result)
+          : statusResponse.result;
+
+        return {
+          status: "completed",
+          result: result as ItineraryData,
+          jobId
+        };
       } else if (statusResponse.status === "failed") {
         throw new Error(statusResponse.error || "Failed to generate itinerary");
       }
@@ -40,12 +50,13 @@ const fetchItinerary = async (formData, token) => {
     }
 
     throw new Error("Request timed out. Please try again later.");
-  } catch (error) {
-    throw new Error(
-      error.message ||
-        "There was an error generating your itinerary - please try again.",
-    );
+  } catch (error: unknown) {
+    // Type guard for error object
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("There was an error generating your itinerary - please try again.");
   }
 };
 
-export default fetchItinerary;
+export default fetchItinerary; 

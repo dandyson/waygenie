@@ -15,19 +15,13 @@ const Itinerary: React.FC<ItineraryProps> = ({ aiResponse, resetStep, error }) =
     if (aiResponse || error) {
       setIsGenerating(false);
 
-      if (aiResponse) {
-        try {
-          const result = typeof aiResponse.result === "string" 
-            ? JSON.parse(aiResponse.result) 
-            : aiResponse.result;
-          setParsedResponse(result as ItineraryData);
-        } catch (err) {
-          console.error("Error parsing response:", err);
-        }
+      if (aiResponse?.result) {
+        setParsedResponse(aiResponse.result as ItineraryData);
       }
     }
   }, [aiResponse, error]);
 
+  
   if (isGenerating) {
     return (
       <div className="flex flex-col items-center justify-center p-8">

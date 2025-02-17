@@ -3,51 +3,45 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { AuthProvider } from "./context/AuthContext.js";
-import App from "./App.tsx";
+import App from "./App";
 import "./index.css";
 import "./App.css";
-import PrivacyPolicy from "./components/PrivacyPolicy.tsx";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
-const router = createBrowserRouter(
-  [
-    {
-      path: "*",
-      element: (
-        <Auth0Provider
-          domain={process.env.REACT_APP_AUTH0_DOMAIN}
-          clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-          authorizationParams={{
-            redirect_uri: window.location.origin,
-            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-          }}
-          cacheLocation="localstorage"
-          useRefreshTokens={true}
-          skipRedirectCallback={window.location.pathname === "/callback"}
-          cookieOptions={{
-            sameSite: "none",
-            secure: true,
-          }}
-        >
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Auth0Provider>
-      ),
-    },
-    {
-      path: "/privacy",
-      element: <PrivacyPolicy />,
-    },
-  ],
-  {
-    future: {
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    },
-  },
+const domain = process.env.REACT_APP_AUTH0_DOMAIN as string;
+const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
+const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+
+const AppWrapper: React.FC = () => (
+  <Auth0Provider
+    domain={domain}
+    clientId={clientId}
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+      audience: audience,
+    }}
+  >
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </Auth0Provider>
 );
 
-const root = createRoot(document.getElementById("root"));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AppWrapper />,
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPolicy />,
+  },
+]);
+
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Failed to find the root element");
+const root = createRoot(rootElement);
+
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
