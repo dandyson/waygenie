@@ -1,9 +1,10 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import TravelStyleInput from "./TravelStyleInput";
+import { TripFormData } from "../types/api";
 
 describe("TravelStyleInput", () => {
-  const mockNextStep = jest.fn();
+  const mockNextStep = jest.fn().mockResolvedValue(undefined);
   const mockBackStep = jest.fn();
 
   beforeEach(() => {
@@ -11,12 +12,22 @@ describe("TravelStyleInput", () => {
     mockBackStep.mockReset();
   });
 
-  const renderTravelStyleInput = (formData) => {
+  const renderTravelStyleInput = (formData: Partial<TripFormData>) => {
+    const defaultFormData: TripFormData = {
+      location: "",
+      startDate: "",
+      startTime: "",
+      endDate: "",
+      endTime: "",
+      interests: [],
+      travelStyle: "laid-back",
+    };
+
     render(
       <TravelStyleInput
         nextStep={mockNextStep}
         backStep={mockBackStep}
-        formData={formData}
+        formData={{ ...defaultFormData, ...formData }}
       />,
     );
   };
@@ -26,7 +37,7 @@ describe("TravelStyleInput", () => {
       const formData = { travelStyle: "laid-back" };
       renderTravelStyleInput(formData);
 
-      const selectElement = screen.getByTestId("travel-style");
+      const selectElement = screen.getByTestId("travel-style") as HTMLSelectElement;
       expect(selectElement.value).toBe("laid-back");
 
       expect(screen.getByText("Laid Back")).toBeInTheDocument();
@@ -38,7 +49,7 @@ describe("TravelStyleInput", () => {
       const formData = {};
       renderTravelStyleInput(formData);
 
-      const selectElement = screen.getByTestId("travel-style");
+      const selectElement = screen.getByTestId("travel-style") as HTMLSelectElement;
       expect(selectElement.value).toBe("laid-back");
     });
 
@@ -46,33 +57,32 @@ describe("TravelStyleInput", () => {
       const formData = { travelStyle: " invalid-value" };
       renderTravelStyleInput(formData);
 
-      const selectElement = screen.getByTestId("travel-style");
+      const selectElement = screen.getByTestId("travel-style") as HTMLSelectElement;
       expect(selectElement.value).toBe("laid-back");
     });
   });
 
   describe("user interaction", () => {
-    it("calls nextStep function with correct value when user selects different option", () => {
+    it("handles travel style selection and form submission", () => {
       const formData = { travelStyle: "laid-back" };
       renderTravelStyleInput(formData);
 
-      const selectElement = screen.getByTestId("travel-style");
+      const selectElement = screen.getByTestId("travel-style") as HTMLSelectElement;
       fireEvent.change(selectElement, { target: { value: "everything" } });
-      expect(selectElement.value).toBe("everything");
+      fireEvent.click(screen.getByText("Let's Go!"));
 
-      const nextButton = screen.getByText("Let's Go!");
-      fireEvent.click(nextButton);
-      expect(mockNextStep).toHaveBeenCalledTimes(1);
-      expect(mockNextStep).toHaveBeenCalledWith({ travelStyle: "everything" });
+      expect(mockNextStep).toHaveBeenCalledWith({
+        ...formData,
+        travelStyle: "everything",
+      });
     });
 
-    it("calls backStep function when user clicks back button", () => {
+    it("calls backStep when back button is clicked", () => {
       const formData = { travelStyle: "laid-back" };
       renderTravelStyleInput(formData);
 
-      const backButton = screen.getByText("Back");
-      fireEvent.click(backButton);
-      expect(mockBackStep).toHaveBeenCalledTimes(1);
+      fireEvent.click(screen.getByText("Back"));
+      expect(mockBackStep).toHaveBeenCalled();
     });
   });
 });

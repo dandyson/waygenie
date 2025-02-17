@@ -2,10 +2,11 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import DateTimeInput from "./DateTimeInput";
+import { TripFormData } from "../types/api";
 
 describe("DateTimeInput", () => {
   // Mock values for formData
-  let formData = {
+  const mockFormData: TripFormData = {
     location: "ewf",
     startDate: "2024-09-05",
     startTime: "12:06",
@@ -19,41 +20,39 @@ describe("DateTimeInput", () => {
     test("renders DateTimeInput with default values", () => {
       render(
         <DateTimeInput
-          nextStep={(data) => {
-            return data;
+          nextStep={async (data) => {
+            return Promise.resolve();
           }}
-          backStep={(data) => {
-            return data;
-          }}
-          formData={formData}
+          backStep={() => {}}
+          formData={mockFormData}
         />,
       );
-      const startDateInput = screen.getByLabelText("Start Date:");
-      const startTimeInput = screen.getByLabelText("Start Time:");
-      const endDateInput = screen.getByLabelText("End Date:");
-      const endTimeInput = screen.getByLabelText("End Time:");
-      expect(startDateInput.value).toBe(formData.startDate);
-      expect(startTimeInput.value).toBe(formData.startTime);
-      expect(endDateInput.value).toBe(formData.endDate);
-      expect(endTimeInput.value).toBe(formData.endTime);
+      const startDateInput = screen.getByLabelText("Start Date:") as HTMLInputElement;
+      const startTimeInput = screen.getByLabelText("Start Time:") as HTMLInputElement;
+      const endDateInput = screen.getByLabelText("End Date:") as HTMLInputElement;
+      const endTimeInput = screen.getByLabelText("End Time:") as HTMLInputElement;
+      expect(startDateInput.value).toBe(mockFormData.startDate);
+      expect(startTimeInput.value).toBe(mockFormData.startTime);
+      expect(endDateInput.value).toBe(mockFormData.endDate);
+      expect(endTimeInput.value).toBe(mockFormData.endTime);
     });
   });
 
   describe("user interaction", () => {
     test("handles date and time changes and form submission", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
-      const startDateInput = screen.getByLabelText("Start Date:");
-      const startTimeInput = screen.getByLabelText("Start Time:");
-      const endDateInput = screen.getByLabelText("End Date:");
-      const endTimeInput = screen.getByLabelText("End Time:");
+      const startDateInput = screen.getByLabelText("Start Date:") as HTMLInputElement;
+      const startTimeInput = screen.getByLabelText("Start Time:") as HTMLInputElement;
+      const endDateInput = screen.getByLabelText("End Date:") as HTMLInputElement;
+      const endTimeInput = screen.getByLabelText("End Time:") as HTMLInputElement;
       fireEvent.change(startDateInput, { target: { value: "2024-09-01" } });
       fireEvent.change(startTimeInput, { target: { value: "10:00" } });
       fireEvent.change(endDateInput, { target: { value: "2024-09-02" } });
@@ -68,13 +67,13 @@ describe("DateTimeInput", () => {
     });
 
     test("calls backStep when back button is clicked", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
       fireEvent.click(screen.getByText("Back"));
@@ -82,18 +81,18 @@ describe("DateTimeInput", () => {
     });
 
     test("changing start time does not affect end time if end time is set", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
 
-      const startTimeInput = screen.getByLabelText("Start Time:");
-      const endTimeInput = screen.getByLabelText("End Time:");
+      const startTimeInput = screen.getByLabelText("Start Time:") as HTMLInputElement;
+      const endTimeInput = screen.getByLabelText("End Time:") as HTMLInputElement;
 
       // Change start time to 10:00
       fireEvent.change(startTimeInput, { target: { value: "10:00" } });
@@ -103,18 +102,18 @@ describe("DateTimeInput", () => {
     });
 
     test("changing end time to before start time updates start time", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
 
-      const startTimeInput = screen.getByLabelText("Start Time:");
-      const endTimeInput = screen.getByLabelText("End Time:");
+      const startTimeInput = screen.getByLabelText("Start Time:") as HTMLInputElement;
+      const endTimeInput = screen.getByLabelText("End Time:") as HTMLInputElement;
 
       // Change end time to 11:00 (before the current start time of 12:06)
       fireEvent.change(endTimeInput, { target: { value: "11:00" } });
@@ -124,18 +123,18 @@ describe("DateTimeInput", () => {
     });
 
     test("changing end date to before start date updates start date", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
 
-      const startDateInput = screen.getByLabelText("Start Date:");
-      const endDateInput = screen.getByLabelText("End Date:");
+      const startDateInput = screen.getByLabelText("Start Date:") as HTMLInputElement;
+      const endDateInput = screen.getByLabelText("End Date:") as HTMLInputElement;
 
       // Change end date to 2024-09-04 (before the current start date of 2024-09-05)
       fireEvent.change(endDateInput, { target: { value: "2024-09-04" } });
@@ -144,33 +143,19 @@ describe("DateTimeInput", () => {
       expect(startDateInput.value).toBe("2024-09-04");
     });
 
-    test("calls backStep when back button is clicked", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
-      render(
-        <DateTimeInput
-          nextStep={mockNextStep}
-          backStep={mockBackStep}
-          formData={formData}
-        />,
-      );
-      fireEvent.click(screen.getByText("Back"));
-      expect(mockBackStep).toHaveBeenCalled();
-    });
-
     test("changing start date does not affect end date if start date is before end date", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
           backStep={mockBackStep}
-          formData={formData}
+          formData={mockFormData}
         />,
       );
 
-      const startDateInput = screen.getByLabelText("Start Date:");
-      const endDateInput = screen.getByLabelText("End Date:");
+      const startDateInput = screen.getByLabelText("Start Date:") as HTMLInputElement;
+      const endDateInput = screen.getByLabelText("End Date:") as HTMLInputElement;
 
       // Change start date to 2024-09-04 (before the current end date of 2024-09-05)
       fireEvent.change(startDateInput, { target: { value: "2024-09-04" } });
@@ -182,13 +167,16 @@ describe("DateTimeInput", () => {
 
   describe("rendering with provided formData", () => {
     test("renders DateTimeInput with provided formData", () => {
-      const mockNextStep = jest.fn();
+      const mockNextStep = jest.fn().mockResolvedValue(undefined);
       const mockBackStep = jest.fn();
-      const formData = {
+      const formData: TripFormData = {
+        location: "",
         startDate: "2024-09-01",
         startTime: "08:00",
         endDate: "2024-09-02",
         endTime: "18:00",
+        interests: [],
+        travelStyle: "",
       };
       render(
         <DateTimeInput
@@ -197,10 +185,10 @@ describe("DateTimeInput", () => {
           formData={formData}
         />,
       );
-      const startDateInput = screen.getByLabelText("Start Date:");
-      const startTimeInput = screen.getByLabelText("Start Time:");
-      const endDateInput = screen.getByLabelText("End Date:");
-      const endTimeInput = screen.getByLabelText("End Time:");
+      const startDateInput = screen.getByLabelText("Start Date:") as HTMLInputElement;
+      const startTimeInput = screen.getByLabelText("Start Time:") as HTMLInputElement;
+      const endDateInput = screen.getByLabelText("End Date:") as HTMLInputElement;
+      const endTimeInput = screen.getByLabelText("End Time:") as HTMLInputElement;
       expect(startDateInput.value).toBe(formData.startDate);
       expect(startTimeInput.value).toBe(formData.startTime);
       expect(endDateInput.value).toBe(formData.endDate);

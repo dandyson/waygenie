@@ -1,5 +1,6 @@
 import fetchItinerary from "./fetchItinerary";
 import { makeAuthenticatedRequest } from "../utils/api";
+import { AIResponse, ItineraryData } from "../types/api";
 
 jest.mock("../utils/api");
 
@@ -20,24 +21,26 @@ describe("fetchItinerary", () => {
   });
 
   it("should return the final itinerary result when the job completes successfully", async () => {
-    makeAuthenticatedRequest
+    const mockItineraryData: ItineraryData = {
+      introduction: "Welcome to your trip!",
+      itinerary: "Your Paris itinerary",
+      events: [{ title: "Louvre Tour", time: "10:00 AM", description: "Visit the famous museum" }],
+      travelMethods: "walking",
+    };
+
+    const mockResponse: AIResponse = {
+      status: "completed",
+      jobId: "12345",
+      result: mockItineraryData
+    };
+
+    (makeAuthenticatedRequest as jest.Mock)
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
-      .mockResolvedValueOnce({
-        status: "completed",
-        result: {
-          introduction: "Welcome to your trip!",
-          events: [{ name: "Louvre Tour", time: "10:00 AM" }],
-          travelMethods: "walking",
-        },
-      });
+      .mockResolvedValueOnce(mockResponse); // Status response
 
     const result = await fetchItinerary(mockFormData, mockToken);
 
-    expect(result).toEqual({
-      introduction: "Welcome to your trip!",
-      events: [{ name: "Louvre Tour", time: "10:00 AM" }],
-      travelMethods: "walking",
-    });
+    expect(result).toEqual(mockResponse);
 
     expect(makeAuthenticatedRequest).toHaveBeenCalledTimes(2);
     expect(makeAuthenticatedRequest).toHaveBeenNthCalledWith(
@@ -56,7 +59,7 @@ describe("fetchItinerary", () => {
   });
 
   it("should throw an error if the job fails", async () => {
-    makeAuthenticatedRequest
+    (makeAuthenticatedRequest as jest.Mock)
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
       .mockResolvedValueOnce({
         status: "failed",
@@ -69,9 +72,9 @@ describe("fetchItinerary", () => {
   });
 
   it("should throw a timeout error if the polling exceeds the timeout period", async () => {
-    makeAuthenticatedRequest
+    (makeAuthenticatedRequest as jest.Mock)
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
-      .mockResolvedValue({ status: "in_progress" }); // Polling response (repeated)
+      .mockResolvedValue({ status: "in-progress" }); // Polling response (repeated)
 
     jest.useFakeTimers(); // Simulate polling timeout
 

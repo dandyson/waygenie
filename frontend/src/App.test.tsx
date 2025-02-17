@@ -1,9 +1,10 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 import fetchItinerary from "./api/fetchItinerary";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import { createMemoryRouter, RouterProvider, RouteObject } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { User } from "@auth0/auth0-spa-js";
 
 jest.mock("axios");
 jest.mock("./api/fetchItinerary");
@@ -12,26 +13,21 @@ jest.useFakeTimers();
 // Mock Auth0
 jest.mock("@auth0/auth0-react");
 
-function renderWithRouter(ui, { route = "/" } = {}) {
-  const router = createMemoryRouter(
-    [
-      {
-        path: "*",
-        element: ui,
-      },
-    ],
+interface RouterOptions {
+  route?: string;
+}
+
+function renderWithRouter(ui: ReactElement, { route = "/" }: RouterOptions = {}) {
+  const routes: RouteObject[] = [
     {
-      initialEntries: [route],
-      future: {
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-        v7_fetcherPersist: true,
-        v7_normalizeFormMethod: true,
-        v7_partialHydration: true,
-        v7_skipActionErrorRevalidation: true,
-      },
+      path: "*",
+      element: ui,
     },
-  );
+  ];
+
+  const router = createMemoryRouter(routes, {
+    initialEntries: [route],
+  });
 
   return render(<RouterProvider router={router} />);
 }
@@ -42,7 +38,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows login component when not authenticated", () => {
-    useAuth0.mockReturnValue({
+    (useAuth0 as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       error: new Error("Authentication failed"),
@@ -57,7 +53,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows loading state while Auth0 is initializing", () => {
-    useAuth0.mockReturnValue({
+    (useAuth0 as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
     });
@@ -68,7 +64,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows error message when authentication fails", () => {
-    useAuth0.mockReturnValue({
+    (useAuth0 as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       error: new Error("Authentication failed"),
