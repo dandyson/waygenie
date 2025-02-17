@@ -1,9 +1,11 @@
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { useAuth0 } from "@auth0/auth0-react";
 
 jest.mock("@auth0/auth0-react");
+
+const mockUseAuth0 = useAuth0 as jest.Mock;
 
 const TestComponent = () => {
   const { isAuthenticated, token } = useAuth();
@@ -24,7 +26,7 @@ describe("AuthContext", () => {
     const mockToken = "test-token";
     const mockGetToken = jest.fn().mockResolvedValue(mockToken);
 
-    useAuth0.mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: true,
       getAccessTokenSilently: mockGetToken,
     });
@@ -32,7 +34,7 @@ describe("AuthContext", () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     // First, check that isAuthenticated is true immediately
@@ -43,7 +45,7 @@ describe("AuthContext", () => {
       () => {
         expect(getByTestId("token")).toHaveTextContent(mockToken);
       },
-      { timeout: 3000 },
+      { timeout: 3000 }
     );
 
     expect(mockGetToken).toHaveBeenCalled();
@@ -51,7 +53,7 @@ describe("AuthContext", () => {
 
   test("handles authentication errors", async () => {
     const mockError = new Error("Failed to get token");
-    useAuth0.mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: true,
       getAccessTokenSilently: jest.fn().mockRejectedValue(mockError),
     });
@@ -59,7 +61,7 @@ describe("AuthContext", () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>,
+      </AuthProvider>
     );
 
     // Check that isAuthenticated is true
@@ -69,5 +71,41 @@ describe("AuthContext", () => {
     await waitFor(() => {
       expect(getByTestId("token")).toHaveTextContent("no-token");
     });
+  });
+
+  test('provides token to children', async () => {
+    const mockToken = 'test-token';
+    const mockGetToken = jest.fn().mockResolvedValue(mockToken);
+
+    mockUseAuth0.mockReturnValue({
+      isAuthenticated: true,
+      getAccessTokenSilently: mockGetToken,
+    });
+
+    render(
+      <AuthProvider>
+        <div data-testid="child">Child Component</div>
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId('child')).toBeInTheDocument();
+    expect(mockGetToken).toHaveBeenCalled();
+  });
+
+  test('handles authentication errors gracefully', async () => {
+    const mockError = new Error('Failed to get token');
+
+    mockUseAuth0.mockReturnValue({
+      isAuthenticated: true,
+      getAccessTokenSilently: jest.fn().mockRejectedValue(mockError),
+    });
+
+    render(
+      <AuthProvider>
+        <div data-testid="child">Child Component</div>
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId('child')).toBeInTheDocument();
   });
 });

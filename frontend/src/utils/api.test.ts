@@ -3,6 +3,17 @@ import { makeAuthenticatedRequest } from "./api";
 
 jest.mock("axios");
 
+const mockAxiosResponse = {
+  data: { test: "data" },
+  status: 200,
+  statusText: "OK",
+  headers: {},
+  config: {},
+};
+
+(axios.get as jest.Mock).mockResolvedValue(mockAxiosResponse);
+(axios.post as jest.Mock).mockResolvedValue(mockAxiosResponse);
+
 describe("makeAuthenticatedRequest", () => {
   const mockToken = "test-token";
   const mockEndpoint = "/api/test";
@@ -18,9 +29,6 @@ describe("makeAuthenticatedRequest", () => {
   });
 
   test("makes successful GET request", async () => {
-    const mockResponse = { data: mockData };
-    axios.get.mockResolvedValue(mockResponse);
-
     const result = await makeAuthenticatedRequest(
       mockEndpoint,
       "GET",
@@ -36,13 +44,10 @@ describe("makeAuthenticatedRequest", () => {
         },
       },
     );
-    expect(result).toEqual(mockData);
+    expect(result).toEqual(mockAxiosResponse.data);
   });
 
   test("makes successful POST request", async () => {
-    const mockResponse = { data: mockData };
-    axios.post.mockResolvedValue(mockResponse);
-
     const result = await makeAuthenticatedRequest(
       mockEndpoint,
       "POST",
@@ -60,6 +65,6 @@ describe("makeAuthenticatedRequest", () => {
         },
       },
     );
-    expect(result).toEqual(mockData);
+    expect(result).toEqual(mockAxiosResponse.data);
   });
 });

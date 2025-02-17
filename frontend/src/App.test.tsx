@@ -13,6 +13,9 @@ jest.useFakeTimers();
 // Mock Auth0
 jest.mock("@auth0/auth0-react");
 
+const mockUseAuth0 = useAuth0 as jest.Mock;
+const mockFetchItinerary = fetchItinerary as jest.Mock;
+
 interface RouterOptions {
   route?: string;
 }
@@ -38,7 +41,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows login component when not authenticated", () => {
-    (useAuth0 as jest.Mock).mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       error: new Error("Authentication failed"),
@@ -53,7 +56,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows loading state while Auth0 is initializing", () => {
-    (useAuth0 as jest.Mock).mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
     });
@@ -64,7 +67,7 @@ describe("App Component Authentication", () => {
   });
 
   test("shows error message when authentication fails", () => {
-    (useAuth0 as jest.Mock).mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       error: new Error("Authentication failed"),
@@ -84,7 +87,7 @@ describe("App Component Form Navigation", () => {
     jest.clearAllMocks();
 
     // Mock Auth0 for an authenticated user
-    useAuth0.mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       user: {
@@ -117,7 +120,7 @@ describe("App Component Form Navigation", () => {
     // Mock the API call to fail
     const mockError = new Error("Failed to fetch itinerary");
     jest.spyOn(console, "error").mockImplementation(() => {}); // Suppress console.error
-    fetchItinerary.mockRejectedValueOnce(mockError);
+    mockFetchItinerary.mockRejectedValueOnce(mockError);
 
     renderWithRouter(<App />);
 
@@ -180,7 +183,7 @@ describe("App Component Error Handling", () => {
     jest.clearAllMocks();
 
     // Mock Auth0 for an authenticated user
-    useAuth0.mockReturnValue({
+    mockUseAuth0.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       user: {
@@ -197,7 +200,7 @@ describe("App Component Error Handling", () => {
       result: "{ invalid json }",
     };
 
-    fetchItinerary.mockResolvedValueOnce(mockResponse); // Mock the API call
+    mockFetchItinerary.mockResolvedValueOnce(mockResponse); // Mock the API call
 
     renderWithRouter(<App />);
 
