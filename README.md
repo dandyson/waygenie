@@ -2,162 +2,145 @@
     <img src="frontend/public/waygenie-logo.png" alt="WayGenie Logo" width="200">
 </div>
 
-# WayGenie
+<div align="center">
+<h1>WAYGENIE</h1>
+</div>
 
-## Overview
+<h4 align="center">
+  <a href="https://d1tl42qtzfxokv.cloudfront.net">Live Demo</a> |
+  <a href="#features">Features</a> |
+  <a href="#quick-start">Quick Start</a>
+</h4>
 
-WayGenie is a full-stack React.js and Express.js Single Page Application (SPA) that uses AI to plan itineraries for travellers. The application showcases:
-- OpenAI API integration for AI-powered suggestions
-- Auth0 authentication protecting API routes
-- Redis for job queue management
-- Cypress for end-to-end testing
-- AWS CloudFront for content delivery
+<div align="center">
+  <h2>
+    An AI-powered travel itinerary planner built with React.js and Express.js. </br>
+    Helping travelers create personalized journeys with intelligent suggestions. </br>
+  <br />
+  </h2>
+</div>
 
-## Live Demo
+<br />
+<p align="center">
+  <a href="https://github.com/dandyson/waygenie/blob/master/LICENSE">
+    <img alt="WayGenie is released under the MIT license." src="https://img.shields.io/badge/license-MIT-blue.svg"  />
+  </a>
+  <a href="https://github.com/dandyson/waygenie/actions">
+    <img alt="CI/CD Pipeline" src="https://github.com/dandyson/waygenie/actions/workflows/deploy.yml/badge.svg"  />
+  </a>
+  <a href="https://github.com/dandyson/waygenie/pulls">
+    <img alt="PRs welcome!" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"  />
+  </a>
+  <a href="https://github.com/dandyson/waygenie/issues">
+    <img alt="Issues" src="https://img.shields.io/github/issues/dandyson/waygenie"  />
+  </a>
+</p>
 
-Visit [WayGenie](https://d1tl42qtzfxokv.cloudfront.net) to see the full application in action!
+<div align="center">
+  <figure>
+    <img src="frontend/public/waygenie-cover.webp" alt="WayGenie Dashboard" />
+    <figcaption>
+      <p align="center">
+        An intuitive interface designed to help travelers create personalized itineraries with AI-powered suggestions.
+      </p>
+    </figcaption>
+  </figure>
+</div>
 
-****Demo credentials will be provided upon request.***
+## Features
 
-## Local Development Setup
+WayGenie provides a comprehensive suite of features for travel planning:
 
-This guide will help you set up a local development environment to explore the codebase and architecture. Note: The OpenAI integration is protected in production to manage API costs, but the setup below will let you explore all other features and code structure.
+- 🤖 **AI-Powered Itinerary Planning**: Intelligent suggestions and personalized travel recommendations
+- 🔒 **Secure Authentication**: Auth0 integration for protected API routes
+- ⚡ **Queue Management**: Redis-based job queue system
+- 🧪 **Comprehensive Testing**: 
+  - Cypress for end-to-end testing
+  - Jest for unit testing
+- 🚀 **Performance & Scalability**:
+  - AWS CloudFront for content delivery
+  - Optimized API routes with:
+    - CORS configuration for secure cross-origin requests
+    - Rate limiting and request validation
+    - Redis caching for frequent queries
+    - Queue-based processing for AI operations
+  - Responsive design
+
+## Quick Start
+
+**Note:** These instructions are for running WayGenie locally. The app is currently just a demo version, so some of the features (such as registering users) has been turned off.
 
 ### Prerequisites
 
-Before running this project locally, ensure you have:
-1. **Node.js and npm**: For managing dependencies and running the application
-2. **Redis**: For the job queue system (optional if not testing AI features)
+- Node.js and npm
+- Redis (optional for AI features)
 
-### Installation Steps
+### Installation
 
-### Step 1: **Clone the Repository**
+1. Clone the repository:
 ```bash
 git clone https://github.com/dandyson/waygenie.git
 cd waygenie
 ```
 
-Navigate into the project directory:
-
-```bash
-cd waygenie
-```
-
-### Step 2: Set Up the Backend
-
-Navigate to the backend directory:
-
+2. Set Up the Backend:
 ```bash
 cd backend
-```
-Install backend dependencies using npm:
-
-```bash
 npm install
-```
-
-Start the backend server:
-
-```bash
 npm start
 ```
 
-### Step 3: Set Up the Frontend
-
-Navigate to the frontend directory:
-
+3. Set Up the Frontend:
 ```bash
 cd ../frontend
-```
-
-Install frontend dependencies using npm:
-
-```bash
 npm install
-```
-
-Start the frontend development server:
-
-```bash
 npm start
 ```
 
-### Step 4: Access the Application
+4. Access the Application:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
 
-The frontend should be accessible at http://localhost:3000 (or the port specified in your frontend setup).
+## Testing
 
-The backend API will be available at http://localhost:5000 (or the port specified in your backend setup).
-
-### Extra steps
-
-## Frontend Testing
-
-If you would like to run tests in the application, first make sure you are in the /frontend directory:
-
+### React Scripts/Jest
 ```bash
 cd frontend
-```
-<br>
-
-You can then run them as follows:
-
-
-### **React Scripts/Jest**
-
-Run the following command to run the tests:
-
-```bash
 npm run test
 ```
 
-If you would like to see the coverage run this command:
-
+For coverage:
 ```bash
 npm run test:total
 ```
 
-<br>
-
-### **Cypress E2E Testing**
-
-WayGenie includes Cypress End-to-End testing on the frontend - to run these tests, first make sure you are in the /frontend directory:
-
+### Cypress E2E Testing
 ```bash
 cd frontend
-```
-
-Then run this command:
-
-```bash
 npm run cypress
 ```
 
-This will open the cypress window. Then follow these steps:
+## Technical Stack
 
-1. Within the window, select the **E2E Testing** option.
-2. You will then be asked to choose a browser. Select any browser you wish.
-3. This will open the browser you selected.
+- **Frontend**: React.js, React Router
+- **Backend**: Express.js, Node.js
+- **Authentication**: Auth0
+- **Queue Management**: Redis
+- **Testing**: Cypress, Jest
+- **CDN**: AWS CloudFront
+- **AI**: OpenAI API
 
-Once the browser has opened, you will be taken to the Cypress dashboard. The tests will be within the **specs**.
+## Contributing
 
-From here, select any of the files and the tests will run!
+We welcome contributions! Here's how you can help:
 
-
-## Understanding the Auth Layer
-
-The application uses Auth0 in production to protect costly API routes. For local development, focus on exploring the architecture and UI components
-
-
-
-## Technical Details
-
-### Architecture Highlights
-- 🎯 Queue-based AI processing system
-- 🔒 Protected API routes for cost management
-- ⚡ Redis job management
-- 📱 Responsive design
-- 🧪 Comprehensive test coverage
+- Found a bug? [Report it here](https://github.com/dandyson/waygenie/issues)
+- Have a feature request? [Open an issue](https://github.com/dandyson/waygenie/issues)
 
 ## Contact
 
 For full demo access or questions about this project, please reach out to dannydyson297@gmail.com
+
+## License
+
+WayGenie is open-source software licensed under the [MIT license](LICENSE).
