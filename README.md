@@ -74,9 +74,13 @@ WayGenie provides a comprehensive suite of features for travel planning:
 
 - Node.js and npm
 - Redis (optional for AI features)
+- Node.js and npm
+- Redis (optional for AI features)
 
 ### Installation
+### Installation
 
+1. Clone the repository:
 1. Clone the repository:
 ```bash
 git clone https://github.com/dandyson/waygenie.git
@@ -84,12 +88,14 @@ cd waygenie
 ```
 
 2. Set Up the Backend:
+2. Set Up the Backend:
 ```bash
 cd backend
 npm install
 npm start
 ```
 
+3. Set Up the Frontend:
 3. Set Up the Frontend:
 ```bash
 cd ../frontend
@@ -104,22 +110,47 @@ npm start
 ## Testing
 
 ### React Scripts/Jest
+4. Access the Application:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+
+## Testing
+
+### React Scripts/Jest
 ```bash
 cd frontend
 npm run test
 ```
 
 For coverage:
+For coverage:
 ```bash
 npm run test:total
 ```
 
+### Cypress E2E Testing
 ### Cypress E2E Testing
 ```bash
 cd frontend
 npm run cypress
 ```
 
+## Technical Stack
+
+- **Frontend**: React.js, React Router
+- **Backend**: Express.js, Node.js
+- **Authentication**: Auth0
+- **Queue Management**: Redis
+- **Testing**: Cypress, Jest
+- **CDN**: AWS CloudFront
+- **AI**: OpenAI API
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+- Found a bug? [Report it here](https://github.com/dandyson/waygenie/issues)
+- Have a feature request? [Open an issue](https://github.com/dandyson/waygenie/issues)
 ## Technical Stack
 
 - **Frontend**: React.js, React Router
