@@ -31,8 +31,9 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx}\"",
     "provision": "aws cloudformation deploy --template-file ../infrastructure/cloudformation.yaml --stack-name waygenie-bucket-stack --parameter-overrides BucketName=waygenie",
     "upload": "aws s3 sync build/ s3://waygenie --delete",
-    "deploy": "npm run build && npm run upload",
-    "eject": "react-scripts eject"
+    "deploy": "npm run build && wrangler deploy",
+    "eject": "react-scripts eject",
+    "preview": "npm run build && wrangler dev"
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +78,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "wrangler": "^4.80.0"
   }
 }
