@@ -1,9 +1,9 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
     branches:
-      - '**'  # Runs on push to any branch
+      - '**'
   pull_request:
     branches:
       - main
@@ -60,12 +60,10 @@ jobs:
         working-directory: frontend
         env:
           REACT_APP_API_URL: "${{ secrets.REACT_APP_API_URL }}"
-          REACT_APP_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
           REACT_APP_FRONTEND_URL: "${{ secrets.REACT_APP_FRONTEND_URL }}"
           REACT_APP_AUTH0_DOMAIN: "${{ secrets.AUTH0_TEST_DOMAIN }}"
           REACT_APP_AUTH0_CLIENT_ID: "${{ secrets.AUTH0_TEST_CLIENT_ID }}"
           REACT_APP_AUTH0_AUDIENCE: "${{ secrets.AUTH0_TEST_AUDIENCE }}"
-          REACT_APP_CLOUDFRONT_URL: "${{ secrets.REACT_APP_CLOUDFRONT_URL }}"
         run: npm run build
 
       - name: Install dependencies for backend
@@ -76,7 +74,7 @@ jobs:
         working-directory: backend
         run: |
           npm start &
-          sleep 10  # Give the server time to start
+          sleep 10
         env:
           REDISCLOUD_URL: "redis://localhost:6379"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -88,21 +86,7 @@ jobs:
           NODE_ENV: 'test'
           FRONTEND_URL: 'http://localhost:3000'
 
-      - name: Debug Environment
-        run: |
-          echo "Checking frontend..."
-          curl -v http://localhost:3000 || true
-          echo "Checking backend..."
-          curl -v http://localhost:5000/health || true
-          echo "Environment variables set:"
-          env | grep -E 'REACT_APP_|CYPRESS_|AUTH0_' | sort
-          echo "Process list:"
-          ps aux | grep -E 'node|npm'
-          echo "Network ports:"
-          netstat -tulpn || true
-
-      # Then run Cypress tests 🧪
-      - name: Run E2E tests 🧪
+      - name: Run E2E tests
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
@@ -116,25 +100,17 @@ jobs:
             experimentalModifyObstructiveThirdPartyCode=true
           record: false
         env:
-          # Auth0 Test Environment Variables
           REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_TEST_DOMAIN }}
           REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
           REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_TEST_AUDIENCE }}
-          
-          # Cypress Auth0 Variables
           CYPRESS_auth_url: ${{ secrets.AUTH0_TEST_DOMAIN }}
           CYPRESS_auth_client_id: ${{ secrets.AUTH0_TEST_CLIENT_ID }}
           CYPRESS_auth_client_secret: ${{ secrets.AUTH0_TEST_CLIENT_SECRET }}
           CYPRESS_auth_username: ${{ secrets.CYPRESS_AUTH_USERNAME }}
           CYPRESS_auth_password: ${{ secrets.CYPRESS_AUTH_PASSWORD }}
-          
-          # API and Backend Variables
-          REACT_APP_API_URL: "http://localhost:5000"  # Point to local backend
+          REACT_APP_API_URL: "http://localhost:5000"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REDISCLOUD_URL: 'redis://localhost:6379'
-          
-          # Debug and CI Variables
-          DEBUG: "cypress:*"
           CI: true
           PORT: 3000
 
@@ -146,56 +122,3 @@ jobs:
           path: |
             frontend/cypress/screenshots
             frontend/cypress/videos
-
-  deploy:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install and build frontend
-        working-directory: frontend
-        run: |
-          npm install
-          npm run build
-        env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          REACT_APP_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          REACT_APP_FRONTEND_URL: ${{ secrets.REACT_APP_FRONTEND_URL }}
-          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          REACT_APP_AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-          REACT_APP_CLOUDFRONT_URL: ${{ secrets.REACT_APP_CLOUDFRONT_URL }}
-
-      - name: Upload frontend to S3
-        run: |
-          aws s3 sync frontend/build/ s3://waygenie --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-west-2'
-
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation --distribution-id E2F0KOSSD5OYR3 --paths "/*"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-west-2'
-
-      - name: Deploy backend to Heroku
-        run: |
-          git subtree push --prefix backend https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git main
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
