@@ -1,2 +1,2 @@
 name = "waygenie"
-pages_build_output_dir = "frontend/build"
+pages_build_output_dir = "build"
