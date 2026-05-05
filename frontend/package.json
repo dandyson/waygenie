@@ -14,7 +14,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "tailwindcss": "^3.4.10",
     "web-vitals": "^2.1.4"
   },
@@ -29,9 +29,6 @@
     "lint:fix": "eslint src/**/*.js cypress/**/*.js --fix",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx}\"",
-    "provision": "aws cloudformation deploy --template-file ../infrastructure/cloudformation.yaml --stack-name waygenie-bucket-stack --parameter-overrides BucketName=waygenie",
-    "upload": "aws s3 sync build/ s3://waygenie --delete",
-    "deploy": "npm run build && npm run upload",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

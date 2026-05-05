@@ -7,7 +7,7 @@
 </div>
 
 <h4 align="center">
-  <a href="https://d1tl42qtzfxokv.cloudfront.net">Live Demo</a> |
+  <a href="https://waygenie.pages.dev/">Live Demo</a> |
   <a href="#features">Features</a> |
   <a href="#quick-start">Quick Start</a>
 </h4>
@@ -58,7 +58,7 @@ WayGenie provides a comprehensive suite of features for travel planning:
   - Cypress for end-to-end testing
   - Jest for unit testing
 - 🚀 **Performance & Scalability**:
-  - AWS CloudFront for content delivery
+  - Cloudflare pages for content delivery
   - Optimized API routes with:
     - CORS configuration for secure cross-origin requests
     - Rate limiting and request validation
@@ -127,7 +127,8 @@ npm run cypress
 - **Authentication**: Auth0
 - **Queue Management**: Redis
 - **Testing**: Cypress, Jest
-- **CDN**: AWS CloudFront
+- **CDN**: Cloudflare Pages
+- **Hosting**: Railway
 - **AI**: OpenAI API
 
 ## Contributing
