@@ -6,11 +6,11 @@ const NavBar = ({ resetStep }) => {
   const { logout, user } = useAuth0();
 
   const handleLogout = () => {
-    const cloudFrontUrl = process.env.REACT_APP_CLOUDFRONT_URL;
+    const url = process.env.REACT_APP_FRONTEND_URL;
 
     logout({
       logoutParams: {
-        returnTo: cloudFrontUrl,
+        returnTo: url,
       },
     });
   };

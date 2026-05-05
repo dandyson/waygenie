@@ -4,6 +4,9 @@
 
 # WayGenie Changelog
 
+## May 2026
+- 🏗️ Removed CloudFront as app is moving to Railway/Cloudflare pages
+
 ## December 2024
 - 📝 Added third-party service privacy documentation links
 - 📝 Slight fix to links for better UX

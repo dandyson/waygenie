@@ -91,13 +91,13 @@ const PrivacyPolicy = () => {
               )
             </li>
             <li>
-              AWS CloudFront for content delivery (See AWS's privacy &
+              Cloudflare Pages for content delivery (See Cloudflare's privacy &
               compliance docs here:{" "}
               <a
                 className="text-blue-600"
-                href="https://aws.amazon.com/privacy/"
+                href="https://www.cloudflare.com/privacypolicy/"
               >
-                https://aws.amazon.com/privacy/
+                https://www.cloudflare.com/privacypolicy/
               </a>
               )
             </li>
