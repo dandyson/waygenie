@@ -28,9 +28,6 @@
   <a href="https://github.com/dandyson/waygenie/actions/workflows/deploy.yml">
     <img alt="CI/CD Pipeline" src="https://github.com/dandyson/waygenie/actions/workflows/deploy.yml/badge.svg"  />
   </a>
-  <a href="https://github.com/dandyson/waygenie/pulls">
-    <img alt="PRs welcome!" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"  />
-  </a>
   <a href="https://github.com/dandyson/waygenie/issues">
     <img alt="Issues" src="https://img.shields.io/github/issues/dandyson/waygenie"  />
   </a>
@@ -68,7 +65,7 @@ WayGenie provides a comprehensive suite of features for travel planning:
 
 ## Quick Start
 
-**Note:** These instructions are for running WayGenie locally. The app is currently just a demo version, so some of the features (such as registering users) has been turned off.
+**Note:** These instructions are for running WayGenie locally. This is a demo instance - to explore the full app, clone the repo and run it locally using the instructions below
 
 ### Prerequisites
 
@@ -130,17 +127,6 @@ npm run cypress
 - **CDN**: Cloudflare Pages
 - **Hosting**: Railway
 - **AI**: OpenAI API
-
-## Contributing
-
-We welcome contributions! Here's how you can help:
-
-- Found a bug? [Report it here](https://github.com/dandyson/waygenie/issues)
-- Have a feature request? [Open an issue](https://github.com/dandyson/waygenie/issues)
-
-## Contact
-
-For full demo access or questions about this project, please reach out to dannydyson297@gmail.com
 
 ## License
 
