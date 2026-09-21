@@ -3,8 +3,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import InterestsInput from "./InterestsInput";
 
 describe("InterestsInput component", () => {
-  const mockNextStep = jest.fn();
-  const mockBackStep = jest.fn();
+  const mockNextStep = vi.fn();
+  const mockBackStep = vi.fn();
   const formData = { interests: [] };
 
   describe("initial rendering", () => {

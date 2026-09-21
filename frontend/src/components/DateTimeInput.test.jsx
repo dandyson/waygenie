@@ -41,8 +41,8 @@ describe("DateTimeInput", () => {
 
   describe("user interaction", () => {
     test("handles date and time changes and form submission", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -68,8 +68,8 @@ describe("DateTimeInput", () => {
     });
 
     test("calls backStep when back button is clicked", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -82,8 +82,8 @@ describe("DateTimeInput", () => {
     });
 
     test("changing start time does not affect end time if end time is set", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -103,8 +103,8 @@ describe("DateTimeInput", () => {
     });
 
     test("changing end time to before start time updates start time", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -124,8 +124,8 @@ describe("DateTimeInput", () => {
     });
 
     test("changing end date to before start date updates start date", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -145,8 +145,8 @@ describe("DateTimeInput", () => {
     });
 
     test("calls backStep when back button is clicked", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -159,8 +159,8 @@ describe("DateTimeInput", () => {
     });
 
     test("changing start date does not affect end date if start date is before end date", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       render(
         <DateTimeInput
           nextStep={mockNextStep}
@@ -182,8 +182,8 @@ describe("DateTimeInput", () => {
 
   describe("rendering with provided formData", () => {
     test("renders DateTimeInput with provided formData", () => {
-      const mockNextStep = jest.fn();
-      const mockBackStep = jest.fn();
+      const mockNextStep = vi.fn();
+      const mockBackStep = vi.fn();
       const formData = {
         startDate: "2024-09-01",
         startTime: "08:00",

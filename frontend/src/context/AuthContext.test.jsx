@@ -3,7 +3,7 @@ import { render, waitFor } from "@testing-library/react";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { useAuth0 } from "@auth0/auth0-react";
 
-jest.mock("@auth0/auth0-react");
+vi.mock("@auth0/auth0-react");
 
 const TestComponent = () => {
   const { isAuthenticated, token } = useAuth();
@@ -17,12 +17,12 @@ const TestComponent = () => {
 
 describe("AuthContext", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("provides authentication status and token", async () => {
     const mockToken = "test-token";
-    const mockGetToken = jest.fn().mockResolvedValue(mockToken);
+    const mockGetToken = vi.fn().mockResolvedValue(mockToken);
 
     useAuth0.mockReturnValue({
       isAuthenticated: true,
@@ -53,7 +53,7 @@ describe("AuthContext", () => {
     const mockError = new Error("Failed to get token");
     useAuth0.mockReturnValue({
       isAuthenticated: true,
-      getAccessTokenSilently: jest.fn().mockRejectedValue(mockError),
+      getAccessTokenSilently: vi.fn().mockRejectedValue(mockError),
     });
 
     const { getByTestId } = render(

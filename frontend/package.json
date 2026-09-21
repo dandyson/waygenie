@@ -11,45 +11,25 @@
     "axios": "^1.7.7",
     "openai": "^4.59.0",
     "postcss-cli": "^11.0.0",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
-    "react-scripts": "^5.0.1",
-    "tailwindcss": "^3.4.10",
-    "web-vitals": "^2.1.4"
+    "react-router-dom": "^7.18.4",
+    "tailwindcss": "^3.4.10"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "test": "react-scripts test --coverage --detectOpenHandles --watchAll",
-    "test:quiet": "FORCE_COLOR=true react-scripts test --silent --verbose false --reporters=default",
-    "test:ci": "react-scripts test --detectOpenHandles",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:quiet": "vitest run --silent",
+    "test:ci": "vitest run",
     "cypress": "cypress open",
-    "build": "react-scripts build",
-    "lint": "eslint src/**/*.js cypress/**/*.js",
-    "lint:fix": "eslint src/**/*.js cypress/**/*.js --fix",
+    "lint": "eslint \"src/**/*.{js,jsx}\" \"cypress/**/*.js\"",
+    "lint:fix": "eslint \"src/**/*.{js,jsx}\" \"cypress/**/*.js\" --fix",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx}\"",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(js|jsx|mjs|ts|tsx)$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(axios)/)"
-    ],
-    "collectCoverageFrom": [
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/src/index.js",
-      "!<rootDir>/src/serviceWorker.js",
-      "!<rootDir>/src/reportWebVitals.js"
-    ]
+    "test:coverage": "vitest run --coverage"
   },
   "browserslist": {
     "production": [
@@ -64,9 +44,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "babel-jest": "^29.7.0",
-    "cypress": "^13.14.2",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/coverage-v8": "^4.1.11",
+    "cypress": "^15.21.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^3.5.0",
@@ -74,6 +54,9 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "prettier": "^3.3.3"
+    "jsdom": "^29.1.1",
+    "prettier": "^3.3.3",
+    "vite": "^8.3.0",
+    "vitest": "^4.1.11"
   }
 }

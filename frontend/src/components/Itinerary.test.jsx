@@ -4,7 +4,7 @@ import Itinerary from "./Itinerary";
 
 describe("Itinerary Component", () => {
   test("displays loading spinner when generating", () => {
-    render(<Itinerary aiResponse={null} resetStep={jest.fn()} />);
+    render(<Itinerary aiResponse={null} resetStep={vi.fn()} />);
 
     // Check if the loading spinner is shown when the AI response is being generated
     const spinnerElement = screen.getByRole("status"); // Assuming the spinner has a role="status"
@@ -28,7 +28,7 @@ describe("Itinerary Component", () => {
       ],
       travelMethods: "Travel by bus and taxi.",
     };
-    const mockResetStep = jest.fn();
+    const mockResetStep = vi.fn();
 
     render(<Itinerary aiResponse={mockAiResponse} resetStep={mockResetStep} />);
 
@@ -55,7 +55,7 @@ describe("Itinerary Component", () => {
     render(
       <Itinerary
         aiResponse={null}
-        resetStep={jest.fn()}
+        resetStep={vi.fn()}
         error="There was an error generating your itinerary - please try again."
       />,
     );
@@ -77,7 +77,7 @@ describe("Itinerary Component", () => {
 
   test("handles no AI response gracefully", () => {
     // Test the case when AI fails to generate an itinerary (e.g., null response or error)
-    render(<Itinerary aiResponse={null} resetStep={jest.fn()} />);
+    render(<Itinerary aiResponse={null} resetStep={vi.fn()} />);
 
     // Expect the spinner to be shown since the AI response is null
     const spinnerElement = screen.getByRole("status");
@@ -90,7 +90,7 @@ describe("Itinerary Component", () => {
       events: [],
       travelMethods: "",
     };
-    render(<Itinerary aiResponse={emptyAiResponse} resetStep={jest.fn()} />);
+    render(<Itinerary aiResponse={emptyAiResponse} resetStep={vi.fn()} />);
 
     // Ensure that no events or travel methods are displayed
     const itineraryHeading = screen.getByText(/YOUR ITINERARY:/i);

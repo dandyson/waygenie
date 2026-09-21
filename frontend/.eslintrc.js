@@ -35,6 +35,9 @@ module.exports = {
         jest: true,
         'cypress/globals': true,
       },
+      globals: {
+        vi: "readonly", // Vitest global (globals: true in vite.config.mjs)
+      },
     },
   ],
 };

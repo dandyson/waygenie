@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import TravelStyleInput from "./TravelStyleInput";
 
 describe("TravelStyleInput", () => {
-  const mockNextStep = jest.fn();
-  const mockBackStep = jest.fn();
+  const mockNextStep = vi.fn();
+  const mockBackStep = vi.fn();
 
   beforeEach(() => {
     mockNextStep.mockReset();
