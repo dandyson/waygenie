@@ -53,7 +53,7 @@ WayGenie provides a comprehensive suite of features for travel planning:
 - ⚡ **Queue Management**: Redis-based job queue system
 - 🧪 **Comprehensive Testing**: 
   - Cypress for end-to-end testing
-  - Jest for unit testing
+  - Vitest for unit testing
 - 🚀 **Performance & Scalability**:
   - Cloudflare pages for content delivery
   - Optimized API routes with:
@@ -69,8 +69,8 @@ WayGenie provides a comprehensive suite of features for travel planning:
 
 ### Prerequisites
 
-- Node.js and npm
-- Redis (optional for AI features)
+- Node.js 20.19+ (or 22.12+) and npm
+- Redis (required for AI itinerary generation)
 
 ### Installation
 
@@ -80,35 +80,46 @@ git clone https://github.com/dandyson/waygenie.git
 cd waygenie
 ```
 
-2. Set Up the Backend:
+2. Copy .env files for both frontend and backend - navigate to /frontend and /backend and for each, run:
+```bash
+cp .env.example .env
+```
+Then fill in the values - the comments in each `.env.example` explain where to find them.
+
+3. Set Up the Backend:
 ```bash
 cd backend
 npm install
 npm start
 ```
 
-3. Set Up the Frontend:
+4. Set Up the Frontend:
 ```bash
 cd ../frontend
 npm install
-npm start
+npm run dev
 ```
 
-4. Access the Application:
+5. Access the Application:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 
 ## Testing
 
-### React Scripts/Jest
+### Vitest
 ```bash
 cd frontend
 npm run test
 ```
 
+For a single run (no watch mode):
+```bash
+npm run test:ci
+```
+
 For coverage:
 ```bash
-npm run test:total
+npm run test:coverage
 ```
 
 ### Cypress E2E Testing
@@ -119,11 +130,11 @@ npm run cypress
 
 ## Technical Stack
 
-- **Frontend**: React.js, React Router
+- **Frontend**: React.js, React Router, Vite
 - **Backend**: Express.js, Node.js
 - **Authentication**: Auth0
 - **Queue Management**: Redis
-- **Testing**: Cypress, Jest
+- **Testing**: Cypress, Vitest
 - **CDN**: Cloudflare Pages
 - **Hosting**: Railway
 - **AI**: OpenAI API

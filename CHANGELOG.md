@@ -4,6 +4,13 @@
 
 # WayGenie Changelog
 
+## September 2026
+- 🏗️ Migrated the frontend from Create React App to Vite (dev server still runs on port 3000)
+- 🧪 Migrated unit tests from Jest to Vitest
+- 🔧 Renamed frontend env vars from `REACT_APP_*` to `VITE_*` (read via `import.meta.env`)
+- 📝 Added `.env.example` files for the frontend and backend
+- 📝 Updated README setup and testing instructions (Node 20.19+ or 22.12+ now required)
+
 ## May 2026
 - 🏗️ Removed CloudFront as app is moving to Railway/Cloudflare pages
 
