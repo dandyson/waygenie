@@ -3,7 +3,7 @@ import { render, screen, fireEvent, within } from "@testing-library/react";
 import LocationInput from "./LocationInput";
 
 describe("LocationInput", () => {
-  const mockNextStep = jest.fn();
+  const mockNextStep = vi.fn();
 
   beforeEach(() => {
     mockNextStep.mockClear();

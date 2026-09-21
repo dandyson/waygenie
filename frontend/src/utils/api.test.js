@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAuthenticatedRequest } from "./api";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("makeAuthenticatedRequest", () => {
   const mockToken = "test-token";
@@ -10,11 +10,11 @@ describe("makeAuthenticatedRequest", () => {
 
   // Mock environment variable
   beforeAll(() => {
-    process.env.REACT_APP_API_URL = "http://localhost:5000";
+    import.meta.env.VITE_API_URL = "http://localhost:5000";
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("makes successful GET request", async () => {
@@ -28,7 +28,7 @@ describe("makeAuthenticatedRequest", () => {
     );
 
     expect(axios.get).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_API_URL}${mockEndpoint}`,
+      `${import.meta.env.VITE_API_URL}${mockEndpoint}`,
       {
         headers: {
           Authorization: `Bearer ${mockToken}`,
@@ -51,7 +51,7 @@ describe("makeAuthenticatedRequest", () => {
     );
 
     expect(axios.post).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_API_URL}${mockEndpoint}`,
+      `${import.meta.env.VITE_API_URL}${mockEndpoint}`,
       mockData,
       {
         headers: {

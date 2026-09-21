@@ -5,12 +5,13 @@ import fetchItinerary from "./api/fetchItinerary";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
-jest.mock("axios");
-jest.mock("./api/fetchItinerary");
-jest.useFakeTimers();
+vi.mock("axios");
+vi.mock("./api/fetchItinerary");
+// shouldAdvanceTime lets RTL's waitFor keep polling (it can't detect Vitest's fake timers)
+vi.useFakeTimers({ shouldAdvanceTime: true });
 
 // Mock Auth0
-jest.mock("@auth0/auth0-react");
+vi.mock("@auth0/auth0-react");
 
 function renderWithRouter(ui, { route = "/" } = {}) {
   const router = createMemoryRouter(
@@ -38,7 +39,7 @@ function renderWithRouter(ui, { route = "/" } = {}) {
 
 describe("App Component Authentication", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("shows login component when not authenticated", () => {
@@ -85,7 +86,7 @@ describe("App Component Authentication", () => {
 
 describe("App Component Form Navigation", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Mock Auth0 for an authenticated user
     useAuth0.mockReturnValue({
@@ -95,7 +96,7 @@ describe("App Component Form Navigation", () => {
         email: "test@example.com",
         name: "Test User",
       },
-      getAccessTokenSilently: jest.fn().mockResolvedValue("mock-token"),
+      getAccessTokenSilently: vi.fn().mockResolvedValue("mock-token"),
     });
   });
 
@@ -120,7 +121,7 @@ describe("App Component Form Navigation", () => {
   test("handles API error during itinerary fetch", async () => {
     // Mock the API call to fail
     const mockError = new Error("Failed to fetch itinerary");
-    jest.spyOn(console, "error").mockImplementation(() => {}); // Suppress console.error
+    vi.spyOn(console, "error").mockImplementation(() => {}); // Suppress console.error
     fetchItinerary.mockRejectedValueOnce(mockError);
 
     renderWithRouter(<App />);
@@ -181,7 +182,7 @@ describe("App Component Form Navigation", () => {
 
 describe("App Component Error Handling", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Mock Auth0 for an authenticated user
     useAuth0.mockReturnValue({
@@ -191,7 +192,7 @@ describe("App Component Error Handling", () => {
         email: "test@example.com",
         name: "Test User",
       },
-      getAccessTokenSilently: jest.fn().mockResolvedValue("mock-token"),
+      getAccessTokenSilently: vi.fn().mockResolvedValue("mock-token"),
     });
   });
 

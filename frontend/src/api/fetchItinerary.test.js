@@ -1,7 +1,7 @@
 import fetchItinerary from "./fetchItinerary";
 import { makeAuthenticatedRequest } from "../utils/api";
 
-jest.mock("../utils/api");
+vi.mock("../utils/api");
 
 describe("fetchItinerary", () => {
   const mockFormData = {
@@ -16,7 +16,7 @@ describe("fetchItinerary", () => {
   const mockToken = "mockAccessToken";
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return the final itinerary result when the job completes successfully", async () => {
@@ -73,16 +73,16 @@ describe("fetchItinerary", () => {
       .mockResolvedValueOnce({ jobId: "12345" }) // Initial job response
       .mockResolvedValue({ status: "in_progress" }); // Polling response (repeated)
 
-    jest.useFakeTimers(); // Simulate polling timeout
+    vi.useFakeTimers(); // Simulate polling timeout
 
     const fetchPromise = fetchItinerary(mockFormData, mockToken);
 
-    jest.advanceTimersByTime(30000); // Simulate 30 seconds passing
+    vi.advanceTimersByTime(30000); // Simulate 30 seconds passing
 
     await expect(fetchPromise).rejects.toThrow(
       "Request timed out. Please try again later.",
     );
 
-    jest.useRealTimers(); // Cleanup fake timers
+    vi.useRealTimers(); // Cleanup fake timers
   });
 });

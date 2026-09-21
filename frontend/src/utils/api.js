@@ -17,12 +17,12 @@ export const makeAuthenticatedRequest = async (
     let response;
     if (method.toUpperCase() === "GET") {
       response = await axios.get(
-        process.env.REACT_APP_API_URL + endpoint,
+        import.meta.env.VITE_API_URL + endpoint,
         config,
       );
     } else if (method.toUpperCase() === "POST") {
       response = await axios.post(
-        process.env.REACT_APP_API_URL + endpoint,
+        import.meta.env.VITE_API_URL + endpoint,
         data,
         config,
       );

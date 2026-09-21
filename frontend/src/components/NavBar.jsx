@@ -8,7 +8,7 @@ const NavBar = ({ resetStep }) => {
   const handleLogout = () => {
     logout({
       logoutParams: {
-        returnTo: process.env.REACT_APP_FRONTEND_URL,
+        returnTo: import.meta.env.VITE_FRONTEND_URL,
       },
     });
   };
